@@ -21,9 +21,12 @@ import {
   CLIENT_226_ETERNAL_TESTS,
   CLIENT_226_FRONTIER_RECORDS,
   CLIENT_226_HYPOTHESIS_NODES,
+  CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL,
+  CLIENT_226_ONHAND_COGNITION_STACK,
   CLIENT_226_REACTOR_RESULTS,
   CLIENT_226_SHARED_LEDGER,
   CLIENT_226_SIDE_EFFECT_MATRIX,
+  computeGhSecretagogueSynergy,
   computeIntranasalInsulinCurve,
   computeProcollagenBifurcation,
   computeTerazosinBiphasic,
@@ -234,9 +237,24 @@ test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slot
     24
   );
   assert.equal(CLIENT_226_HYPOTHESIS_NODES.length, 22);
-  assert.equal(CLIENT_226_SIDE_EFFECT_MATRIX.length, 12);
-  assert.equal(CLIENT_226_CONSULTATION_BRANCHES.length, 7);
+  assert.equal(CLIENT_226_SIDE_EFFECT_MATRIX.length, 16);
+  assert.equal(CLIENT_226_CONSULTATION_BRANCHES.length, 9);
   assert.equal(CLIENT_226_SHARED_LEDGER.length, 7);
+  assert.equal(CLIENT_226_ONHAND_COGNITION_STACK.compounds.length, 5);
+  assert.equal(CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.stages.length, 3);
+  assert.match(CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.fgfrConstraint, /Mandatory Erdafitinib/);
+
+  // Coupled Exogenous rhGH (70% Night / 30% Morning) + CJC-1295 no DAC + Ipamorelin Synergy ODE
+  const ghBridge = computeGhSecretagogueSynergy({
+    totalGhIu: 12,
+    splitMode: '70_30',
+    cjcDoseMcg: 150,
+    ipaDoseMcg: 150,
+    scheduleMode: 'afternoon_1600',
+  });
+  assert.equal(ghBridge.batemanTmaxH, 3.365);
+  assert.equal(ghBridge.current.intLocalIgf1 > ghBridge.baseline.intLocalIgf1, true);
+  assert.equal(ghBridge.current.int20kDa > ghBridge.baseline.int20kDa, true);
 
   // Biphasic Terazosin PGK1 calculator: 0.6 mg optimal (> 2.0 mg high-dose inhibition)
   const tzOpt = computeTerazosinBiphasic(0.6);

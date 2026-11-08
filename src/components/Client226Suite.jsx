@@ -4,11 +4,14 @@ import {
   CLIENT_226_ETERNAL_TESTS,
   CLIENT_226_FRONTIER_RECORDS,
   CLIENT_226_HYPOTHESIS_NODES,
+  CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL,
+  CLIENT_226_ONHAND_COGNITION_STACK,
   CLIENT_226_PHASES,
   CLIENT_226_REACTOR_RESULTS,
   CLIENT_226_SHARED_LEDGER,
   CLIENT_226_SIDE_EFFECT_MATRIX,
   CLIENT_226_TIMING_RESULTS,
+  computeGhSecretagogueSynergy,
   computeIntranasalInsulinCurve,
   computeProcollagenBifurcation,
   computeTerazosinBiphasic,
@@ -17,6 +20,7 @@ import {
 import { Icon, Input, Notice, SectionHead, Select, Status, Tabs } from './ui.jsx';
 
 export {
+  computeGhSecretagogueSynergy,
   computeIntranasalInsulinCurve,
   computeProcollagenBifurcation,
   computeTerazosinBiphasic,
@@ -33,13 +37,23 @@ export default function Client226Suite({ workspace, library, onApplyBranch, onAd
   const [serumPo4, setSerumPo4] = useState('4.1');
   const [serumE2, setSerumE2] = useState('16.5');
   const [freeT4, setFreeT4] = useState('1.28');
-  const [fgfrArm, setFgfrArm] = useState('arm_a'); // 'arm_a' (Dabogratinib) | 'arm_b' (Erdafitinib)
+  const [fgfrArm, setFgfrArm] = useState('arm_b'); // 'arm_b' (Mandatory Erdafitinib — No TYRA-300 Available) | 'arm_a' (Reference)
   const [synthMult, setSynthMult] = useState('1.95');
   const [chaperonesOn, setChaperonesOn] = useState(true);
   const [selectedBranchId, setSelectedBranchId] = useState(
-    workspace?.id === 'ws-226-height' ? 'branch-226-height-arma' : 'branch-226-cog-baseline'
+    workspace?.id === 'ws-226-height' ? 'branch-226-height-erda-minimal' : 'branch-226-cog-onhand'
   );
   const [branchNotice, setBranchNotice] = useState('');
+
+  // GH (70% Night / 30% Morning) + CJC-1295 no DAC + Ipamorelin Calibration state
+  const [totalGhIu, setTotalGhIu] = useState('12');
+  const [ghSplitMode, setGhSplitMode] = useState('70_30');
+  const [cjcDoseMcg, setCjcDoseMcg] = useState('150');
+  const [ipaDoseMcg, setIpaDoseMcg] = useState('150');
+  const [ghScheduleMode, setGhScheduleMode] = useState('afternoon_1600');
+  const [gammaSocs2, setGammaSocs2] = useState('0.65');
+  const [betaCartilage, setBetaCartilage] = useState('0.45');
+  const [equalTotalPeptide, setEqualTotalPeptide] = useState(true);
 
   // Tab 2: 53-Slot Mechanistic Explorer state
   const [slotDomain, setSlotDomain] = useState('all');
@@ -73,6 +87,16 @@ export default function Client226Suite({ workspace, library, onApplyBranch, onAd
     s107Active: true,
   });
   const reactorState = evaluateReactorAtHour(reactorHour);
+  const ghSynergy = computeGhSecretagogueSynergy({
+    totalGhIu,
+    splitMode: ghSplitMode,
+    cjcDoseMcg,
+    ipaDoseMcg,
+    scheduleMode: ghScheduleMode,
+    gammaSocs2,
+    betaCartilage,
+    equalTotalPeptide,
+  });
 
   const po4Val = Number(serumPo4) || 4.1;
   const e2Val = Number(serumE2) || 16.5;
@@ -204,9 +228,9 @@ export default function Client226Suite({ workspace, library, onApplyBranch, onAd
               onChange={(e) => setWeightKg(e.target.value)}
               hint="Scales FGFR3, Vosoritide & Somatropin"
             />
-            <Select label="FGFR3 Kinase Architecture" value={fgfrArm} onChange={(e) => setFgfrArm(e.target.value)}>
-              <option value="arm_a">Arm A · Dabogratinib (TYRA-300 Selective FGFR3)</option>
-              <option value="arm_b">Arm B · Erdafitinib (Pan-FGFR1-4 + Full Shield)</option>
+            <Select label="FGFR Kinase Architecture (No TYRA-300 Available -> Mandatory ERDA)" value={fgfrArm} onChange={(e) => setFgfrArm(e.target.value)}>
+              <option value="arm_b">Mandatory Active · Erdafitinib (ERDA Pan-FGFR1-4 + Full Shield)</option>
+              <option value="arm_a">Reference Only · Dabogratinib (TYRA-300 Selective FGFR3 — Unavailable)</option>
             </Select>
             <Input
               label="Terazosin Bedtime Dose (mg)"
@@ -337,6 +361,184 @@ export default function Client226Suite({ workspace, library, onApplyBranch, onAd
                 {ft4Val >= 1.1 ? 'PASS — Hypertrophic DIO2/T3 Flux Intact' : 'LOW Free T4 — Titrate Levothyroxine 25 → 50 mcg AM'}
               </strong>
               <small>GH accelerates peripheral T4 → T3/rT3 clearance</small>
+            </article>
+          </div>
+
+          {/* COUPLED EXOGENOUS rhGH (70% NIGHT / 30% MORNING) + CJC-1295 NO DAC + IPAMORELIN SYNERGY & TIMING CALIBRATOR */}
+          <article className="record-row" style={{ display: 'block', padding: '1.15rem', marginTop: '1.5rem', background: 'var(--surface-2, #f8fafc)' }}>
+            <div className="inline-between" style={{ flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div>
+                <span className="microcopy">
+                  COUPLED BATEMAN SC rhGH (Tmax = {ghSynergy.batemanTmaxH}h) × PITUITARY GHRH/GHSR1a × PERIPHERAL STAT5b/SOCS2 ODE
+                </span>
+                <h3>Exogenous rhGH (70% Night / 30% Morning) + CJC-1295 no DAC + Ipamorelin Calibration</h3>
+                <p className="small muted">
+                  Pituitary secretion exhibits multiplicative Gs (CJC-1295 no DAC) × Gq (Ipamorelin K+ closure clamping rhGH-induced hypothalamic SST) synergy, releasing endogenous 22 kDa + 20 kDa GH isoforms. Peripheral cartilage STAT5b &amp; local IGF-1 ranking depends on CIS/SOCS2 adaptation strength (γ) and local chondrocyte GHRHR/GHSR1a gain (β_cart).
+                </p>
+              </div>
+              <Status value="configured">
+                Cartilage IGF-1 Synergy: {ghSynergy.cartilageSynergyPct >= 0 ? `+${ghSynergy.cartilageSynergyPct}%` : `${ghSynergy.cartilageSynergyPct}%`} vs rhGH Alone
+              </Status>
+            </div>
+
+            <div className="form-grid four" style={{ marginTop: '0.85rem' }}>
+              <Input
+                label="Total Exogenous rhGH (IU/day)"
+                type="number"
+                step="1"
+                min="4"
+                max="20"
+                value={totalGhIu}
+                onChange={(e) => setTotalGhIu(e.target.value)}
+                hint={`70% Night = ${(Number(totalGhIu || 12) * 0.7).toFixed(1)} IU (22:15) · 30% AM = ${(Number(totalGhIu || 12) * 0.3).toFixed(1)} IU (07:00)`}
+              />
+              <Select label="Exogenous rhGH Regimen" value={ghSplitMode} onChange={(e) => setGhSplitMode(e.target.value)}>
+                <option value="70_30">70% Night (22:15) / 30% Morning (07:00) Split</option>
+                <option value="100_0">100% Night (22:15) Initial Ramp Bolus</option>
+              </Select>
+              <Input
+                label="CJC-1295 no DAC (Mod GRF 1-29 mcg)"
+                type="number"
+                step="25"
+                min="50"
+                max="300"
+                value={cjcDoseMcg}
+                onChange={(e) => setCjcDoseMcg(e.target.value)}
+                hint="GHRHR Gs/cAMP/PKA agonist (t½ ~ 30 min)"
+              />
+              <Input
+                label="Ipamorelin Dose (mcg)"
+                type="number"
+                step="25"
+                min="50"
+                max="300"
+                value={ipaDoseMcg}
+                onChange={(e) => setIpaDoseMcg(e.target.value)}
+                hint="GHSR1a Gq SST2/SST5 clamp (t½ ~ 2h)"
+              />
+            </div>
+
+            <div className="form-grid four" style={{ marginTop: '0.75rem' }}>
+              <Select label="Secretagogue Clock Window" value={ghScheduleMode} onChange={(e) => setGhScheduleMode(e.target.value)}>
+                <option value="afternoon_1600">16:00 Afternoon Trough Bridge (9h post-07:00 AM rhGH)</option>
+                <option value="prebed_2145">21:45 Pre-Bed Primer (T-30 min before 22:15 Night rhGH)</option>
+                <option value="dual_1600_2145">Dual 16:00 Bridge + 21:45 Pre-Bed Primer</option>
+                <option value="ramp_morning_0730">07:30 Morning Trough (100% Night rhGH Ramp Phase)</option>
+                <option value="rhgh_only">Exogenous rhGH Only Baseline (0 mcg Secretagogues)</option>
+              </Select>
+              <Input
+                label="Peripheral CIS/SOCS2 Adaptation (γ)"
+                type="number"
+                step="0.05"
+                min="0.10"
+                max="1.50"
+                value={gammaSocs2}
+                onChange={(e) => setGammaSocs2(e.target.value)}
+                hint="Higher γ favors 16:00 separated bridge"
+              />
+              <Input
+                label="Local Chondrocyte GHRHR/GHSR1a Gain (β_cart)"
+                type="number"
+                step="0.05"
+                min="0.00"
+                max="1.20"
+                value={betaCartilage}
+                onChange={(e) => setBetaCartilage(e.target.value)}
+                hint="Direct epiphyseal autocrine IGF-1 branch"
+              />
+              <Select
+                label="Dual-Pulse Peptide Accounting"
+                value={equalTotalPeptide ? 'iso_dose' : 'full_double'}
+                onChange={(e) => setEqualTotalPeptide(e.target.value === 'iso_dose')}
+              >
+                <option value="iso_dose">Iso-Dose Split (50% @ 16:00 + 50% @ 21:45 — Equal Daily Input)</option>
+                <option value="full_double">Full Dual Pulse (100% @ 16:00 + 100% @ 21:45 — 2× Peptide Input)</option>
+              </Select>
+            </div>
+
+            <div className="dose-telemetry-grid" style={{ marginTop: '0.9rem' }}>
+              <div className="telemetry-cell">
+                <span>Selected Schedule Output ({ghScheduleMode})</span>
+                <strong className="tabular-nums">
+                  Cartilage IGF-1: {ghSynergy.current.intLocalIgf1} ({ghSynergy.cartilageSynergyPct >= 0 ? `+${ghSynergy.cartilageSynergyPct}%` : `${ghSynergy.cartilageSynergyPct}%`})
+                </strong>
+                <small className="tabular-nums">
+                  Cartilage STAT5b: {ghSynergy.current.intStat5Cart} ({ghSynergy.stat5CartGainPct >= 0 ? `+${ghSynergy.stat5CartGainPct}%` : `${ghSynergy.stat5CartGainPct}%`}) · Liver STAT5b: {ghSynergy.current.intStat5Liver}
+                </small>
+              </div>
+              <div className="telemetry-cell">
+                <span>Endogenous Pituitary Burst &amp; 20 kDa Isoform</span>
+                <strong className="tabular-nums">
+                  Pituitary Sec: {ghSynergy.current.intPitSec} · 20 kDa Pool: {ghSynergy.current.int20kDa}
+                </strong>
+                <small className="tabular-nums">
+                  Vesicle Store Floor M(t): {(ghSynergy.current.minVesicleStore * 100).toFixed(0)}% · SC rhGH Tail @ 4.5h: 95.5% / @ 9h: 50.8%
+                </small>
+              </div>
+              <div className="telemetry-cell">
+                <span>Schedule Comparison (Local Epiphyseal IGF-1 Integral)</span>
+                <strong className="tabular-nums">
+                  16:00 Bridge: {ghSynergy.schedules.afternoon_1600.intLocalIgf1} · 21:45 Primer: {ghSynergy.schedules.prebed_2145.intLocalIgf1} · Dual: {ghSynergy.schedules.dual_1600_2145.intLocalIgf1}
+                </strong>
+                <small className="tabular-nums">
+                  rhGH-Only Baseline: {ghSynergy.baseline.intLocalIgf1} · 100%-Night + 07:30 Ramp: {ghSynergy.schedules.ramp_morning_0730.intLocalIgf1}
+                </small>
+              </div>
+              <div className="telemetry-cell">
+                <span>Regime Bifurcation Verdict (Optimal: {ghSynergy.optimalSplitSchedule})</span>
+                <strong>{ghSynergy.optimalSplitSchedule === 'afternoon_1600' ? '16:00 Afternoon Trough Bridge Wins' : ghSynergy.optimalSplitSchedule === 'dual_1600_2145' ? 'Dual 16:00 + 21:45 Split Wins' : '21:45 Pre-Bed Primer Wins'}</strong>
+                <small>{ghSynergy.regimeExplanation}</small>
+              </div>
+            </div>
+          </article>
+
+          {/* SETTLED MINIMALISTIC 14-DAY HEIGHT PROTOCOL (MANDATORY ERDA) & 5 ON-HAND COGNITION OVERVIEW */}
+          <div className="profile-columns" style={{ marginTop: '1.5rem' }}>
+            <article className="record-row" style={{ display: 'block', padding: '1.1rem' }}>
+              <span className="microcopy">HEIGHT ARCHITECTURE · PRESERVED MINIMALISTIC 14-DAY PROTOCOL (MANDATORY ERDA)</span>
+              <h3>{CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.title}</h3>
+              <p className="small" style={{ marginTop: '0.35rem', color: 'var(--teal-dark, #0f766e)' }}>
+                <strong>{CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.fgfrConstraint}</strong>
+              </p>
+              <h4 style={{ marginTop: '0.75rem' }}>Erdafitinib Targeted Ancillaries (Mandatory Active Shield)</h4>
+              <ul className="small" style={{ paddingLeft: '1.2rem', margin: '0.35rem 0' }}>
+                {CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.erdafitinibAncillaries.map((item) => (
+                  <li key={item} style={{ marginBottom: '0.2rem' }}>{item}</li>
+                ))}
+              </ul>
+              <h4 style={{ marginTop: '0.75rem' }}>Continuous Base (Days 1–14, Every Stage)</h4>
+              <ul className="small" style={{ paddingLeft: '1.2rem', margin: '0.35rem 0' }}>
+                {CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.continuousBase.map((item) => (
+                  <li key={item} style={{ marginBottom: '0.2rem' }}>{item}</li>
+                ))}
+              </ul>
+              {CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL.stages.map((stg) => (
+                <div key={stg.id} style={{ marginTop: '0.75rem' }}>
+                  <h4>{stg.name}</h4>
+                  <ul className="small" style={{ paddingLeft: '1.2rem', margin: '0.35rem 0' }}>
+                    {stg.items.map((it) => (
+                      <li key={it} style={{ marginBottom: '0.2rem' }}>{it}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </article>
+
+            <article className="record-row" style={{ display: 'block', padding: '1.1rem' }}>
+              <span className="microcopy">COGNITION ARCHITECTURE · CLIENT 226’S 5 ON-HAND COMPOUNDS</span>
+              <h3>{CLIENT_226_ONHAND_COGNITION_STACK.title}</h3>
+              <p className="small muted" style={{ marginTop: '0.35rem' }}>
+                <strong>Spatial Spine-Head / Spine-Neck cAMP Conservation:</strong> <code>{CLIENT_226_ONHAND_COGNITION_STACK.spatialCampEquation}</code>
+              </p>
+              <div className="record-list" style={{ marginTop: '0.75rem' }}>
+                {CLIENT_226_ONHAND_COGNITION_STACK.compounds.map((c) => (
+                  <div key={c.id} className="telemetry-cell" style={{ marginBottom: '0.55rem' }}>
+                    <span>{c.domain} · {c.clockWindow}</span>
+                    <strong className="tabular-nums">{c.name} — {c.onHandDose}</strong>
+                    <small>{c.mechanism}</small>
+                  </div>
+                ))}
+              </div>
             </article>
           </div>
         </div>

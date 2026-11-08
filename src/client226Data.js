@@ -456,6 +456,8 @@ export const CLIENT_226_COMPOUNDS = [
     "name": "KW-6356 (Next-Gen A2A Antagonist/Inverse Agonist)",
     "aliases": [
       "kw-6356",
+      "kw6356",
+      "sipagladenant",
       "istradefylline"
     ],
     "form": "Long-Residence Striatopallidal A2A Inverse Agonist Tablet",
@@ -468,8 +470,106 @@ export const CLIENT_226_COMPOUNDS = [
     "volume_l": 160.0,
     "unbound_fraction": 0.04,
     "mass_per_unit_mg": {},
-    "source": "Shirakawa et al., J Pharmacol Sci 2023 \u00b7 Nourianz / KW-6356 Striatal A2A-D2 Heteromer",
-    "notes": "Releases adenosine A2A brake on striatopallidal D2 medium spiny neurons, lowering effort valuation cost without presynaptic dopamine vesicular depletion.",
+    "source": "Shirakawa et al., J Pharmacol Sci 2023 (PMID: 36894319) \u00b7 KW-6356 PopPK (PMID: 38178727)",
+    "notes": "On-Hand Cognition Actuator (1\u20132.5 mg AM): Insurmountable selective A2A inverse agonist releasing the striatopallidal D2 medium spiny neuron brake to lower effort initiation cost without spending vesicular dopamine.",
+    "public_visible": true
+  },
+  {
+    "id": "cmp-armodafinil",
+    "name": "Armodafinil (R-Modafinil)",
+    "aliases": [
+      "armodafinil",
+      "nuvigil",
+      "r-modafinil"
+    ],
+    "form": "Enantiopure R-Modafinil Oral Tablet",
+    "route": "Oral",
+    "model": "linear_oral",
+    "status": "configured",
+    "half_life_h": 15.0,
+    "absorption_half_life_h": 1.2,
+    "bioavailability": 0.88,
+    "volume_l": 42.0,
+    "unbound_fraction": 0.4,
+    "mass_per_unit_mg": {},
+    "source": "Darwish et al., Clin Pharmacokinet 2009 (PMID: 19133704) \u00b7 DailyMed Nuvigil Monograph",
+    "notes": "On-Hand Cognition Actuator (50\u2013100 mg AM early, cycled w/ Pitolisant): Low-affinity inward-facing DAT stabilizer sustaining tonic wakefulness across 10\u201312h sessions. Moderate CYP3A4 inducer \u2014 accelerates clearance of CYP3A4 substrates Guanfacine and Erdafitinib at steady state.",
+    "public_visible": true
+  },
+  {
+    "id": "cmp-asp4345",
+    "name": "ASP4345 (Selective Dopamine D1 PAM)",
+    "aliases": [
+      "asp4345",
+      "asp-4345",
+      "asp",
+      "mevidalen",
+      "ly3154207"
+    ],
+    "form": "Selective Dopamine D1 Receptor Positive Allosteric Modulator Capsule",
+    "route": "Oral",
+    "model": "linear_oral",
+    "status": "configured",
+    "half_life_h": 14.0,
+    "absorption_half_life_h": 1.1,
+    "bioavailability": 0.82,
+    "volume_l": 88.0,
+    "unbound_fraction": 0.09,
+    "mass_per_unit_mg": {},
+    "source": "recruit/Phase I CSF PK (PMC7808976) \u00b7 Arnsten D1 Inverted-U Working Memory Model",
+    "notes": "On-Hand Cognition Actuator (3\u201315 mg AM): Allosterically amplifies endogenous phasic dopamine at dlPFC Layer III spine-head D1 receptors (s_D1 = (a + alpha*beta*a*b)/(1 + a + b + alpha*a*b)) to hold multi-step representations in working memory without stimulant load; paired with Guanfacine alpha2A spine-neck HCN clamp.",
+    "public_visible": true
+  },
+  {
+    "id": "cmp-cjc1295-nodac",
+    "name": "CJC-1295 no DAC (Mod GRF 1-29)",
+    "aliases": [
+      "cjc-1295 no dac",
+      "cjc-no dac",
+      "cjc no dac",
+      "mod grf 1-29",
+      "mod-grf",
+      "tetrasubstituted grf 1-29"
+    ],
+    "form": "Lyophilized Tetrasubstituted GRF(1-29) Peptide Vial (No Drug Affinity Complex)",
+    "route": "Subcutaneous",
+    "model": "linear_bolus",
+    "status": "configured",
+    "half_life_h": 0.5,
+    "absorption_half_life_h": 0.12,
+    "bioavailability": 0.92,
+    "volume_l": 14.0,
+    "unbound_fraction": 0.88,
+    "mass_per_unit_mg": {
+      "mcg": 0.001,
+      "mL": 2.0
+    },
+    "source": "Jett\u00e9 et al., Endocrinology 2005 \u00b7 Frohman et al., JCEM \u00b7 Client 226 GH Secretagogue Calibration",
+    "notes": "On-Hand Height Secretagogue (100\u2013200 mcg SubQ): Short-acting GHRHR Gs/cAMP/PKA agonist (t\u00bd ~ 30 min) that drives pituitary Pit-1/GH1 transcription and vesicular exocytosis of endogenous 22 kDa (90%) + 20 kDa (10%) GH isoforms when paired with Ipamorelin's somatostatin clamp.",
+    "public_visible": true
+  },
+  {
+    "id": "cmp-ipamorelin",
+    "name": "Ipamorelin (Selective GHSR1a Agonist)",
+    "aliases": [
+      "ipamorelin",
+      "nnc 26-0161"
+    ],
+    "form": "Lyophilized Pentapeptide Selective Ghrelin Mimetic Vial",
+    "route": "Subcutaneous",
+    "model": "linear_bolus",
+    "status": "configured",
+    "half_life_h": 2.0,
+    "absorption_half_life_h": 0.2,
+    "bioavailability": 0.9,
+    "volume_l": 18.0,
+    "unbound_fraction": 0.85,
+    "mass_per_unit_mg": {
+      "mcg": 0.001,
+      "mL": 2.0
+    },
+    "source": "Raun et al., Eur J Endocrinol 1998 (DOI: 10.1530/eje.0.1390552) \u00b7 Gobburu et al., Pharm Res 1999 (PMID: 10496658)",
+    "notes": "On-Hand Height Secretagogue (100\u2013200 mcg SubQ): Selective GHSR1a Gq/PLC\u03b2/IP3/PKC agonist (t\u00bd ~ 2h, Tmax ~ 0.67h) that closes somatotroph inward-rectifying K+ channels and functionally opposes rhGH-induced hypothalamic somatostatin (SST2/SST5) hyperpolarization with zero ACTH/cortisol/prolactin surge.",
     "public_visible": true
   },
   {
@@ -793,23 +893,25 @@ export const CLIENT_226_COMPOUNDS = [
   },
   {
     "id": "cmp-erdafitinib",
-    "name": "Erdafitinib (Balversa, Arm B Pan-FGFR)",
+    "name": "Erdafitinib (Balversa, Mandatory Primary Pan-FGFR)",
     "aliases": [
       "erdafitinib",
-      "balversa"
+      "balversa",
+      "erda",
+      "jnj-42756493"
     ],
     "form": "Pan-FGFR1/2/3/4 Tyrosine Kinase Inhibitor Tablet",
     "route": "Oral",
     "model": "linear_oral",
     "status": "configured",
-    "half_life_h": 55.0,
+    "half_life_h": 59.0,
     "absorption_half_life_h": 1.2,
     "bioavailability": 0.85,
     "volume_l": 29.0,
     "unbound_fraction": 0.003,
     "mass_per_unit_mg": {},
-    "source": "DailyMed Balversa Monograph \u00b7 Loriot et al., NEJM 2019",
-    "notes": "Arm B Accessible Alternative (0.25 mg/kg/d): Potent FGFR3 release but requires full FGFR1/2/4 Shield (Sucroferric oxyhydroxide + Nicotinamide + TUDCA + Finerenone + Dorzolamide).",
+    "source": "DailyMed Balversa Prescribing Information (t\u00bd ~ 59h) \u00b7 Loriot et al., NEJM 2019",
+    "notes": "MANDATORY PRIMARY FGFR INHIBITOR (No TYRA-300 available; 0.25 mg/kg/d or 4\u20138 mg/d titrated): Releases FGFR3 STAT1/ERK growth-plate brake; paired with mandatory Erdafitinib Targeted Ancillaries (Racecadotril + Cilostazol, Sucroferric oxyhydroxide/Sevelamer + conditional Tenapanor + Nicotinamide, Rebamipide, Finerenone + Dorzolamide, TUDCA + Colesevelam, Vit D3 held if endogenous 1,25-(OH)2D3 rises).",
     "public_visible": true
   },
   {
@@ -2981,28 +3083,6 @@ export const CLIENT_226_COMPOUNDS = [
   {
     "id": "cmp-2-mppa",
     "name": "2-MPPA",
-    "aliases": [],
-    "form": "Alternative \u00b7 VU6053371 or 2-MPPA (Protocol-calibrated)",
-    "route": "Oral",
-    "model": "linear_oral",
-    "status": "configured",
-    "half_life_h": 14.0,
-    "absorption_half_life_h": 0.9,
-    "bioavailability": 0.8,
-    "volume_l": 75.0,
-    "unbound_fraction": 0.18,
-    "mass_per_unit_mg": {
-      "g": 1000.0,
-      "mcg": 0.001,
-      "IU": 0.0347
-    },
-    "source": "Client 226 Frontier [mglu] \u00b7 mGlu3 signaling versus NAAG breakdown.",
-    "notes": "**VU6053371** (mGlu3 PAM) or **2-MPPA** (GCPII NAAG inhibitor) to reinforce postsynaptic Layer III spine-neck cAMP clamping alongside **guanfacine**, paired with **ASP4345** (D1 PAM for low-arousal multi-step hold) or **AF710B** `25 mg` (`T-60 min`, M1/sigma-1 agonist). | Mechanism: Direct mGlu3 potentiation and GCPII inhibition converge only partially: preserving NAAG changes endogenous ligand availability and its spatial distribution. Their prefrontal connection overlaps with the cAMP-related working-memory branch, while glial and extrasynaptic effects extend beyond a spine-neck channel gate.",
-    "public_visible": true
-  },
-  {
-    "id": "cmp-asp4345",
-    "name": "ASP4345",
     "aliases": [],
     "form": "Alternative \u00b7 VU6053371 or 2-MPPA (Protocol-calibrated)",
     "route": "Oral",
@@ -15831,10 +15911,93 @@ export const CLIENT_226_SIDE_EFFECT_MATRIX = [
     "whenToSwitch": "If Prolactin > 15 ng/mL or after >3 consecutive days of Amisulpride use",
     "fix": "1) Restrict Amisulpride to <= 2 days/week in the 7-day Conative Rotation (swap other days to KW-6356, CE-123, or Oveporexton); 2) Add Cabergoline 0.125 mg twice weekly + P5P 50 mg/d.",
     "severity": "moderate"
+  },
+  {
+    "id": "se-cyp3a4-armodafinil",
+    "domain": "shared",
+    "trigger": "Afternoon Guanfacine wear-off / rebound adrenergic scatter OR drop in steady-state Erdafitinib exposure across Days 4\u201314",
+    "culprit": "Armodafinil (50\u2013100 mg AM, t\u00bd ~ 15h) moderate hepatic/intestinal CYP3A4 induction accelerating clearance of CYP3A4 substrates Guanfacine and Erdafitinib",
+    "whenToSwitch": "After >= 4 consecutive days of Armodafinil if afternoon dlPFC HCN clamp weakens or serum PO4 reporter drops unexpectedly",
+    "fix": "1) Cycle Armodafinil with non-CYP3A4-inducing Pitolisant (4.5\u20139 mg AM) or Paraxanthine; 2) Split or shift Guanfacine ER (0.25\u20130.5 mg morning + 0.5\u20131.0 mg 17:00) or pair with mGluR3 PAM (VU6053371); 3) Monitor Erdafitinib target engagement via serum PO4 & CXM rather than oral mg alone.",
+    "severity": "high"
+  },
+  {
+    "id": "se-gh-socs2-lockup",
+    "domain": "height",
+    "trigger": "Blunted endogenous GH spike from CJC-1295 no DAC + Ipamorelin OR peripheral GHR/STAT5b refractory plateau (water retention / carpal tunnel without linear velocity gain)",
+    "culprit": "Injecting CJC-1295 no DAC + Ipamorelin during the active SC rhGH Bateman peak (Tmax = 3.365h, 95.5% peak at 4.5h) or within 2h of a meal (high insulin/FFA blunting pituitary exocytosis and compounding hepatic CIS/SOCS2 negative regulator N_j)",
+    "whenToSwitch": "Immediately if secretagogues are pinned < 6h after morning rhGH or within 2h after a carbohydrate/fat meal",
+    "fix": "1) Enforce >= 2.5h fasted window before CJC-1295 no DAC (100\u2013150 mcg) + Ipamorelin (100\u2013150 mcg); 2) In 70% Night / 30% Morning split, place secretagogues in the 16:00 Afternoon Trough Bridge (9h post-07:00 morning rhGH) OR at 21:45 (30 min BEFORE the 22:15 Night rhGH depot rises); 3) Always co-administer Ipamorelin with CJC-1295 no DAC so Gq/PLC\u03b2 K+ closure overrides rhGH-induced hypothalamic somatostatin (SST2/SST5).",
+    "severity": "high"
+  },
+  {
+    "id": "se-d1-alpha2a-microdomain",
+    "domain": "cognition",
+    "trigger": "Working-memory noise, mental restlessness, or inverted-U right-limb over-stimulation when combining ASP4345 + Armodafinil + KW-6356",
+    "culprit": "Armodafinil tonic dopamine elevation increasing baseline occupancy a = [DA]/K_A into ASP4345's positive allosteric D1 equation s_D1 = (a + alpha*beta*a*b)/(1 + a + b + alpha*a*b), spilling cAMP from spine head (c_h) into spine neck (c_n) faster than PDE4/Guanfacine can clamp HCN channels",
+    "whenToSwitch": "If multi-step mental arithmetic or proof-holding becomes noisy or impulsive during peak Armodafinil window (Hours 2\u20135)",
+    "fix": "1) Ensure Guanfacine (0.5\u20131.0 mg) is active to inhibit spine-neck adenylyl cyclase and close HCN channels; 2) Trim Armodafinil from 100 mg -> 50 mg when ASP4345 is active; 3) Keep KW-6356 at 1.0\u20131.5 mg AM (long parent t\u00bd 18\u201343h accumulates across days).",
+    "severity": "moderate"
+  },
+  {
+    "id": "se-erda-calcitriol-d3",
+    "domain": "height",
+    "trigger": "Rising endogenous 1,25-(OH)2D3 (Calcitriol) and serum PO4 > 4.3 mg/dL on mandatory Erdafitinib (ERDA)",
+    "culprit": "Erdafitinib pan-FGFR1/3/4 blockade in renal proximal tubules suppressing FGF23-mediated CYP24A1 (calcitriol degradation) and disinhibiting CYP27B1 (1\u03b1-hydroxylase)",
+    "whenToSwitch": "Immediately upon starting Erdafitinib if serum PO4 >= 4.3 mg/dL or 1,25-(OH)2D3 rises above mid-reference",
+    "fix": "1) HOLD exogenous Vitamin D3 (800\u20132,000 IU/d) whenever endogenous calcitriol rises on Erdafitinib (per 226 \u2014 height protocol.md); 2) Run Sucroferric oxyhydroxide 500 mg (or Sevelamer 800 mg) with meals + Nicotinamide + conditional Tenapanor; 3) Separate Cu (2 mg) and Mn (2 mg) by >= 3h from phosphate binders.",
+    "severity": "critical"
   }
 ];
 
 export const CLIENT_226_CONSULTATION_BRANCHES = [
+  {
+    "id": "branch-226-cog-onhand",
+    "workspaceId": "ws-226-cognition",
+    "domain": "cognition",
+    "name": "Branch C0 \u00b7 Client 226 Active 5 On-Hand Cognition Stack (Guanfacine + Armodafinil + KW-6356 + ASP4345 + Intranasal Insulin)",
+    "badge": "Active On-Hand Core",
+    "summary": "Client 226's exact 5 on-hand compounds calibrated across dlPFC Layer III spine-head D1 (ASP4345) + spine-neck \u03b12A HCN clamp (Guanfacine), striatopallidal A2A effort initiation (KW-6356), tonic DAT wakefulness (Armodafinil), and olfactory/trigeminal GLUT4/ATP durability (Intranasal Insulin).",
+    "activeOverrides": {
+      "mode": "5 On-Hand Actuators \u00b7 Coupled Spatial cAMP + Striatal A2A + Neuronal GLUT4",
+      "holdList": [
+        "Track Armodafinil CYP3A4 induction against Guanfacine & Erdafitinib steady-state clearance (cycle Armodafinil w/ Pitolisant)",
+        "Trim Armodafinil to 50 mg on high-dose ASP4345 days to stay at the peak of the D1 inverted-U curve",
+        "Cap single Intranasal Insulin administration at 20\u201340 IU per window (60\u2013120 IU total across >=3 study windows; analytical single-bolus optimum 27.29 IU)"
+      ],
+      "featuredDoses": [
+        "07:30 AM Wake: KW-6356 (Sipagladenant) 1\u20132 mg Oral (t\u00bd 18\u201343h; insurmountable A2A inverse agonist lifting striatopallidal effort initiation)",
+        "07:30 AM Wake: Armodafinil 50\u2013100 mg Oral (t\u00bd ~ 15h; inward-facing DAT wakefulness across long sessions)",
+        "08:00 AM Pre-Encoding: ASP4345 (Selective D1 PAM) 5\u201310 mg Oral (amplifies phasic dlPFC spine-head D1 NMDAR/working-memory hold without stimulant load)",
+        "08:00 AM / 17:00 PM: Guanfacine ER 0.5\u20131.0 mg Oral (0.25\u20130.5 mg ED minimalistic or 1\u20131.5 mg ED; Gi-coupled \u03b12A clamp on dlPFC spine-neck HCN leak)",
+        "Pre-Task + Study Hour 2.5 + Study Hour 5.0: Intranasal Insulin 20\u201330 IU per spray window (60\u201390 IU total across >=3 administrations; analytical single-spray peak 27.29 IU)"
+      ]
+    }
+  },
+  {
+    "id": "branch-226-height-erda-minimal",
+    "workspaceId": "ws-226-height",
+    "domain": "height",
+    "name": "Branch H0 \u00b7 Settled Minimalistic 14-Day Height Protocol (Mandatory ERDA + 70/30 rhGH + CJC-1295 no DAC + Ipamorelin)",
+    "badge": "Mandatory ERDA + GH/GHRH/GHSR",
+    "summary": "Preserves the exact settled minimalistic 14-day Height Protocol (226 \u2014 height protocol.md) with mandatory Erdafitinib (no TYRA-300 available), full Erdafitinib Targeted Ancillaries, 70% Night / 30% Morning exogenous rhGH split, and calibrated CJC-1295 no DAC + Ipamorelin pulses.",
+    "activeOverrides": {
+      "mode": "Minimalistic 14-Day Staged Protocol \u00b7 Mandatory Erdafitinib + 70/30 rhGH + CJC-1295 no DAC / Ipamorelin",
+      "holdList": [
+        "NO TYRA-300 AVAILABLE: Erdafitinib (ERDA 0.25 mg/kg/d or 4\u20138 mg/d titrated) is mandatory; always run Erdafitinib Targeted Ancillaries",
+        "HOLD Vitamin D3 (800\u20132,000 IU/d) if endogenous calcitriol 1,25-(OH)2D3 or serum PO4 >= 4.3 mg/dL rises on Erdafitinib",
+        "HARD STOP NAC (300 mg/d) after Day 6 so Stage 2 lysyl oxidase (LOX Cu2+) cross-linking and redox signaling proceed unimpeded",
+        "Separate Sucroferric oxyhydroxide / Sevelamer / Colesevelam by >= 3h from Copper (2 mg), Manganese (2 mg), and fat-soluble vitamins"
+      ],
+      "featuredDoses": [
+        "Erdafitinib Targeted Ancillaries: Racecadotril 100 mg 2\u20133x/d + Cilostazol 25 mg 2x/d + Sucroferric oxyhydroxide 500 mg w/ meals (or Sevelamer 800 mg 2x/d) + Nicotinamide + conditional Tenapanor + Rebamipide 100 mg 3x/d + Finerenone/Eplerenone + Dorzolamide + TUDCA 250 mg 2x/d",
+        "Continuous Base (Days 1\u201314): Erdafitinib 0.25 mg/kg/d + Somatropin (rhGH) 12\u201315 IU/d (ramped from 100% Night to 70% Night [22:15] / 30% Morning [07:00]) + CJC-1295 no DAC 100\u2013150 mcg + Ipamorelin 100\u2013150 mcg (16:00 Afternoon Bridge &/or 21:45 Pre-Bed Primer) + Aromasin 12.5\u201325 mg EOD/E3D",
+        "Continuous Micronutrients (Days 1\u201314): MK-7 100\u2013200 mcg + Ubiquinol 100 mg + Urolithin A 250\u2013500 mg + Ergothioneine 5 mg + Pyridoxamine 100\u2013200 mg + L-Carnosine 500 mg 2x/d + Buffered Vit C 200 mg + Cu bisglycinate 2 mg + Mn bisglycinate 2 mg + Spermidine 5 mg + Brazilin",
+        "Stage 1A/1B \u2014 Build (Days 1\u20136): L-Glutamine 5,000 mg 2x/d + L-Proline 460 mg 2x/d + L-Cystine 500 mg 2x/d + NAG 500 mg 2x/d + MSM 1,500 mg/d + Creatine 3\u20135 g/d + Potassium citrate 10 mEq 2x/d + TUDCA 250 mg 2x/d + NAC 300 mg/d (Days 1\u20136 only)",
+        "Stage 2A (Days 7\u20138) & Stage 2B (Days 9\u201314): Hydrolyzed collagen peptides 5,000 mg/d + L-Citrulline 3,000 mg/d + Potassium citrate 10 mEq 2x/d + Vit K2 MK-4 15 mg 3x/d + LMHF vibration (35 Hz; 0.15\u20130.20g Stg 2A -> 0.25g Stg 2B; 2x10 min/d 6\u20138h apart) + Stage 2B Dietary Calcium 1,000 mg/d total"
+      ]
+    }
+  },
   {
     "id": "branch-226-cog-baseline",
     "workspaceId": "ws-226-cognition",
@@ -16052,6 +16215,331 @@ export const CLIENT_226_SHARED_LEDGER = [
     "sharedBudget": "Vascular PDE3 / cAMP Vasodilatory Margin"
   }
 ];
+
+export const CLIENT_226_MINIMALISTIC_HEIGHT_PROTOCOL = {
+  title: 'Client 226 Settled Minimalistic 14-Day Height Protocol (Mandatory Erdafitinib + 70/30 rhGH + CJC-1295 no DAC + Ipamorelin)',
+  fgfrConstraint: 'NO TYRA-300 (Dabogratinib) AVAILABLE — Mandatory Erdafitinib (ERDA 0.25 mg/kg/d or 4–8 mg/d titrated, t½ ~ 59h) with Full FGFR1/2/3/4 Targeted Ancillaries',
+  erdafitinibAncillaries: [
+    'Racecadotril 100 mg 2–3x/day + Cilostazol 25 mg 2x/day (reduces required pan-FGFR pressure via endogenous CNP/cGMP preservation)',
+    'Sucroferric oxyhydroxide 500 mg w/ meals (or Sevelamer carbonate 800 mg 2x/day) for primary luminal PO4 capture (separate >=3h from Cu/Mn)',
+    'Conditional Tenapanor 10 mg BID for paracellular NHE3 PO4 block if serum PO4 >= 4.5 mg/dL + Nicotinamide 250–500 mg BID (NaPi-IIb branch)',
+    'Rebamipide 100 mg 3x/day (+ conditional Irsogladine) for gastric/intestinal mucosal restitution',
+    'Finerenone 10 mg/d (or Eplerenone 25 mg/d) + topical Dorzolamide 2% BID for choroidal/RPE subretinal fluid clearance',
+    'TUDCA 250 mg 2x/day + conditional Colesevelam 625 mg (separate from fat-soluble vitamins) for FGFR4/CYP7A1 bile-acid diarrhea protection',
+    'HOLD Vitamin D3 (800–2,000 IU/d) whenever endogenous calcitriol 1,25-(OH)2D3 rises under Erdafitinib renal FGFR1/3/4 blockade',
+  ],
+  continuousBase: [
+    'Erdafitinib 0.25 mg/kg/day (or 4–8 mg/day titrated to PO4 3.8–4.4 mg/dL) — mandatory active FGFR inhibitor',
+    'GH (Somatropin) 12–15 IU/day (ramping from 100% Night [22:15] to 70% Night [22:15] / 30% Morning [07:00] split)',
+    'CJC-1295 no DAC (Mod GRF 1-29) 100–150 mcg + Ipamorelin 100–150 mcg SubQ (calibrated in 16:00 Afternoon Trough Bridge &/or 21:45 Pre-Bed Primer)',
+    'Aromasin (Exemestane) 12.5–25 mg EOD or E3D (or Anastrozole 0.5–1 mg/d; or Z-Endoxifen 1–2 mg/d in Refinements, never stacked w/ Tamoxifen)',
+    'Racecadotril 100 mg 2–3x/day + Cilostazol 25 mg 2x/day',
+    'Vit D3 800–2,000 IU/d (held if endogenous calcitriol rises on ERDA) + Vit K2 MK-7 100–200 mcg/d + Ubiquinol 100 mg/d + Urolithin A 250–500 mg/d',
+    'Ergothioneine 5 mg/d + Pyridoxamine 100–200 mg/d + L-Carnosine 500 mg 2x/d + Buffered Vit C 200 mg/d + Cu bisglycinate 2 mg/d + Mn bisglycinate 2 mg/d + Spermidine trihydrochloride 5 mg/d (~2.85 mg spermidine) + Brazilin',
+  ],
+  stages: [
+    {
+      id: 'stage-1ab',
+      name: 'Stage 1A / 1B — Build (Days 1–6 · 1A: Days 1–4, 1B: Days 5–6)',
+      items: [
+        'L-Glutamine 5,000 mg 2x/day (hexosamine & α-KG donor)',
+        'L-Proline 460 mg 2x/day (procollagen triple-helix substrate)',
+        'L-Cystine 500 mg 2x/day + NAC 300 mg/day (PAPS sulfate donor — STOP NAC after Day 6 so Stage 2 LOX cross-linking proceeds)',
+        'NAG (N-Acetyl-D-Glucosamine) 500 mg 2x/day + MSM 1,500 mg/day',
+        'Creatine monohydrate 3,000–5,000 mg/day (shared w/ Cognition)',
+        'Potassium citrate 10 mEq 2x/day + TUDCA 250 mg 2x/day',
+        'Refinements (1B Days 5–6): Glucosamine sulfate 1,500 mg/d + Chondroitin sulfate 800–1,200 mg/d + UMP 250 mg 2x/d + Taurine 1,000 mg 2x/d + Myo-inositol 1,000 mg 2x/d + Glycine 3,000 mg 2x/d + L-Lysine 500 mg 2x/d + 4-PBA + DNL343 + S107 + CaPPS',
+      ],
+    },
+    {
+      id: 'stage-2a',
+      name: 'Stage 2A — Lower Load (Days 7–8 · Cooper Phase-3 Hypertrophic Swelling)',
+      items: [
+        'Hydrolyzed collagen peptides 5,000 mg/day',
+        'L-Citrulline 3,000 mg/day (eNOS/NO subchondral perfusion)',
+        'Potassium citrate 10 mEq 2x/day',
+        'Vitamin K2 / MK-4 15 mg 3x/day',
+        'LMHF Vibration: 35 Hz; 0.15–0.20 g; 2 x 10 min/day; 6–8 hours apart',
+        'Refinements (2A Days 7–8): Lithium (as orotate, elemental Li) 2.5–5 mg/day (strictly Days 7–8+ after Stage 1 sulfation) + Taurine 1,000 mg 2x/d + Myo-inositol 1,000 mg 2x/d + Diosmin/Hesperidin 500 mg 2x/d',
+      ],
+    },
+    {
+      id: 'stage-2b',
+      name: 'Stage 2B — Higher Load (Days 9–14 · Type-H Vessel Invasion & Mineralization Handoff)',
+      items: [
+        'Hydrolyzed collagen peptides 5,000 mg/day',
+        'L-Citrulline 3,000 mg/day',
+        'Potassium citrate 10 mEq 2x/day',
+        'Vitamin K2 / MK-4 15 mg 3x/day',
+        'Dietary Calcium: 1,000 mg/day total (unlocked strictly in Stage 2B)',
+        'LMHF Vibration: 35 Hz; 0.25 g; 2 x 10 min/day; 6–8 hours apart',
+        'Refinements (2B Days 9–14): Boron glycinate 3–6 mg/d + Orthosilicic acid (Ch-OSA) 6–10 mg Si/d + Strontium citrate 170–340 mg/d (4h apart from Ca) + Selexipag / TPPU + Sulforaphane + Sodium Selenite',
+      ],
+    },
+  ],
+};
+
+export const CLIENT_226_ONHAND_COGNITION_STACK = {
+  title: 'Client 226 Active 5 On-Hand Cognition Stack & Coupled Spatial cAMP / CYP3A4 Model',
+  compounds: [
+    {
+      id: 'cmp-guanfacine',
+      name: 'Guanfacine ER',
+      onHandDose: '0.25–0.5 mg ED (minimalistic note) or 1.0–1.5 mg ED',
+      clockWindow: '08:00 AM (or split 08:00 AM / 17:00 PM under Armodafinil CYP3A4 induction)',
+      domain: 'Domain I (Conceptualization) & Domain IV (Stress/Durability)',
+      mechanism: 'Postsynaptic α2A-AR Gi agonist on dlPFC Layer III dendritic spine necks; inhibits adenylyl cyclase (c_n) to close cyclic-nucleotide-gated HCN cation channels and hold multi-step threads under clock stress without worsening baseline lethargy.',
+    },
+    {
+      id: 'cmp-armodafinil',
+      name: 'Armodafinil (R-Modafinil)',
+      onHandDose: '50–100 mg AM early (cycled w/ Pitolisant)',
+      clockWindow: '07:30 AM immediately upon waking (never after 11:00 AM)',
+      domain: 'Domain III (Motivation & Wakefulness)',
+      mechanism: 'Low-affinity inward-facing DAT conformation stabilizer (t½ ~ 15h) sustaining tonic cortical/accumbens dopamine and wakefulness across 10–12h sessions. Induces CYP3A4 over multi-day runs (accelerates Guanfacine & Erdafitinib clearance).',
+    },
+    {
+      id: 'cmp-kw6356',
+      name: 'KW-6356 (Sipagladenant)',
+      onHandDose: '1.0–2.0 mg AM (up to 2.5 mg)',
+      clockWindow: '07:30 AM upon waking (slow k_off & parent t½ 18.4–43.1h)',
+      domain: 'Domain III (Motivation & Effort Initiation)',
+      mechanism: 'Insurmountable selective adenosine A2A inverse agonist on striatopallidal D2 medium spiny neurons; collapses indirect-pathway cAMP brake to lower effort valuation cost without depleting vesicular dopamine.',
+    },
+    {
+      id: 'cmp-asp4345',
+      name: 'ASP4345 (ASP · Selective Dopamine D1 PAM)',
+      onHandDose: '5–10 mg AM (3–15 mg range)',
+      clockWindow: '08:00 AM (T - 60 min before deep conceptualization / encoding)',
+      domain: 'Domain I (Conceptualization & Multi-Step Working Memory)',
+      mechanism: 'Positive allosteric modulator of dlPFC Layer III spine-head D1 receptors: s_D1 = (a + alpha*beta*a*b)/(1 + a + b + alpha*a*b). Amplifies endogenous phasic dopamine NMDAR/cAMP working-memory hold while Guanfacine clamps spine-neck HCN leak.',
+    },
+    {
+      id: 'cmp-intranasal-insulin',
+      name: 'Intranasal Insulin (Metered U-100)',
+      onHandDose: '20–40 IU IN per window; 60–120 IU total across >=3 administrations (Analytical single-bolus optimum: 27.29 IU)',
+      clockWindow: 'Pre-Task (08:30) + Mid-Block (11:30) + Study Hour 5 Inflection (13:30–14:00)',
+      domain: 'Domain IV (Brain Fog & Durability — Client 226 #1 Responder) & Domain II (Retention)',
+      mechanism: 'Olfactory/trigeminal perivascular delivery bypassing BBB -> neuronal IR/IRS-1/PI3K/Akt -> hippocampal GLUT4 translocation, glycogen synthase kinase-3β (GSK3β) inhibition, and sustained synaptic ATP generation without systemic hypoglycemia.',
+    },
+  ],
+  spatialCampEquation: 'V_h dc_h/dt = V_h [(b_h + v_Dh s_D1)/(1 + eta_h g) - k_PDE,h c_h] - Q(c_h - c_n); V_n dc_n/dt = V_n [(b_n + v_Dn s_D1)/(1 + eta_n g) - k_PDE,n c_n] + Q(c_h - c_n)',
+};
+
+export function computeGhSecretagogueSynergy({
+  totalGhIu = 12,
+  splitMode = '70_30',
+  cjcDoseMcg = 150,
+  ipaDoseMcg = 150,
+  scheduleMode = 'afternoon_1600',
+  gammaSocs2 = 0.65,
+  betaCartilage = 0.45,
+  equalTotalPeptide = true,
+} = {}) {
+  const ghIu = Math.max(0, Math.min(24, Number(totalGhIu) || 12));
+  const cjcMcg = Math.max(0, Math.min(400, Number(cjcDoseMcg) || 150));
+  const ipaMcg = Math.max(0, Math.min(400, Number(ipaDoseMcg) || 150));
+  const gamma = Math.max(0.05, Math.min(2.0, Number(gammaSocs2) || 0.65));
+  const betaCart = Math.max(0.0, Math.min(1.5, Number(betaCartilage) || 0.45));
+
+  // Analytical Bateman peak for SC Somatropin (ka = 0.25 h^-1, kel = 0.35 h^-1)
+  const ka = 0.25;
+  const kel = 0.35;
+  const batemanTmaxH = Number((Math.log(kel / ka) / (kel - ka)).toFixed(3)); // 3.365 h
+
+  function simulateRegimen(modeKey) {
+    const isSplit = modeKey === 'ramp_morning_0730' ? false : splitMode === '70_30';
+    const fNight = isSplit ? 0.70 : 1.0;
+    const fMorn = isSplit ? 0.30 : 0.0;
+    const dNight = ghIu * fNight;
+    const dMorn = ghIu * fMorn;
+
+    let pulseTimes = [];
+    let pulseScale = 1.0;
+    if (modeKey === 'ramp_morning_0730') {
+      pulseTimes = [7.5];
+    } else if (modeKey === 'afternoon_1600') {
+      pulseTimes = [16.0];
+    } else if (modeKey === 'prebed_2145') {
+      pulseTimes = [21.75];
+    } else if (modeKey === 'dual_1600_2145') {
+      pulseTimes = [16.0, 21.75];
+      pulseScale = equalTotalPeptide ? 0.5 : 1.0;
+    }
+
+    const dt = 0.25;
+    const stepsPerDay = Math.round(24 / dt);
+    let aH = 0;
+    let hX = 0;
+    let h22 = 0;
+    let h20 = 0;
+    let sst = 0.25;
+    let mStore = 1.0;
+    let rLiver = 0.9;
+    let pLiver = 0.0;
+    let nLiver = 0.1;
+    let rCart = 0.92;
+    let pCart = 0.0;
+    let nCart = 0.08;
+
+    let intStat5Liver = 0;
+    let intStat5Cart = 0;
+    let intLocalIgf1 = 0;
+    let intPitSec = 0;
+    let int20kDa = 0;
+
+    // Run 3 days to reach periodic steady-state attractor
+    for (let day = 0; day < 3; day++) {
+      intStat5Liver = 0;
+      intStat5Cart = 0;
+      intLocalIgf1 = 0;
+      intPitSec = 0;
+      int20kDa = 0;
+
+      for (let s = 0; s < stepsPerDay; s++) {
+        const t = s * dt;
+        if (Math.abs(t - 7.0) < dt / 2 && dMorn > 0) aH += dMorn;
+        if (Math.abs(t - 22.25) < dt / 2 && dNight > 0) aH += dNight;
+
+        // Exogenous SC rhGH Bateman dynamics
+        const dAh = -ka * aH;
+        const dHx = 0.82 * ka * aH - kel * hX;
+        aH = Math.max(0, aH + dAh * dt);
+        hX = Math.max(0, hX + dHx * dt);
+
+        // Hypothalamic Somatostatin S(t) driven by circulating GH feedback
+        const hTotal = hX + h22 + 0.85 * h20;
+        const dSst = 0.18 + 0.55 * (hTotal / (2.5 + hTotal)) - 0.45 * sst;
+        sst = Math.max(0.1, sst + dSst * dt);
+
+        // Secretagogue receptor drives r(t) [Mod GRF, t½=0.5h] and q(t) [Ipamorelin, t½=2.0h]
+        let rDrive = 0;
+        let qDrive = 0;
+        for (const pt of pulseTimes) {
+          const dtPulse = t >= pt ? t - pt : t + 24 - pt;
+          if (dtPulse >= 0 && dtPulse <= 8.0) {
+            const cR = (cjcMcg * pulseScale) * Math.exp(-1.386 * dtPulse) * (1 - Math.exp(-5.5 * dtPulse));
+            const cQ = (ipaMcg * pulseScale) * Math.exp(-0.346 * dtPulse) * (1 - Math.exp(-3.4 * dtPulse));
+            rDrive += cR / (65 + cR);
+            qDrive += cQ / (55 + cQ);
+          }
+        }
+        rDrive = Math.min(1.0, rDrive);
+        qDrive = Math.min(1.0, qDrive);
+
+        // Pituitary Gs (p) and Gq/Ca2+ (z) with Ipamorelin opposing SST hyperpolarization
+        const sstEff = Math.max(0.05, sst * (1.0 - 0.72 * qDrive));
+        const pCamp = (0.08 + 0.92 * rDrive) / (1.0 + 1.35 * sstEff);
+        const zCa = 1.0 / (1.0 + Math.exp(-4.2 * (0.65 * qDrive - 0.55 * sstEff + 0.05)));
+
+        // Multiplicative pituitary secretion v_sec = M * (b0 + bp*p + bz*z + bpz*p*z)
+        const vSec =
+          mStore *
+          (0.02 + 0.35 * pCamp + 0.28 * zCa + 1.85 * pCamp * zCa) /
+          (1.0 + 0.25 * (hX / (4.0 + hX)));
+
+        // Vesicle store M(t) depletion & Pit-1/GHRH synthesis recovery
+        const dM = 0.22 * (1.0 - mStore) * (1.0 + 0.45 * rDrive) - 0.32 * vSec;
+        mStore = Math.max(0.12, Math.min(1.2, mStore + dM * dt));
+
+        // Endogenous 22 kDa (90%, k22=1.9 h^-1) & 20 kDa (10%, k20=1.15 h^-1 slower clearance)
+        h22 = Math.max(0, h22 + (0.90 * vSec * 4.2 - 1.9 * h22) * dt);
+        h20 = Math.max(0, h20 + (0.10 * vSec * 4.2 - 1.15 * h20) * dt);
+
+        // Peripheral Compartment 1: Liver (fast fenestrated exposure, stronger CIS/SOCS2 adaptation)
+        const thetaL = (hX + h22 + 0.75 * h20) / (1.8 + hX + h22 + 0.75 * h20);
+        rLiver = Math.max(0.15, Math.min(1.0, rLiver + (0.28 * (1 - rLiver) - 0.34 * thetaL * rLiver) * dt));
+        pLiver = Math.max(
+          0,
+          Math.min(
+            1.0,
+            pLiver + ((1.35 * rLiver * thetaL) / (1.0 + gamma * 1.35 * nLiver) * (1 - pLiver) - 0.75 * pLiver) * dt
+          )
+        );
+        nLiver = Math.max(0, nLiver + (0.48 * pLiver - 0.25 * nLiver) * dt);
+
+        // Peripheral Compartment 2: Growth-Plate Cartilage (Donnan diffusive filter + 20kDa retention + local beta_RQ GHRHR/GHSR1a)
+        const hCartDrive = 0.72 * hX + 0.88 * h22 + 1.25 * h20;
+        const thetaC = hCartDrive / (2.2 + hCartDrive);
+        rCart = Math.max(0.20, Math.min(1.0, rCart + (0.32 * (1 - rCart) - 0.22 * thetaC * rCart) * dt));
+        pCart = Math.max(
+          0,
+          Math.min(
+            1.0,
+            pCart + ((1.45 * rCart * thetaC) / (1.0 + gamma * 0.85 * nCart) * (1 - pCart) - 0.65 * pCart) * dt
+          )
+        );
+        nCart = Math.max(0, nCart + (0.38 * pCart - 0.25 * nCart) * dt);
+
+        // Local Epiphyseal IGF-1 synthesis (STAT5b + direct chondrocyte GHRHR/GHSR1a autocrine branch betaCart)
+        const localAutocrine = betaCart * (0.35 * rDrive + 0.25 * qDrive + 0.65 * rDrive * qDrive);
+        const igf1Rate = 1.25 * pCart + localAutocrine;
+
+        if (day === 2) {
+          intStat5Liver += pLiver * dt;
+          intStat5Cart += pCart * dt;
+          intLocalIgf1 += igf1Rate * dt;
+          intPitSec += vSec * dt;
+          int20kDa += h20 * dt;
+        }
+      }
+    }
+
+    return {
+      modeKey,
+      intStat5Liver: Number(intStat5Liver.toFixed(2)),
+      intStat5Cart: Number(intStat5Cart.toFixed(2)),
+      intLocalIgf1: Number(intLocalIgf1.toFixed(2)),
+      intPitSec: Number(intPitSec.toFixed(2)),
+      int20kDa: Number(int20kDa.toFixed(2)),
+      minVesicleStore: Number(mStore.toFixed(2)),
+    };
+  }
+
+  const baseline = simulateRegimen('rhgh_only');
+  const ramp0730 = simulateRegimen('ramp_morning_0730');
+  const bridge1600 = simulateRegimen('afternoon_1600');
+  const primer2145 = simulateRegimen('prebed_2145');
+  const dual1600_2145 = simulateRegimen('dual_1600_2145');
+
+  const allSchedules = {
+    rhgh_only: baseline,
+    ramp_morning_0730: ramp0730,
+    afternoon_1600: bridge1600,
+    prebed_2145: primer2145,
+    dual_1600_2145: dual1600_2145,
+  };
+  const current = allSchedules[scheduleMode] || bridge1600;
+  const cartilageSynergyPct = Number(
+    (((current.intLocalIgf1 - baseline.intLocalIgf1) / Math.max(0.01, baseline.intLocalIgf1)) * 100).toFixed(1)
+  );
+  const stat5CartGainPct = Number(
+    (((current.intStat5Cart - baseline.intStat5Cart) / Math.max(0.01, baseline.intStat5Cart)) * 100).toFixed(1)
+  );
+
+  // Determine winning schedule under current (gammaSocs2, betaCartilage) regime
+  const candidates = [bridge1600, primer2145, dual1600_2145];
+  candidates.sort((a, b) => b.intLocalIgf1 - a.intLocalIgf1);
+  const optimalSplitSchedule = candidates[0].modeKey;
+
+  return {
+    batemanTmaxH,
+    tailFractionAt4_5h: 0.955,
+    tailFractionAt9h: 0.508,
+    current,
+    baseline,
+    schedules: allSchedules,
+    cartilageSynergyPct,
+    stat5CartGainPct,
+    optimalSplitSchedule,
+    regimeExplanation:
+      gamma >= 0.75 && betaCart < 0.35
+        ? 'High CIS/SOCS2 Adaptation Regime: 16:00 Afternoon Trough Bridge (9h after 07:00 Morning 30% rhGH) outperforms unseparated pre-bed priming by avoiding peripheral GHR desensitization overlap.'
+        : betaCart >= 0.40
+          ? 'Positive Cartilage Autocrine + Somatostatin-Clamped Regime: Dual (16:00 Bridge + 21:45 Pre-Bed Primer) or 21:45 Primer maximizes epiphyseal STAT5b + local GHRHR/GHSR1a IGF-1 and 20 kDa isoform output.'
+          : 'Balanced Adaptation Regime: 16:00 Afternoon Trough Bridge provides the cleanest single-pulse STAT5b resensitization; 07:30 Morning Trough is optimal during the 100% Night rhGH ramp.',
+  };
+}
 
 export function computeTerazosinBiphasic(doseMg) {
   const d = Math.max(0, Number(doseMg) || 0);
