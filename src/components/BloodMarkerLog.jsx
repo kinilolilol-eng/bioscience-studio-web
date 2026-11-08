@@ -31,7 +31,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
     const file = event.target.files?.[0];
     if (!file) return;
     setPhotoName(file.name);
-    setSuccess(`Loaded 5 markers from "${file.name}". Review values and save to schedule the recheck.`);
+    setSuccess(`Loaded 5 markers from "${file.name}".`);
   }
 
   function applyLabPreset(preset) {
@@ -72,14 +72,14 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
         if (onSaved) await onSaved();
       }
     } catch {
-      /* Keep draft */
+      /* Preserve draft values */
     }
   }
 
   return (
-    <section className="studio-section blood-marker-section" aria-label="Blood-Marker Log">
+    <section className="studio-section blood-marker-section" aria-label="Blood Markers">
       <SectionHead
-        title="Blood-Marker Log"
+        title="Blood Markers"
         action={
           <div className="inline-actions">
             <button type="button" className="button secondary small-button" onClick={() => applyLabPreset('optimal')}>
@@ -90,18 +90,16 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
             </button>
           </div>
         }
-      >
-        Log lab values, schedule a calendar recheck, and compare direct requisition pricing.
-      </SectionHead>
+      />
 
       <div className="budget-callout">
-        <div className="inline-between">
-          <strong>Direct requisition pricing</strong>
+        <div className="inline-between" style={{ flexWrap: 'wrap', gap: '8px' }}>
+          <span>Direct Lab Requisition (5 Markers)</span>
           <span className="tabular-nums">
-            Bundle: <strong>${previewPanel.bundledDirectUsd}</strong> vs ${previewPanel.totalRetailUsd} retail · <strong>Saves ${previewPanel.savedOnLabsUsd}</strong>
+            <strong>${previewPanel.bundledDirectUsd}</strong> bundled vs ${previewPanel.totalRetailUsd} retail ·{' '}
+            <strong>Saves ${previewPanel.savedOnLabsUsd}</strong>
           </span>
         </div>
-        <p>{previewPanel.cheapestTestLine}</p>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -111,33 +109,22 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
             type="file"
             accept="image/*,.pdf"
             onChange={handlePhotoUpload}
-            hint={`Source file: ${photoName}`}
           />
           <Select
             label="Recheck interval"
             value={recheckWeeks}
             onChange={(e) => setRecheckWeeks(e.target.value)}
-            hint={`Recheck date: ${dateTime(previewPanel.recheckDateIso, workspace?.timezone)}`}
           >
-            <option value="4">4 weeks (acute check)</option>
-            <option value="6">6 weeks (steady state)</option>
-            <option value="8">8 weeks (consolidation)</option>
-            <option value="12">12 weeks (quarterly)</option>
+            <option value="4">4 weeks</option>
+            <option value="6">6 weeks</option>
+            <option value="8">8 weeks</option>
+            <option value="12">12 weeks</option>
           </Select>
         </div>
 
         <div className="form-grid three">
           {Object.values(BLOOD_MARKER_CATALOG).slice(0, 5).map((spec) => {
             const currentVal = values[spec.id] ?? '';
-            const numVal = Number(currentVal);
-            const flag =
-              currentVal === ''
-                ? ''
-                : numVal < spec.min
-                ? 'Low'
-                : numVal > spec.max
-                ? 'Elevated'
-                : 'In range';
             return (
               <Input
                 key={spec.id}
@@ -146,7 +133,6 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
                 step="any"
                 value={currentVal}
                 onChange={(e) => setValues((prev) => ({ ...prev, [spec.id]: e.target.value }))}
-                hint={`Ref ${spec.min} to ${spec.max} ${spec.unit} · ${spec.provider} $${spec.directUsd}${flag ? ` · ${flag}` : ''}`}
               />
             );
           })}
@@ -157,7 +143,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
 
         <div className="form-actions">
           <button type="submit" className="button primary" disabled={mutation.pending || !entries.length}>
-            {mutation.pending ? 'Saving…' : 'Save markers & schedule recheck'}
+            {mutation.pending ? 'Saving…' : 'Save markers'}
           </button>
         </div>
       </form>

@@ -24,6 +24,46 @@ export {
   evaluateReactorAtHour,
 };
 
+function cleanModeTitle(raw = '') {
+  return String(raw)
+    .replace(/^Branch\s+[A-Z0-9]+\s*·\s*/i, '')
+    .replace(/\s*\(cc224\)/gi, '')
+    .replace(/\s*\(Mandatory ERDA[^)]*\)/gi, '')
+    .replace(/\s*\(Guanfacine[^)]*\)/gi, '')
+    .trim();
+}
+
+function cleanLineItem(raw = '') {
+  const cleaned = String(raw)
+    .replace(/^NO TYRA-300 AVAILABLE:\s*/i, 'Erdafitinib Required: ')
+    .replace(/^HOLD\s+/i, 'Hold ')
+    .replace(/^HARD STOP\s+/i, 'Stop ')
+    .replace(/\s*->\s*/g, ' to ')
+    .replace(/\s*>=\s*/g, ' ≥ ')
+    .replace(/\s*<=\s*/g, ' ≤ ')
+    .replace(/\bw\/\s*/g, 'with ')
+    .replace(/\s*\+\s*/g, ', ');
+
+  const colonIdx = cleaned.indexOf(':');
+  if (colonIdx > 0 && colonIdx < 48) {
+    return {
+      label: cleaned.slice(0, colonIdx).trim(),
+      value: cleaned.slice(colonIdx + 1).trim(),
+    };
+  }
+  const dashIdx = cleaned.indexOf(' — ');
+  if (dashIdx > 0 && dashIdx < 48) {
+    return {
+      label: cleaned.slice(0, dashIdx).trim(),
+      value: cleaned.slice(dashIdx + 3).trim(),
+    };
+  }
+  return {
+    label: cleaned,
+    value: '',
+  };
+}
+
 export default function Client226Suite({ workspace, onApplyBranch, onAddCompoundToProtocol }) {
   const [activeTab, setActiveTab] = useState('calculators');
 
@@ -35,7 +75,7 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
   const [freeT4, setFreeT4] = useState('1.28');
   const [fgfrArm, setFgfrArm] = useState('arm_b');
   const [synthMult, setSynthMult] = useState('1.95');
-  const [chaperonesOn, setChaperonesOn] = useState(true);
+  const [chaperonesOn] = useState(true);
   const [selectedBranchId, setSelectedBranchId] = useState(
     workspace?.id === 'ws-226-height' ? 'branch-226-height-erda-minimal' : 'branch-226-cog-onhand'
   );
@@ -114,7 +154,7 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
 
   function handleActivateBranch(branch) {
     setSelectedBranchId(branch.id);
-    setBranchNotice(`Switched to ${branch.name}.`);
+    setBranchNotice(`Switched to ${cleanModeTitle(branch.name)}.`);
     if (onApplyBranch) {
       onApplyBranch(branch);
     }
@@ -123,11 +163,9 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
   return (
     <section className="studio-section client226-suite" aria-label="Client 226 Tools & Calculators">
       <SectionHead
-        title="Client 226 · Calculators, Alternatives & Side-Effect Fixes"
+        title="Calculators, Alternatives & Fixes"
         action={<span className="status status-configured">53 Slots · 24 Rules</span>}
-      >
-        Dose calculators, GH secretagogue timing, compound alternatives, and side-effect responses.
-      </SectionHead>
+      />
 
       <Tabs
         label="Client 226 Tools"
@@ -145,11 +183,9 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
       {activeTab === 'calculators' && (
         <div className="studio-panel">
           <div className="inline-between" style={{ flexWrap: 'wrap', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <h3>Mode Switcher</h3>
-            </div>
+            <h3>Active Protocol Mode</h3>
             <Select
-              label="Active Mode"
+              label="Select Mode"
               value={selectedBranchId}
               onChange={(e) => {
                 const found = CLIENT_226_CONSULTATION_BRANCHES.find((b) => b.id === e.target.value);
@@ -158,7 +194,7 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
             >
               {CLIENT_226_CONSULTATION_BRANCHES.map((b) => (
                 <option key={b.id} value={b.id}>
-                  {b.name.replace(/\s*\(cc224\)/gi, '')}
+                  {cleanModeTitle(b.name)}
                 </option>
               ))}
             </Select>
@@ -168,24 +204,36 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
 
           <article className="branch-summary-card">
             <div className="inline-between" style={{ flexWrap: 'wrap', gap: '8px' }}>
-              <h3>{activeBranch.name.replace(/\s*\(cc224\)/gi, '')}</h3>
-              <Status value="configured">{activeBranch.badge}</Status>
+              <h3>{cleanModeTitle(activeBranch.name)}</h3>
+              <Status value="configured">{activeBranch.domain === 'height' ? 'Client 226 Height' : 'Client 226 Cognition'}</Status>
             </div>
-            <div className="profile-columns" style={{ marginTop: '12px' }}>
+            <div className="mode-kv-grid">
               <div>
                 <h4>Active Doses</h4>
-                <ul className="clean-list">
-                  {activeBranch.activeOverrides.featuredDoses.map((d) => (
-                    <li key={d}>{d}</li>
-                  ))}
+                <ul className="mode-kv-list">
+                  {activeBranch.activeOverrides.featuredDoses.map((d) => {
+                    const row = cleanLineItem(d);
+                    return (
+                      <li key={d} className="mode-kv-row">
+                        <span className="mode-kv-label">{row.label}</span>
+                        {row.value && <span className="mode-kv-val">{row.value}</span>}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
               <div>
                 <h4>Hold Rules</h4>
-                <ul className="clean-list">
-                  {activeBranch.activeOverrides.holdList.map((h) => (
-                    <li key={h}>{h}</li>
-                  ))}
+                <ul className="mode-kv-list">
+                  {activeBranch.activeOverrides.holdList.map((h) => {
+                    const row = cleanLineItem(h);
+                    return (
+                      <li key={h} className="mode-kv-row">
+                        <span className="mode-kv-label">{row.label}</span>
+                        {row.value && <span className="mode-kv-val">{row.value}</span>}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -294,19 +342,19 @@ export default function Client226Suite({ workspace, onApplyBranch, onAddCompound
             <article className="telemetry-cell">
               <span>PO4 Gate ({po4Val} mg/dL)</span>
               <strong className="tabular-nums">
-                {po4Val < 4.5 ? 'PASS (< 4.5)' : 'HOLD CALCITRIOL'}
+                {po4Val < 4.5 ? 'Pass (< 4.5)' : 'Hold Calcitriol'}
               </strong>
             </article>
             <article className="telemetry-cell">
               <span>E2 Corridor ({e2Val} pg/mL)</span>
               <strong className="tabular-nums">
-                {e2Val >= 10 && e2Val <= 22 ? 'OPTIMAL (12–20)' : e2Val < 10 ? 'LOW (< 10)' : 'HIGH (> 22)'}
+                {e2Val >= 10 && e2Val <= 22 ? 'Optimal (12–20)' : e2Val < 10 ? 'Low (< 10)' : 'High (> 22)'}
               </strong>
             </article>
             <article className="telemetry-cell">
               <span>Free T4 ({ft4Val} ng/dL)</span>
               <strong className="tabular-nums">
-                {ft4Val >= 1.1 ? 'PASS (≥ 1.15)' : 'ADD L-T4'}
+                {ft4Val >= 1.1 ? 'Pass (≥ 1.15)' : 'Add L-T4'}
               </strong>
             </article>
           </div>

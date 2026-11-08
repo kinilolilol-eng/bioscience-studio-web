@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { request, useMutation } from '../api.js';
 import { dateTime, nameFor, number, sortRecent } from '../format.js';
 import { computeCostAndWasteAnalysis, createIcsCalendar } from '../studioLogic.js';
+import { GDOCS_SOURCES, applyGoogleDocsOverrides } from '../gdocsSync.js';
 import { Empty, Icon, Loading, Notice, SectionHead, Status } from '../components/ui.jsx';
 import { Findings } from '../components/Evaluation.jsx';
 import IntakeEditor from '../components/IntakeEditor.jsx';
@@ -167,12 +168,33 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
   const [calendarStatus, setCalendarStatus] = useState('');
   const [stageHighlight, setStageHighlight] = useState('all');
   const [cogModeHighlight, setCogModeHighlight] = useState('all');
+  const [gdocsSync, setGdocsSync] = useState(null);
   const mutation = useMutation();
   const quickIntent = useRef(null);
 
   const isHeight226 = workspace.id === 'ws-226-height';
   const isCognition226 = workspace.id === 'ws-226-cognition';
   const isClient226 = isHeight226 || isCognition226;
+
+  async function pullGoogleDocsSync() {
+    if (typeof window === 'undefined' || typeof window.fetch !== 'function') return;
+    try {
+      const res = await window.fetch(`/gdocs-sync.json?t=${Date.now()}`, { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        setGdocsSync(data);
+      }
+    } catch {
+      /* Offline or SSR environment */
+    }
+  }
+
+  useEffect(() => {
+    if (!isClient226) return undefined;
+    pullGoogleDocsSync();
+    const timer = window.setInterval(pullGoogleDocsSync, 15000);
+    return () => window.clearInterval(timer);
+  }, [isClient226, workspace.id]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -269,6 +291,15 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
     setCalendarStatus(`Exported ${allCalendarEvents.length} events to calendar (.ics).`);
   }
 
+  const { columns: activePlanColumns, onHandStrip: activeOnHandStrip } = applyGoogleDocsOverrides(
+    isHeight226 ? HEIGHT_PLAN_COLUMNS : COGNITION_PLAN_COLUMNS,
+    COGNITION_ONHAND_STRIP,
+    gdocsSync,
+    isHeight226
+  );
+
+  const primaryDoc = isHeight226 ? GDOCS_SOURCES.height : GDOCS_SOURCES.cognition;
+
   return (
     <div className="today-shell">
       {isClient226 && (
@@ -279,7 +310,7 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
               <p className="plan-subtitle">
                 {isHeight226
                   ? '14-Day Staged Protocol · Mandatory Erdafitinib · 70/30 GH + CJC-1295 no DAC + Ipamorelin'
-                  : '5 On-Hand Core · 4-Domain Study Architecture'}
+                  : '5 On-Hand Core · 4-Domain Study Plan'}
               </p>
             </div>
 
@@ -319,9 +350,43 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
             </div>
           </div>
 
+          <div className="gdocs-sync-bar" aria-label="Google Docs Live Sync">
+            <div className="gdocs-sync-left">
+              <span className="gdocs-dot" aria-hidden="true" />
+              <span>Google Docs Auto-Sync Active</span>
+              <span>·</span>
+              <a
+                href={primaryDoc.url}
+                target="_blank"
+                rel="noreferrer"
+                className="gdocs-doc-link"
+              >
+                {primaryDoc.title} ↗
+              </a>
+              <span>·</span>
+              <a
+                href={GDOCS_SOURCES.master.url}
+                target="_blank"
+                rel="noreferrer"
+                className="gdocs-doc-link"
+              >
+                {GDOCS_SOURCES.master.title} ↗
+              </a>
+            </div>
+            <div className="inline-actions">
+              <button
+                type="button"
+                className="text-button"
+                onClick={pullGoogleDocsSync}
+              >
+                Sync now
+              </button>
+            </div>
+          </div>
+
           {isCognition226 && (
             <div className="onhand-five-strip" aria-label="Client 226 5 On-Hand Compounds">
-              {COGNITION_ONHAND_STRIP.map((item) => (
+              {activeOnHandStrip.map((item) => (
                 <article className="onhand-card" key={item.name}>
                   <div className="onhand-card-top">
                     <span className="onhand-time tabular-nums">{item.time}</span>
@@ -337,7 +402,7 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
           )}
 
           <div className="plan-grid-four">
-            {(isHeight226 ? HEIGHT_PLAN_COLUMNS : COGNITION_PLAN_COLUMNS).map((col) => {
+            {activePlanColumns.map((col) => {
               const dimmed = isHeight226
                 ? stageHighlight !== 'all' && col.stageKey !== 'all' && col.stageKey !== stageHighlight
                 : cogModeHighlight !== 'all' && col.modeKey !== cogModeHighlight;
@@ -387,10 +452,10 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
             </div>
             <div className="plan-jump-links">
               <a href="#details-suite" className="plan-jump-link">
-                Calculators &amp; 53-Slot Alternatives ↓
+                Calculators &amp; Alternatives ↓
               </a>
               <a href="#blood-markers-section" className="plan-jump-link">
-                Blood Markers &amp; Logs ↓
+                Blood Markers ↓
               </a>
             </div>
           </footer>
