@@ -228,7 +228,10 @@ test('Browser-adapted Obsidian vault access resolves supplied compound descripti
 test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slots + 32 phase/reactor records), 170 compounds, 24 Eternal Tests, dose calculators, 336h reactor, and side-effect matrix', () => {
   assert.equal(CLIENT_226_FRONTIER_RECORDS.length, 85);
   assert.equal(CLIENT_226_COMPOUNDS.length >= 165, true);
-  assert.equal(CLIENT_226_ETERNAL_TESTS.length, 24);
+  assert.equal(
+    (CLIENT_226_ETERNAL_TESTS.height_rules?.length || 0) + (CLIENT_226_ETERNAL_TESTS.cognition_rules?.length || 0),
+    24
+  );
   assert.equal(CLIENT_226_HYPOTHESIS_NODES.length, 22);
   assert.equal(CLIENT_226_SIDE_EFFECT_MATRIX.length, 12);
   assert.equal(CLIENT_226_CONSULTATION_BRANCHES.length, 7);

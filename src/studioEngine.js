@@ -1542,7 +1542,9 @@ export async function handleLocalApi(path, { method = 'GET', body, download = fa
             arm_b_erdafitinib_14d_mm: CLIENT_226_REACTOR_RESULTS.arm_b_14d.height_mm,
             arm_a_annualized_rate_cm_yr: CLIENT_226_REACTOR_RESULTS.arm_a_14d.annualized_rate_cm_yr,
             window_violation_penalties_mm: CLIENT_226_REACTOR_RESULTS.window_violation_stress_tests,
-            eternal_test_rules_enforced: CLIENT_226_ETERNAL_TESTS.length,
+            eternal_test_rules_enforced:
+              (CLIENT_226_ETERNAL_TESTS.height_rules?.length || 0) +
+              (CLIENT_226_ETERNAL_TESTS.cognition_rules?.length || 0),
           },
         },
         {
