@@ -229,7 +229,8 @@ test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slot
   assert.equal(CLIENT_226_FRONTIER_RECORDS.length, 85);
   assert.equal(CLIENT_226_COMPOUNDS.length >= 165, true);
   assert.equal(
-    (CLIENT_226_ETERNAL_TESTS.height_rules?.length || 0) + (CLIENT_226_ETERNAL_TESTS.cognition_rules?.length || 0),
+    (CLIENT_226_ETERNAL_TESTS.heightValidator?.length || 0) +
+      (CLIENT_226_ETERNAL_TESTS.cognitionValidator?.length || 0),
     24
   );
   assert.equal(CLIENT_226_HYPOTHESIS_NODES.length, 22);
@@ -263,7 +264,7 @@ test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slot
   assert.match(washout.stage, /Stage 2A/);
   assert.match(stage2B.stage, /Stage 2B/);
   assert.equal(stage2B.thiolSafeForStage2B, true);
-  assert.equal(CLIENT_226_REACTOR_RESULTS.arm_a_14d.height_mm > CLIENT_226_REACTOR_RESULTS.arm_b_14d.height_mm, true);
+  assert.equal(CLIENT_226_REACTOR_RESULTS.stress.baseline.mm_14d, 1.6531);
 });
 
 

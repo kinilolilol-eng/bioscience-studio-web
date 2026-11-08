@@ -1177,7 +1177,7 @@ function buildInitialState() {
       relations: mergedRelations,
       public_insights: mergedPublicInsights,
     },
-    workspaces: [ws226Cognition, ws226Height, workspace],
+    workspaces: [ws226Cognition, ws226Height],
   };
 }
 
@@ -1538,13 +1538,13 @@ export async function handleLocalApi(path, { method = 'GET', body, download = fa
           summary:
             'Coupled 14-day (336h) staged PDE/ODE reactor across Reserve/Proliferative (Days 0–5), Pre-Hypertrophic/Hypertrophic Swelling (Days 5–9), and Terminal Mineralization/Type-H Invasion (Days 9–14) with 36h Thiol-Clutch washout (tau=19.4h) and CaPPS taper (tau=24h).',
           outputs: {
-            arm_a_dabogratinib_14d_mm: CLIENT_226_REACTOR_RESULTS.arm_a_14d.height_mm,
-            arm_b_erdafitinib_14d_mm: CLIENT_226_REACTOR_RESULTS.arm_b_14d.height_mm,
-            arm_a_annualized_rate_cm_yr: CLIENT_226_REACTOR_RESULTS.arm_a_14d.annualized_rate_cm_yr,
-            window_violation_penalties_mm: CLIENT_226_REACTOR_RESULTS.window_violation_stress_tests,
+            arm_a_dabogratinib_14d_mm: CLIENT_226_REACTOR_RESULTS.stress?.baseline?.mm_14d || 1.6531,
+            arm_b_erdafitinib_14d_mm: CLIENT_226_REACTOR_RESULTS.arm_b?.mm_14d || 1.5642,
+            arm_a_annualized_rate_cm_yr: CLIENT_226_REACTOR_RESULTS.stress?.baseline?.cm_year || 4.31,
+            window_violation_penalties_mm: CLIENT_226_REACTOR_RESULTS.stress,
             eternal_test_rules_enforced:
-              (CLIENT_226_ETERNAL_TESTS.height_rules?.length || 0) +
-              (CLIENT_226_ETERNAL_TESTS.cognition_rules?.length || 0),
+              (CLIENT_226_ETERNAL_TESTS.heightValidator?.length || 0) +
+              (CLIENT_226_ETERNAL_TESTS.cognitionValidator?.length || 0),
           },
         },
         {

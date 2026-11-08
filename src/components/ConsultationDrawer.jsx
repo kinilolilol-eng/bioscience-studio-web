@@ -29,7 +29,7 @@ export default function ConsultationDrawer({ workspace, prefilled = null, onSave
     event.preventDefault();
     setSuccess('');
     try {
-      const wsId = workspace?.id || 'ws-client-01';
+      const wsId = workspace?.id || 'ws-226-cognition';
       const result = await mutation.run(`/workspaces/${wsId}/consultation`, {
         clientCode,
         biologicalBaseline,

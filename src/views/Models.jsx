@@ -71,7 +71,7 @@ export default function Models({ owner, workspace, onRefresh }) {
 
   async function saveReconstitutionToProtocol() {
     setReconStatus('');
-    const wsId = workspace?.id || 'ws-client-01';
+    const wsId = workspace?.id || 'ws-226-height';
     try {
       const res = await reconMutation.run(`/workspaces/${wsId}/reconstitution`, {
         compoundName,
@@ -98,7 +98,7 @@ export default function Models({ owner, workspace, onRefresh }) {
 
   async function pushPinningToCalendar() {
     setPinStatus('');
-    const wsId = workspace?.id || 'ws-client-01';
+    const wsId = workspace?.id || 'ws-226-height';
     try {
       const res = await pinMutation.run(`/workspaces/${wsId}/pinning-schedule`, {
         compoundName: esterCompound,

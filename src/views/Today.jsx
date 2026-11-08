@@ -148,8 +148,10 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
       <Client226Suite
         workspace={workspace}
         library={library}
-        onAddCompoundToProtocol={async ({ name, doseText, slotTitle, notes }) => {
-          const amtMatch = String(doseText || '').match(/(\d+(?:\.\d+)?)\s*(mg|mcg|g|iu|ml)/i);
+        onAddCompoundToProtocol={async (ec, slot) => {
+          const name = ec?.name || 'Client 226 Actuator';
+          const doseText = ec?.dose || '';
+          const amtMatch = String(doseText).match(/(\d+(?:\.\d+)?)\s*(mg|mcg|g|iu|ml)/i);
           const amount = amtMatch ? Number(amtMatch[1]) : 10;
           const unit = amtMatch ? amtMatch[2].replace(/^iu$/i, 'IU').replace(/^ml$/i, 'mL') : 'mg';
           const res = await mutation.run(`/workspaces/${workspace.id}/protocol-item`, {
@@ -157,8 +159,8 @@ export default function Today({ workspace, library, onRefresh, owner, onManage, 
             amount,
             unit,
             interval_h: 24,
-            window_label: slotTitle || 'Client 226 Mechanistic Window',
-            notes: `${doseText ? `Dose: ${doseText} · ` : ''}${notes || ''}`.slice(0, 260),
+            window_label: slot?.name || 'Client 226 Mechanistic Window',
+            notes: `${doseText ? `Dose: ${doseText} · ` : ''}${ec?.context || slot?.function || ''}`.slice(0, 260),
           });
           if (res) {
             setSuccess(`Added ${name} (${amount} ${unit}) from Client 226 Explorer into active protocol.`);
