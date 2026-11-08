@@ -10290,7 +10290,448 @@ export const CLIENT_226_PHASES = {
   "thyroid": "Delivery, activation and transcriptional persistence"
 };
 
-export const CLIENT_226_HYPOTHESIS_NODES = [];
+export const CLIENT_226_HYPOTHESIS_NODES = [
+  {
+    "id": "ss31_epicatechin",
+    "name": "SS-31 + (+)-epicatechin (+ optional taurine/L-serine)",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.5,
+    "ports": {
+      "p_damage": [
+        -0.1,
+        0.1
+      ],
+      "p_fold": [
+        0.05,
+        0.06
+      ]
+    },
+    "signature": "Higher serum CPII per unit IGF-I with flat or lower CTX-II; lower GDF-15/FGF-21.",
+    "falsifier": "CPII/IGF-I unchanged and GDF-15 unchanged at Day 14; or CPII and CTX-II rise together.",
+    "constraint": "Epicatechin reverse-ATPase restraint is only coherent while ATP demand is glycolytically covered (see terazosin)."
+  },
+  {
+    "id": "oleate_ambroxol_batyl",
+    "name": "Oleate + ambroxol (+ batyl alcohol): LIMP-2 lipid recycling / export membrane",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.4,
+    "ports": {
+      "p_fold": [
+        0.08,
+        0.08
+      ],
+      "p_mmp": [
+        -0.03,
+        0.04
+      ]
+    },
+    "signature": "Faster procollagen secretion: serum PIIANP/CPII rise without matching C-Col10 rise.",
+    "falsifier": "No CPII shift at matched IGF-I; plasma glucosylsphingosine unchanged (LIMP-2 route not engaged).",
+    "constraint": ""
+  },
+  {
+    "id": "local_igf_branch",
+    "name": "rhPAPP-A2 / STC2 neutralization / G-1: local IGF-I liberation and recruitment",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.45,
+    "ports": {
+      "p_prolif": [
+        0.1,
+        0.1
+      ],
+      "p_recruit": [
+        0.06,
+        0.08
+      ]
+    },
+    "signature": "IGFBP-3/5 proteolytic fragments up and free:total IGF-I up, total IGF-I flat.",
+    "falsifier": "No fragment shift and no BALP/C-Col10 gain beyond the systemic IGF-I effect.",
+    "constraint": "Only liberates IGF-I that already exists: gain should scale with GH-driven total IGF-I."
+  },
+  {
+    "id": "fasudil_2a",
+    "name": "Fasudil, Days 7-8: ROCK cortical-tension release, YAP/TAZ-permissive entry",
+    "group": "frontier",
+    "window": "Days 6\u20138",
+    "prior": 0.6,
+    "ports": {
+      "p_entry": [
+        0.03,
+        0.05
+      ],
+      "p_exit": [
+        0.03,
+        0.05
+      ]
+    },
+    "signature": "Day 7-8 rise in serum C-Col10 (hypertrophic-zone turnover) within 48 h of start.",
+    "falsifier": "No C-Col10 excursion by Day 9 and no change in LMHF-session knee-edge strain readout.",
+    "constraint": "Window-bound (Days 7-8); blood-pressure effect would limit combination with terazosin/guanfacine-class agents."
+  },
+  {
+    "id": "isrib_5_8",
+    "name": "ISRIB, Days 5-8 only: lifts PERK-ATF4 SOX9 retention",
+    "group": "frontier",
+    "window": "Days 4\u20138",
+    "prior": 0.45,
+    "ports": {
+      "p_entry": [
+        0.1,
+        0.08
+      ],
+      "p_syn": [
+        0.08,
+        0.06
+      ],
+      "p_damage": [
+        0.05,
+        0.1
+      ]
+    },
+    "signature": "C-Col10 up at Day 8 vs Day 4, with CPII up (translation re-opened).",
+    "falsifier": "CPII spike >2x with CTX-II also up and no C-Col10 gain = ER overload, not hypertrophic release.",
+    "constraint": "Removing the integrated-stress brake raises ER cargo: coupled to TUDCA/betaine/chaperone capacity via C_er."
+  },
+  {
+    "id": "terazosin_biphasic",
+    "name": "Terazosin PM (0.65 mg optimum, positive ~0.5-0.8 mg): PGK1 glycolytic ATP, biphasic",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.5,
+    "ports": {
+      "p_syn": [
+        0.07,
+        0.05
+      ],
+      "p_prolif": [
+        0.04,
+        0.04
+      ]
+    },
+    "signature": "Fasting lactate unchanged, resting BP down <=5 mmHg; benefit only inside 0.5-0.8 mg.",
+    "falsifier": "No gain at 0.65 mg, or gain persists at >=1.2 mg (biphasic shape absent).",
+    "constraint": "Alpha-1 blockade: hold the night before any guanfacine+nicergoline exam-stress stack (cross-protocol)."
+  },
+  {
+    "id": "teprenone",
+    "name": "Teprenone (GGA): HSP70 induction",
+    "group": "chaperone",
+    "window": "Days 3\u20138",
+    "prior": 0.2,
+    "ports": {
+      "p_fold": [
+        0.08,
+        0.06
+      ],
+      "p_damage": [
+        -0.05,
+        0.05
+      ]
+    },
+    "signature": "Folding headroom: CPII holds as ISRIB/GH load rises.",
+    "falsifier": "No HSP70 rise in PBMC and no change in CPII/CTX-II ratio.",
+    "constraint": ""
+  },
+  {
+    "id": "ectoine",
+    "name": "Ectoine: compact interfacial hydration shell",
+    "group": "chaperone",
+    "window": "Days 3\u20138",
+    "prior": 0.15,
+    "ports": {
+      "p_fold": [
+        0.04,
+        0.05
+      ]
+    },
+    "signature": "Smaller CPII-to-PIIANP lag.",
+    "falsifier": "No change in secretion lag.",
+    "constraint": ""
+  },
+  {
+    "id": "pba_4_8",
+    "name": "4-PBA, Days 4-8: chemical chaperone",
+    "group": "chaperone",
+    "window": "Days 3\u20138",
+    "prior": 0.2,
+    "ports": {
+      "p_fold": [
+        0.1,
+        0.08
+      ],
+      "p_prolif": [
+        -0.04,
+        0.05
+      ]
+    },
+    "signature": "Folding gain plus a small proliferation cost (HDAC-inhibitor side).",
+    "falsifier": "Folding gain absent or proliferation unaffected (HDAC arm inert).",
+    "constraint": "Sodium load and HDAC activity bound dose; window Days 4-8 only."
+  },
+  {
+    "id": "dantrolene",
+    "name": "Dantrolene: ER RyR calcium-leak control",
+    "group": "er_calcium",
+    "window": "Days 3\u20138",
+    "prior": 0.25,
+    "ports": {
+      "p_damage": [
+        -0.08,
+        0.08
+      ],
+      "p_fold": [
+        0.03,
+        0.04
+      ]
+    },
+    "signature": "Lower UPR-damage share when ER cargo is high.",
+    "falsifier": "No change in damage markers at high cargo.",
+    "constraint": "Hepatotoxicity ceiling; use only when leak (not reuptake) limits."
+  },
+  {
+    "id": "cdn1163",
+    "name": "CDN1163: SERCA activation",
+    "group": "er_calcium",
+    "window": "Days 3\u20138",
+    "prior": 0.2,
+    "ports": {
+      "p_fold": [
+        0.08,
+        0.08
+      ],
+      "p_damage": [
+        -0.04,
+        0.05
+      ]
+    },
+    "signature": "Folding gain when ER calcium is reuptake-limited.",
+    "falsifier": "No gain; or effect equal to dantrolene (leak, not reuptake, dominates).",
+    "constraint": ""
+  },
+  {
+    "id": "retromer_tpt260_salbutamol",
+    "name": "TPT-260 + nocturnal salbutamol: retromer stabilization, hydrolase recapture",
+    "group": "frontier",
+    "window": "Days 0\u20135, Days 5\u201310, Days 10\u201314",
+    "prior": 0.35,
+    "ports": {
+      "p_mmp": [
+        -0.1,
+        0.08
+      ],
+      "p_prolif": [
+        0.03,
+        0.05
+      ]
+    },
+    "signature": "Lower serum CTX-II and MMP-13 fragments; free IGF-2 preserved.",
+    "falsifier": "No CTX-II fall; or daytime IGF-2 falls (salbutamol timing leak, see stress test).",
+    "constraint": "Salbutamol must stay nocturnal/fasted (daytime scavenges perilacunar IGF-2: stress scenario); beta2 tachyphylaxis modelled as weight 1.0->0.6; raises FFA (opposes acipimox) and shifts K intracellularly."
+  },
+  {
+    "id": "rapamycin_pulsed",
+    "name": "Pulsed micro-dose rapamycin: OFD1 clearance, primary cilia restoration",
+    "group": "frontier",
+    "window": "Days 2\u20133, Days 3\u20134, Days 4\u20135, Days 5\u20136, Days 6\u20137, Days 9\u201310, Days 10\u201311, Days 11\u201312, Days 12\u201313, Days 13\u201314",
+    "prior": 0.3,
+    "ports": {
+      "p_recruit": [
+        0.1,
+        0.1
+      ],
+      "p_prolif": [
+        -0.08,
+        0.1
+      ]
+    },
+    "signature": "Cilia length up in sampled cells; reserve-zone activity up while proliferation dips.",
+    "falsifier": "Net p_prolif loss with no recruitment gain (mTORC1 inhibition simply opposes GH).",
+    "constraint": "Sign-uncertain by construction (mTORC1 inhibition opposes GH drive, cilia restoration helps recruitment); t1/2 ~60 h so each pulse carries a ~3 d exponential tail that overlaps the ISRIB window."
+  },
+  {
+    "id": "lithium_7_14",
+    "name": "Lithium, Days 7-14 only: GSK3 inhibition, longer BMP signal",
+    "group": "frontier",
+    "window": "Days 6\u20137, Days 7\u20138, Days 8\u20139, Days 9\u201314",
+    "prior": 0.5,
+    "ports": {
+      "p_exit": [
+        0.1,
+        0.1
+      ],
+      "p_stefan": [
+        0.05,
+        0.06
+      ],
+      "p_fusion": [
+        0.1,
+        0.15
+      ],
+      "p_udp": [
+        -0.08,
+        0.04
+      ],
+      "p_mmp": [
+        0.06,
+        0.04
+      ]
+    },
+    "signature": "Faster H->Q exit with a small premature-fusion risk (Wnt/beta-catenin).",
+    "falsifier": "No exit gain, or fusion proxy (BALP/P1NP rise with falling growth-plate width) rises first.",
+    "constraint": "Hard exclusion Days 1-6 (IMPAD1); steady state takes 4-5 d so weight ramps 0.25->1.0; therapeutic Li still taxes IMPAD1 in-window (small p_udp/p_mmp); clearance depends on Na/volume (4-PBA Na load, MRA, K-citrate): trough check Day 9 and 12."
+  },
+  {
+    "id": "phytate_1_8",
+    "name": "Phytate (IP6), Days 1-8 only: hydroxyapatite crystal-surface inhibition",
+    "group": "frontier",
+    "window": "Days 0\u20138",
+    "prior": 0.5,
+    "ports": {
+      "p_fusion": [
+        -0.2,
+        0.12
+      ]
+    },
+    "signature": "Lower urinary brushite supersaturation, serum Ca stable.",
+    "falsifier": "No fusion-proxy change, or Mn/Cu status falls (chelation dominates).",
+    "constraint": "IP6 chelates Mn, Cu, Fe, Zn: separation from Mn/Cu dosing sets how much of the benefit is paid back in Golgi CANT1 and LOX."
+  },
+  {
+    "id": "redox_leak_cluster",
+    "name": "OP2113 / S1QEL / S3QEL electron-leak suppression + tRES-HESP carbonyl defense",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.4,
+    "ports": {
+      "p_damage": [
+        -0.05,
+        0.05
+      ],
+      "p_fold": [
+        0.02,
+        0.03
+      ]
+    },
+    "signature": "Lower carbonyl/oxidative stress markers; CTX-II flat or down.",
+    "falsifier": "Markers unchanged.",
+    "constraint": ""
+  },
+  {
+    "id": "sulforaphane_selenite",
+    "name": "Sulforaphane + sodium selenite: luminal folding redox (Days 9-14, after the thiol clutch has cleared)",
+    "group": "frontier",
+    "window": "Days 8\u201314",
+    "prior": 0.4,
+    "ports": {
+      "p_fold": [
+        0.03,
+        0.04
+      ],
+      "p_damage": [
+        -0.03,
+        0.04
+      ]
+    },
+    "signature": "Lower oxidized-protein markers; folding headroom in Stage 2B.",
+    "falsifier": "No marker change.",
+    "constraint": "Both reagents react with and consume thiols: kept out of Days 1-8 while the L-cystine/NAC clutch is active."
+  },
+  {
+    "id": "acipimox_pm",
+    "name": "Acipimox 250 mg PM: nocturnal FFA suppression",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.4,
+    "ports": {
+      "p_prolif": [
+        0.03,
+        0.05
+      ],
+      "p_recruit": [
+        0.03,
+        0.04
+      ],
+      "p_syn": [
+        0.02,
+        0.03
+      ]
+    },
+    "signature": "Nocturnal GH pulse amplitude up (FFA-release rebound).",
+    "falsifier": "No nocturnal GH or IGF-I change.",
+    "constraint": ""
+  },
+  {
+    "id": "naltriben_comparator",
+    "name": "Naltriben: TRPM7/CaMKII execution comparator",
+    "group": "frontier",
+    "window": "Days 0\u201314",
+    "prior": 0.3,
+    "ports": {
+      "p_exit": [
+        0.0,
+        0.1
+      ]
+    },
+    "signature": "Sign is the readout: comparator vs fasudil/lithium exit effects.",
+    "falsifier": "Effect indistinguishable from zero (comparator inert).",
+    "constraint": ""
+  },
+  {
+    "id": "meclizine_erk",
+    "name": "Meclizine 25-50 mg PM: distal ERK brake (ancillary alternative)",
+    "group": "ancillary",
+    "window": "Days 0\u201314",
+    "prior": 0.3,
+    "ports": {
+      "p_prolif": [
+        0.05,
+        0.06
+      ],
+      "p_entry": [
+        0.0,
+        0.05
+      ]
+    },
+    "signature": "Column proliferation up at small hypertrophic-entry cost.",
+    "falsifier": "No change; or next-day lethargy cost exceeds gain.",
+    "constraint": "Withhold before study/exam days (central H1 hangover)."
+  },
+  {
+    "id": "kmg_citrate_split",
+    "name": "Stage 2B K-citrate AM + Mg-citrate PM (renal Ca/PO4 balance)",
+    "group": "ancillary",
+    "window": "Days 8\u201314",
+    "prior": 0.7,
+    "ports": {
+      "p_fusion": [
+        -0.1,
+        0.1
+      ]
+    },
+    "signature": "Urine Mg/Ca up, calcium-phosphate supersaturation down.",
+    "falsifier": "No urine shift or serum K above ceiling.",
+    "constraint": "Shared potassium budget with MRA and salbutamol; urine pH ceiling ~6.5 (alkaline urine raises brushite); Mg-citrate >=4 h after Mn/Cu."
+  },
+  {
+    "id": "tppu_selexipag_coupling",
+    "name": "TPPU + selexipag gain uncertainty (lead-in Hour 180)",
+    "group": "coupling-uncertainty",
+    "window": "Days 7.5\u201314",
+    "prior": 1.0,
+    "ports": {
+      "p_stefan": [
+        0.0,
+        0.15
+      ]
+    },
+    "signature": "Type-H vessel proxies (CD31hi Emcnhi surrogate: ALP-BALP rise at metaphyseal border) by Day 11.",
+    "falsifier": "No BALP/P1NP lift Day 9-12 despite full dose.",
+    "constraint": "Carries the model's largest structural uncertainty: how much the Stefan channel gain really moves."
+  }
+];
 
 export const CLIENT_226_REACTOR_RESULTS = {
   "core_A": {
@@ -15739,7 +16180,6 @@ export const CLIENT_226_SHARED_LEDGER = [
     "sharedBudget": "Vascular PDE3 / cAMP Vasodilatory Margin"
   }
 ];
-
 
 export function computeTerazosinBiphasic(doseMg) {
   const d = Math.max(0, Number(doseMg) || 0);
