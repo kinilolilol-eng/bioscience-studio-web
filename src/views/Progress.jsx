@@ -21,6 +21,24 @@ export default function Progress({ workspace }) {
     {!measures.length ? <Empty title="No measures configured">Your recorded measures will appear here after a check-in is configured.</Empty> : <><div className="measure-picker"><Select label="Measure" value={measureId} onChange={(event) => setMeasureId(event.target.value)}>{measures.map((entry) => <option key={entry.id} value={entry.id}>{entry.name}{entry.unit ? ` (${entry.unit})` : ''}</option>)}</Select></div>
       {!records.length ? <Empty title="No observations yet">Record this measure in Today to begin your timeline.</Empty> : <><Chart title={measure.name} unit={measure.unit} observations series={[{ label: 'Observed', times: chronological.map((record) => record.occurred_at), values: chronological.map((record) => record.value) }]} markers={workspace.protocol_changes || []} /><div className="record-list observations">{records.map((record) => <article className="record-row" key={record.id}><div><h3>{dateTime(record.occurred_at, workspace.timezone)}</h3>{record.note && <p>{record.note}</p>}</div><strong>{number(record.value)} <span className="muted">{record.unit || measure.unit}</span></strong></article>)}</div></>}
     </>}
+    {workspace.symptom_attributions?.length > 0 && (
+      <section className="protocol-history">
+        <h2>Causal symptom attributions · Which change did this?</h2>
+        <div className="record-list">
+          {sortRecent(workspace.symptom_attributions).map((sym) => (
+            <article className="record-row" key={sym.id}>
+              <div>
+                <h3>{sym.attributedChange}</h3>
+                <p>{sym.observation}</p>
+                <p className="muted small">
+                  {sym.entryMode === 'voice_checkin' ? 'Voice Check-In (#6)' : 'Mini-Experiment (#4)'} · {sym.verdict} · {dateTime(sym.occurred_at, workspace.timezone)}
+                </p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
     {workspace.protocol_changes?.length > 0 && <section className="protocol-history"><h2>Protocol changes</h2><div className="record-list">{sortRecent(workspace.protocol_changes).map((change) => <article className="record-row" key={change.id}><div><h3>{change.title}</h3><p>{dateTime(change.occurred_at, workspace.timezone)}</p></div></article>)}</div></section>}
   </div>;
 }

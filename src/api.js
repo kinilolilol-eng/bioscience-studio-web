@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { handleLocalApi } from './studioEngine.js';
 
 let sessionGeneration = 0;
 export function resetSessionScope() { sessionGeneration += 1; }
@@ -19,6 +20,9 @@ export class ApiError extends Error {
 
 export async function request(path, { method = 'GET', body, signal, key, download = false } = {}) {
   const generation = sessionGeneration;
+  if (signal?.aborted) throw new DOMException('Aborted', 'AbortError');
+  const localDirect = await handleLocalApi(path, { method, body, download });
+  if (localDirect !== null) return localDirect;
   let response;
   try {
     response = await fetch(`/api${path}`, {

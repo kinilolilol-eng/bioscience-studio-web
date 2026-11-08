@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
+    "lint": "node --test test/public.test.mjs test/ui.test.mjs test/studio.test.mjs",
+    "test": "node --test test/public.test.mjs test/ui.test.mjs test/studio.test.mjs",
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {

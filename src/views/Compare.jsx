@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { request, useMutation } from '../api.js';
 import { browserTimezone, dateTime, instant, localTime, nameFor, number, numeric, scopeLabel } from '../format.js';
-import { Drawer, Empty, Input, Loading, Notice, SectionHead, Select, Status } from '../components/ui.jsx';
+import { ESTER_KINETICS, buildPctAncillaryPlan, evaluateDoseAdjustmentAdvisor } from '../studioLogic.js';
+import { Drawer, Empty, Input, Loading, Notice, SectionHead, Select, Status, Tabs } from '../components/ui.jsx';
 import { Coverage, Findings, SeriesDetails } from '../components/Evaluation.jsx';
 import Chart from '../components/Chart.jsx';
+import ReceptorMap from '../components/ReceptorMap.jsx';
 
 function initialDraft(item) {
   return { item_id: item?.id || '', amount: item?.next_amount ?? item?.amount ?? '', interval_h: '', shift_h: '0', scope: 'schedule_from', effective_from: localTime(), horizon_h: '168' };
@@ -12,6 +14,7 @@ const percent = (value) => value == null ? 'Not computed' : `${value > 0 ? '+' :
 
 export default function Compare({ workspace, library, owner, onRefresh }) {
   const items = workspace.protocol.items.filter((entry) => entry.due_status !== 'complete');
+  const [reviewerMode, setReviewerMode] = useState('exposure'); // 'exposure' | 'pct_ancillary' | 'stack_builder'
   const [draft, setDraft] = useState(() => initialDraft(items[0]));
   const [comparison, setComparison] = useState(null);
   const [comparedDraft, setComparedDraft] = useState(null);
@@ -24,6 +27,13 @@ export default function Compare({ workspace, library, owner, onRefresh }) {
   const [minimum, setMinimum] = useState(items[0]?.minimum_amount ?? '');
   const [maximum, setMaximum] = useState(items[0]?.maximum_amount ?? '');
   const [target, setTarget] = useState('100');
+
+  // PCT & Ancillary Builder state (Reviewer Mode)
+  const [pctEster, setPctEster] = useState('cypionate');
+  const [pctWeeklyMg, setPctWeeklyMg] = useState('140');
+  const [pctWeeks, setPctWeeks] = useState('12');
+  const [pctSerm, setPctSerm] = useState('endoxifen');
+
   const currentRequest = useRef(null);
   const sequence = useRef(0);
   const effectiveEdited = useRef(false);
@@ -79,38 +89,177 @@ export default function Compare({ workspace, library, owner, onRefresh }) {
     } catch { /* The server rejects stale comparisons; retain the reason and require a new comparison. */ }
   }
   if (!items.length) return <Empty title={workspace.protocol.items.length ? 'No upcoming schedule to compare' : 'Add a protocol before comparing'}>{workspace.protocol.items.length ? 'Completed schedules and actual records are retained. A new future schedule must be assigned before it can be compared.' : 'A comparison changes one assigned item against the same current state. No plan is active here yet.'}</Empty>;
-  return <div className="compare-layout"><section className="comparison-controls"><SectionHead title="Compare a change">Explore amount and timing. Your current plan stays unchanged until you save.</SectionHead>
-    <form onSubmit={(event) => { event.preventDefault(); runComparison(); }}>
-      <Select label="Compound" value={draft.item_id} onChange={(event) => chooseItem(event.target.value)}>{items.map((entry) => <option key={entry.id} value={entry.id}>{nameFor(library, entry.compound_id)} · {entry.amount} {entry.unit}</option>)}</Select>
-      {item && <p className="current-plan">Current: <strong>{number(item.amount)} {item.unit}</strong> {item.interval_h == null ? 'once' : `every ${number(item.interval_h)} h`}</p>}
-      <div className="form-grid two"><Input label={`Proposed amount (${item?.unit || ''})`} type="number" step="any" min="0" required value={draft.amount} onChange={(event) => edit('amount', event.target.value)} /><Input label="Interval (hours)" type="number" step="any" min="0.25" max="8760" placeholder="Keep current" disabled={draft.scope === 'next_occurrence'} value={draft.scope === 'next_occurrence' ? '' : draft.interval_h} onChange={(event) => edit('interval_h', event.target.value)} hint={draft.scope === 'next_occurrence' ? 'A next-occurrence change keeps the recurring interval.' : 'Blank keeps the current interval.'} /></div>
-      <Input label="Timing shift (hours)" type="number" min="-720" max="720" step="any" required value={draft.shift_h} onChange={(event) => edit('shift_h', event.target.value)} hint="Negative moves it earlier; positive moves it later." />
-      <Select label="Change scope" value={draft.scope} onChange={(event) => edit('scope', event.target.value)}><option value="schedule_from">Recurring schedule from this time</option><option value="next_occurrence">Next occurrence only</option></Select>
-      <Input label="Effective from" type="datetime-local" required value={draft.effective_from} onChange={(event) => edit('effective_from', event.target.value)} hint={`Time in ${browserTimezone()}. Uses now when you compare unless you choose a time. Past actual records are not edited.`} />
-      <Select label="Comparison horizon" value={draft.horizon_h} onChange={(event) => edit('horizon_h', event.target.value)}><option value="24">24 hours</option><option value="72">72 hours</option><option value="168">7 days</option><option value="336">14 days</option><option value="720">30 days</option></Select>
-      <button className="button primary full-width" disabled={pending || matchPending}>{pending ? 'Comparing…' : 'Run comparison'}</button>
-    </form>
-    <details className="exposure-tool"><summary>Match current exposure</summary><p className="muted small">Match a percentage of this item’s current modeled exposure after your timing change, within a chosen amount range.</p>
-      <form onSubmit={matchExposure}><div className="form-grid two"><Input label={`Minimum (${item?.unit || ''})`} type="number" step="any" min="0" required value={minimum} onChange={(event) => { invalidate(); setMinimum(event.target.value); }} /><Input label={`Maximum (${item?.unit || ''})`} type="number" step="any" min="0" required value={maximum} onChange={(event) => { invalidate(); setMaximum(event.target.value); }} /></div><Input label="Target exposure (%)" type="number" step="any" min="0" max="1000" required value={target} onChange={(event) => { invalidate(); setTarget(event.target.value); }} /><button className="button secondary full-width" disabled={pending || matchPending}>{matchPending ? 'Finding matches…' : 'Find exposure matches'}</button></form>
-      {match && <div className="match-result"><p>{match.explanation}</p>{match.solutions.length ? <div className="match-options">{match.solutions.map((solution, index) => <button className="button secondary small-button" key={index} onClick={() => { const next = { ...draft, amount: solution }; setDraft(next); runComparison(next); }}>Compare {number(solution)} {match.unit}</button>)}</div> : <p>No solution in the chosen range.</p>}</div>}
-    </details>
-  </section><div className="comparison-output" aria-live="polite"><Notice>{error}</Notice><Notice kind="success">{success}</Notice>
-    {(pending || matchPending) && <Loading>{pending ? 'Comparing against the current state…' : 'Searching the configured range…'}</Loading>}
-    {!comparison && !pending && !matchPending && <Empty title="See what changes">Run a comparison to see exposure changes, interactions and configured conditions.</Empty>}
-    {comparison && <>
-      <SectionHead title="What changes" action={<Status value="neutral">Not saved</Status>}>{scopeLabel(comparedDraft.scope)} · {dateTime(comparedDraft.effective_from, workspace.timezone)}</SectionHead>
-      <Coverage evaluation={comparison.proposed} />
-      {comparison.changes?.length > 0 && <div className="delta-list">{comparison.changes.map((change) => <article className="delta-row" key={change.compound_id}><h3>{change.name}</h3><div><span>Exposure area</span><strong>{percent(change.auc_percent)}</strong></div><div><span>Peak</span><strong>{percent(change.peak_percent)}</strong></div></article>)}</div>}
-      <div className="curve-list">{comparison.proposed.series.map((series) => {
-        const baseline = comparison.baseline.series.find((entry) => entry.compound_id === series.compound_id);
-        if (series.status !== 'computed') return <div className="missing-model" key={series.compound_id}><h3>{series.name}</h3><p>Not computed: {series.missing?.join('; ') || 'the required model inputs are not configured.'}</p></div>;
-        return <article className="curve-result" key={series.compound_id}><Chart title={series.name} unit={series.unit} series={[...(baseline?.status === 'computed' ? [{ ...baseline, label: 'Current plan', dashed: true }] : []), { ...series, label: 'Proposed plan' }]} />{series.unit === 'relative' && <p className="microcopy">Relative exposure for this compound only; not an absolute concentration or a cross-compound total.</p>}<SeriesDetails series={series} owner={owner} /></article>;
-      })}</div>
-      <Findings evaluation={{ ...comparison.proposed, gates: comparison.gates || comparison.proposed.gates }} heading="Conditions and trade-offs" />
-      {comparison.explanation && <details className="reason" open><summary>Why this result</summary><p>{typeof comparison.explanation === 'string' ? comparison.explanation : JSON.stringify(comparison.explanation)}</p></details>}
-      <div className="save-comparison"><div><h3>Keep this change?</h3><p>{!canEdit ? 'You can compare scenarios. Your owner manages saved protocol changes.' : !comparison.can_apply ? 'The configured conditions do not permit saving this change.' : 'Saving changes the planned protocol, not your actual intake history.'}</p></div><button className="button primary" disabled={!canEdit || !comparison.can_apply} onClick={() => setConfirm(true)}>Save change</button></div>
-    </>}
-  </div>
+
+  const advisorState = evaluateDoseAdjustmentAdvisor({
+    labs: workspace.blood_marker_panels || [],
+    symptomAttributions: workspace.symptom_attributions || [],
+    protocolItems: items,
+  });
+
+  const pctPlan = buildPctAncillaryPlan({
+    ester: pctEster,
+    weeklyDoseMg: Number(pctWeeklyMg) || 140,
+    cycleWeeks: Number(pctWeeks) || 12,
+    sermChoice: pctSerm,
+  });
+
+  return <div className="reviewer-wrapper">
+    <div className="reviewer-mode-tabs">
+      <Tabs
+        label="Protocol Reviewer Modes"
+        value={reviewerMode}
+        onChange={setReviewerMode}
+        entries={[
+          ['exposure', 'Exposure & Timing Reviewer (+ Dose Advisor)'],
+          ['pct_ancillary', 'PCT & Ancillary Builder (Paid Reviewer Mode)'],
+          ['stack_builder', 'Pro Stack & Interaction Builder'],
+        ]}
+      />
+    </div>
+
+    {reviewerMode === 'exposure' && (
+      <div className="compare-layout"><section className="comparison-controls"><SectionHead title="Compare a change">Explore amount and timing. Your current plan stays unchanged until you save.</SectionHead>
+        <form onSubmit={(event) => { event.preventDefault(); runComparison(); }}>
+          <Select label="Compound" value={draft.item_id} onChange={(event) => chooseItem(event.target.value)}>{items.map((entry) => <option key={entry.id} value={entry.id}>{nameFor(library, entry.compound_id)} · {entry.amount} {entry.unit}</option>)}</Select>
+          {item && <p className="current-plan">Current: <strong>{number(item.amount)} {item.unit}</strong> {item.interval_h == null ? 'once' : `every ${number(item.interval_h)} h`}</p>}
+          <div className="form-grid two"><Input label={`Proposed amount (${item?.unit || ''})`} type="number" step="any" min="0" required value={draft.amount} onChange={(event) => edit('amount', event.target.value)} /><Input label="Interval (hours)" type="number" step="any" min="0.25" max="8760" placeholder="Keep current" disabled={draft.scope === 'next_occurrence'} value={draft.scope === 'next_occurrence' ? '' : draft.interval_h} onChange={(event) => edit('interval_h', event.target.value)} hint={draft.scope === 'next_occurrence' ? 'A next-occurrence change keeps the recurring interval.' : 'Blank keeps the current interval.'} /></div>
+          <Input label="Timing shift (hours)" type="number" min="-720" max="720" step="any" required value={draft.shift_h} onChange={(event) => edit('shift_h', event.target.value)} hint="Negative moves it earlier; positive moves it later." />
+          <Select label="Change scope" value={draft.scope} onChange={(event) => edit('scope', event.target.value)}><option value="schedule_from">Recurring schedule from this time</option><option value="next_occurrence">Next occurrence only</option></Select>
+          <Input label="Effective from" type="datetime-local" required value={draft.effective_from} onChange={(event) => edit('effective_from', event.target.value)} hint={`Time in ${browserTimezone()}. Uses now when you compare unless you choose a time. Past actual records are not edited.`} />
+          <Select label="Comparison horizon" value={draft.horizon_h} onChange={(event) => edit('horizon_h', event.target.value)}><option value="24">24 hours</option><option value="72">72 hours</option><option value="168">7 days</option><option value="336">14 days</option><option value="720">30 days</option></Select>
+          <button className="button primary full-width" disabled={pending || matchPending}>{pending ? 'Comparing…' : 'Run comparison'}</button>
+        </form>
+        <details className="exposure-tool"><summary>Match current exposure</summary><p className="muted small">Match a percentage of this item’s current modeled exposure after your timing change, within a chosen amount range.</p>
+          <form onSubmit={matchExposure}><div className="form-grid two"><Input label={`Minimum (${item?.unit || ''})`} type="number" step="any" min="0" required value={minimum} onChange={(event) => { invalidate(); setMinimum(event.target.value); }} /><Input label={`Maximum (${item?.unit || ''})`} type="number" step="any" min="0" required value={maximum} onChange={(event) => { invalidate(); setMaximum(event.target.value); }} /></div><Input label="Target exposure (%)" type="number" step="any" min="0" max="1000" required value={target} onChange={(event) => { invalidate(); setTarget(event.target.value); }} /><button className="button secondary full-width" disabled={pending || matchPending}>{matchPending ? 'Finding matches…' : 'Find exposure matches'}</button></form>
+          {match && <div className="match-result"><p>{match.explanation}</p>{match.solutions.length ? <div className="match-options">{match.solutions.map((solution, index) => <button className="button secondary small-button" key={index} onClick={() => { const next = { ...draft, amount: solution }; setDraft(next); runComparison(next); }}>Compare {number(solution)} {match.unit}</button>)}</div> : <p>No solution in the chosen range.</p>}</div>}
+        </details>
+      </section><div className="comparison-output" aria-live="polite"><Notice>{error}</Notice><Notice kind="success">{success}</Notice>
+        {(pending || matchPending) && <Loading>{pending ? 'Comparing against the current state…' : 'Searching the configured range…'}</Loading>}
+        {!comparison && !pending && !matchPending && <Empty title="See what changes">Run a comparison to see exposure changes, interactions and configured conditions.</Empty>}
+        {comparison && <>
+          <SectionHead title="What changes" action={<Status value="neutral">Not saved</Status>}>{scopeLabel(comparedDraft.scope)} · {dateTime(comparedDraft.effective_from, workspace.timezone)}</SectionHead>
+          <Coverage evaluation={comparison.proposed} />
+          {comparison.changes?.length > 0 && <div className="delta-list">{comparison.changes.map((change) => <article className="delta-row" key={change.compound_id}><h3>{change.name}</h3><div><span>Exposure area</span><strong>{percent(change.auc_percent)}</strong></div><div><span>Peak</span><strong>{percent(change.peak_percent)}</strong></div></article>)}</div>}
+          <div className="curve-list">{comparison.proposed.series.map((series) => {
+            const baseline = comparison.baseline.series.find((entry) => entry.compound_id === series.compound_id);
+            if (series.status !== 'computed') return <div className="missing-model" key={series.compound_id}><h3>{series.name}</h3><p>Not computed: {series.missing?.join('; ') || 'the required model inputs are not configured.'}</p></div>;
+            return <article className="curve-result" key={series.compound_id}><Chart title={series.name} unit={series.unit} series={[...(baseline?.status === 'computed' ? [{ ...baseline, label: 'Current plan', dashed: true }] : []), { ...series, label: 'Proposed plan' }]} />{series.unit === 'relative' && <p className="microcopy">Relative exposure for this compound only; not an absolute concentration or a cross-compound total.</p>}<SeriesDetails series={series} owner={owner} /></article>;
+          })}</div>
+          <Findings evaluation={{ ...comparison.proposed, gates: comparison.gates || comparison.proposed.gates }} heading="Conditions and trade-offs" />
+          {comparison.explanation && <details className="reason" open><summary>Why this result</summary><p>{typeof comparison.explanation === 'string' ? comparison.explanation : JSON.stringify(comparison.explanation)}</p></details>}
+          <div className="save-comparison"><div><h3>Keep this change?</h3><p>{!canEdit ? 'You can compare scenarios. Your owner manages saved protocol changes.' : !comparison.can_apply ? 'The configured conditions do not permit saving this change.' : 'Saving changes the planned protocol, not your actual intake history.'}</p></div><button className="button primary" disabled={!canEdit || !comparison.can_apply} onClick={() => setConfirm(true)}>Save change</button></div>
+        </>}
+
+        {/* Dose-Adjustment Advisor embedded directly inside the Reviewer, gated on real lab + symptom data */}
+        <section className="studio-section advisor-embedded-section" aria-label="Dose-Adjustment Advisor">
+          <SectionHead
+            title="Dose-Adjustment Advisor (Embedded in Reviewer)"
+            action={
+              <Status value={advisorState.unlocked ? 'due' : 'missing_input'}>
+                {advisorState.unlocked ? 'Unlocked · Real Lab + Symptom Data Verified' : 'Gated · Awaiting Real Data'}
+              </Status>
+            }
+          >
+            Sits inside the Reviewer rather than a standalone screen. Activates only when both Blood-Marker Labs and Causal Symptom Attributions have real recorded data.
+          </SectionHead>
+          {!advisorState.unlocked ? (
+            <div className="finding finding-missing_input">
+              <h3>Advisor locked until empirical evidence is logged</h3>
+              <p>Missing required inputs: {advisorState.missingRequirements.join(' AND ')}.</p>
+            </div>
+          ) : (
+            <div className="record-list">
+              {advisorState.recommendations.map((rec) => (
+                <article className="record-row" key={rec.id}>
+                  <div>
+                    <h3>{rec.targetCompound}: {rec.action}</h3>
+                    <p>{rec.evidenceBasis}</p>
+                    <small className="muted">{rec.confidence}</small>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
+        </section>
+      </div></div>
+    )}
+
+    {reviewerMode === 'pct_ancillary' && (
+      <section className="studio-section pct-builder-section" aria-label="PCT and Ancillary Builder Mode">
+        <SectionHead
+          title="PCT &amp; Ancillary Builder · HPTA Restart &amp; Ester Washout Kinetics"
+          action={<Status value="due">Paid Reviewer Mode</Status>}
+        >
+          Computes the exact ester clearance washout window before initiating SERM therapy (Endoxifen, Enclomiphene, or Raloxifene) so pituitary gonadotropes are not stimulated while exogenous androgen remains suppressive.
+        </SectionHead>
+
+        <div className="form-grid four">
+          <Select label="Primary Ester Depot" value={pctEster} onChange={(e) => setPctEster(e.target.value)}>
+            {Object.entries(ESTER_KINETICS).map(([key, spec]) => (
+              <option key={key} value={key}>{spec.label} (t½ {spec.halfLifeH}h)</option>
+            ))}
+          </Select>
+          <Input label="Weekly Androgen Load (mg/wk)" type="number" min="20" max="1500" value={pctWeeklyMg} onChange={(e) => setPctWeeklyMg(e.target.value)} />
+          <Input label="Exposure Duration (weeks)" type="number" min="2" max="104" value={pctWeeks} onChange={(e) => setPctWeeks(e.target.value)} />
+          <Select label="SERM Co-Regulator Choice" value={pctSerm} onChange={(e) => setPctSerm(e.target.value)}>
+            <option value="endoxifen">Direct (Z)-Endoxifen (CYP2D6 bypass)</option>
+            <option value="enclomiphene">Enclomiphene Citrate (Pure trans-isomer)</option>
+            <option value="raloxifene">Raloxifene HCl (Mammary-selective)</option>
+          </Select>
+        </div>
+
+        <div className="dose-telemetry-grid" style={{ marginTop: '18px' }}>
+          <div className="telemetry-cell">
+            <span>Calculated Ester Washout Window</span>
+            <strong className="tabular-nums">{pctPlan.washoutDays} days</strong>
+            <small>{pctPlan.esterLabel} ester (t½ = {pctPlan.halfLifeH}h)</small>
+          </div>
+          <div className="telemetry-cell">
+            <span>Optimal SERM Initiation</span>
+            <strong className="tabular-nums">{pctPlan.sermStartDay}</strong>
+            <small>When depot decays &lt;18 mg/wk eq.</small>
+          </div>
+          <div className="telemetry-cell">
+            <span>Selected SERM Protocol</span>
+            <strong>{pctPlan.selectedSerm.name}</strong>
+            <small>{pctPlan.selectedSerm.weeks1to2} → {pctPlan.selectedSerm.weeks3to4}</small>
+          </div>
+        </div>
+
+        <div className="record-list" style={{ marginTop: '18px' }}>
+          {pctPlan.ancillaryGuardrails.map((step) => (
+            <article className="record-row" key={step.phase}>
+              <div>
+                <h3>{step.phase}</h3>
+                <p><strong>{step.protocol}</strong></p>
+                <p className="muted small">{step.purpose}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
+    {reviewerMode === 'stack_builder' && (
+      <section className="studio-section pro-stack-builder" aria-label="Full Pro Stack and Interaction Builder">
+        <SectionHead
+          title="Pro Stack &amp; Interaction Builder"
+          action={<Status value="due">Pro Studio</Status>}
+        >
+          Full multi-compound receptor topology and competitive metabolic clearance matrix across your active workspace protocol.
+        </SectionHead>
+        <ReceptorMap
+          items={items.map((i) => ({
+            id: i.compound_id,
+            name: nameFor(library, i.compound_id) || i.name,
+            notes: i.notes || '',
+          }))}
+          library={library}
+          title="Pro Stack Receptor &amp; CYP2D6 Interaction Topology"
+        />
+      </section>
+    )}
+
     {confirm && comparison && <Drawer title="Save this protocol change?" onClose={() => { if (!apply.pending) setConfirm(false); }}><div className="drawer-content"><p className="confirmation-amount">{nameFor(library, item.compound_id)} <strong>{number(comparedDraft.amount)} {item.unit}</strong></p><dl className="definition-list"><div><dt>Scope</dt><dd>{scopeLabel(comparedDraft.scope)}</dd></div><div><dt>Effective</dt><dd>{dateTime(comparedDraft.effective_from, workspace.timezone)}</dd></div><div><dt>Interval</dt><dd>{comparedDraft.interval_h == null ? 'Keep current' : `${number(comparedDraft.interval_h)} h`}</dd></div><div><dt>Timing shift</dt><dd>{number(comparedDraft.shift_h)} h</dd></div></dl><p className="muted">Actual records remain unchanged. This saves only the scenario you just compared.</p><Notice>{apply.error}</Notice><div className="form-actions"><button className="button quiet" disabled={apply.pending} onClick={() => setConfirm(false)}>Cancel</button><button className="button primary" disabled={apply.pending} onClick={applyComparison}>{apply.pending ? 'Saving…' : 'Confirm and save'}</button></div></div></Drawer>}
   </div>;
 }
