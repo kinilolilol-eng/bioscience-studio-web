@@ -5,7 +5,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '0.0.0.0',
-    port: 3000,
+    port: Number(process.env.PORT) || 3000,
+    strictPort: false,
+    allowedHosts: true,
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: Number(process.env.PORT) || 3000,
+    allowedHosts: true,
   },
   build: {
     outDir: 'dist',
