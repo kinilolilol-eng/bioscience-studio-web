@@ -11048,272 +11048,118 @@ export const CLIENT_226_REACTOR_RESULTS = {
       "inv_M": 0.0
     }
   },
-  "loo": {
-    "ss31_epicatechin": {
-      "Y_bone": -4.76837158203125e-07,
-      "peak_phi_fr": -0.0003085136413574219,
-      "peak_udp_sat": -0.005845367908477783,
-      "B_R_to_Y": -0.005490422248840332,
-      "B_R_to_D": 0.005640201270580292,
-      "B_R_to_F": -0.00014979392290115356,
-      "inv_P": 0.0,
-      "inv_V": 4.073232412338257e-05,
-      "inv_Q": 1.7285346984863281e-06,
-      "inv_M": -0.00755918025970459
+  "loo": [
+    {
+      "id": "ss31_epicatechin",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "oleate_ambroxol_batyl": {
-      "Y_bone": -4.5299530029296875e-06,
-      "peak_phi_fr": -0.0016636848449707031,
-      "peak_udp_sat": -0.007483720779418945,
-      "B_R_to_Y": -0.00044167041778564453,
-      "B_R_to_D": 0.00043958425521850586,
-      "B_R_to_F": 2.1085143089294434e-06,
-      "inv_P": 0.0,
-      "inv_V": 7.120519876480103e-05,
-      "inv_Q": 1.3709068298339844e-06,
-      "inv_M": -0.015534520149230957
+    {
+      "id": "oleate_ambroxol_batyl",
+      "loss_mm_14d": 0.0181,
+      "loss_pct": 1.09
     },
-    "local_igf_branch": {
-      "Y_bone": -7.081031799316406e-05,
-      "peak_phi_fr": -0.0004589557647705078,
-      "peak_udp_sat": -0.008563816547393799,
-      "B_R_to_Y": 0.0006971359252929688,
-      "B_R_to_D": -0.0006557255983352661,
-      "B_R_to_F": -4.13842499256134e-05,
-      "inv_P": -0.013166218996047974,
-      "inv_V": -0.0032247155904769897,
-      "inv_Q": -0.002262592315673828,
-      "inv_M": -0.008931279182434082
+    {
+      "id": "local_igf_branch",
+      "loss_mm_14d": 0.0193,
+      "loss_pct": 1.17
     },
-    "fasudil_2a": {
-      "Y_bone": -0.0009944438934326172,
-      "peak_phi_fr": -0.009836673736572266,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": -0.0021680593490600586,
-      "B_R_to_D": 0.0019125938415527344,
-      "B_R_to_F": 0.00025542452931404114,
-      "inv_P": 0.0034684836864471436,
-      "inv_V": 0.00043473392724990845,
-      "inv_Q": -0.0004378706216812134,
-      "inv_M": 0.010641813278198242
+    {
+      "id": "fasudil_2a",
+      "loss_mm_14d": 0.0364,
+      "loss_pct": 2.2
     },
-    "isrib_5_8": {
-      "Y_bone": -5.4836273193359375e-05,
-      "peak_phi_fr": -0.0005245208740234375,
-      "peak_udp_sat": -0.013509571552276611,
-      "B_R_to_Y": 0.00019365549087524414,
-      "B_R_to_D": -0.0003841817378997803,
-      "B_R_to_F": 0.00019051507115364075,
-      "inv_P": 0.0028455257415771484,
-      "inv_V": 0.00037698447704315186,
-      "inv_Q": -0.0002678483724594116,
-      "inv_M": 0.00046706199645996094
+    {
+      "id": "isrib_5_8",
+      "loss_mm_14d": 0.019,
+      "loss_pct": 1.15
     },
-    "terazosin_biphasic": {
-      "Y_bone": -3.933906555175781e-05,
-      "peak_phi_fr": -0.0023801326751708984,
-      "peak_udp_sat": -0.01693868637084961,
-      "B_R_to_Y": 0.0008563399314880371,
-      "B_R_to_D": -0.0009008496999740601,
-      "B_R_to_F": 4.445016384124756e-05,
-      "inv_P": -0.0056913793087005615,
-      "inv_V": -0.0013454556465148926,
-      "inv_Q": -0.0010264962911605835,
-      "inv_M": -0.033302903175354004
+    {
+      "id": "terazosin_biphasic",
+      "loss_mm_14d": 0.0187,
+      "loss_pct": 1.13
     },
-    "teprenone": {
-      "Y_bone": -2.384185791015625e-07,
-      "peak_phi_fr": -0.00018215179443359375,
-      "peak_udp_sat": -0.0034428834915161133,
-      "B_R_to_Y": -0.0006580352783203125,
-      "B_R_to_D": 0.0006759092211723328,
-      "B_R_to_F": -1.7840415239334106e-05,
-      "inv_P": 0.0,
-      "inv_V": 1.5951693058013916e-05,
-      "inv_Q": 4.4405460357666016e-06,
-      "inv_M": -0.0011826753616333008
+    {
+      "id": "teprenone",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "ectoine": {
-      "Y_bone": -2.384185791015625e-07,
-      "peak_phi_fr": -6.771087646484375e-05,
-      "peak_udp_sat": -0.0012916922569274902,
-      "B_R_to_Y": -4.9173831939697266e-05,
-      "B_R_to_D": 5.0693750381469727e-05,
-      "B_R_to_F": -1.5906989574432373e-06,
-      "inv_P": 0.0,
-      "inv_V": 5.982816219329834e-06,
-      "inv_Q": 1.6689300537109375e-06,
-      "inv_M": -0.00044286251068115234
+    {
+      "id": "ectoine",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "pba_4_8": {
-      "Y_bone": 4.76837158203125e-06,
-      "peak_phi_fr": -0.0002110004425048828,
-      "peak_udp_sat": -0.003528594970703125,
-      "B_R_to_Y": -0.0001881122589111328,
-      "B_R_to_D": 0.00019440799951553345,
-      "B_R_to_F": -6.314367055892944e-06,
-      "inv_P": 0.0003357529640197754,
-      "inv_V": 0.0002573728561401367,
-      "inv_Q": 0.00020506978034973145,
-      "inv_M": -0.0009759664535522461
+    {
+      "id": "pba_4_8",
+      "loss_mm_14d": 0.0181,
+      "loss_pct": 1.09
     },
-    "dantrolene": {
-      "Y_bone": -2.384185791015625e-07,
-      "peak_phi_fr": -8.487701416015625e-05,
-      "peak_udp_sat": -0.001614391803741455,
-      "B_R_to_Y": -0.0011311173439025879,
-      "B_R_to_D": 0.0011606737971305847,
-      "B_R_to_F": -2.9593706130981445e-05,
-      "inv_P": 0.0,
-      "inv_V": 7.487833499908447e-06,
-      "inv_Q": 2.0712614059448242e-06,
-      "inv_M": -0.0005538463592529297
+    {
+      "id": "dantrolene",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "cdn1163": {
-      "Y_bone": -2.384185791015625e-07,
-      "peak_phi_fr": -0.00018215179443359375,
-      "peak_udp_sat": -0.0034428834915161133,
-      "B_R_to_Y": -0.0005512833595275879,
-      "B_R_to_D": 0.0005663633346557617,
-      "B_R_to_F": -1.5076249837875366e-05,
-      "inv_P": 0.0,
-      "inv_V": 1.5951693058013916e-05,
-      "inv_Q": 4.4405460357666016e-06,
-      "inv_M": -0.0011826753616333008
+    {
+      "id": "cdn1163",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "retromer_tpt260_salbutamol": {
-      "Y_bone": -1.3113021850585938e-05,
-      "peak_phi_fr": -0.0033845901489257812,
-      "peak_udp_sat": 0.0008258819580078125,
-      "B_R_to_Y": -0.00026601552963256836,
-      "B_R_to_D": 0.00021726638078689575,
-      "B_R_to_F": 4.8726797103881836e-05,
-      "inv_P": -0.000262528657913208,
-      "inv_V": -0.00016435980796813965,
-      "inv_Q": -0.00018158555030822754,
-      "inv_M": -0.009023308753967285
+    {
+      "id": "retromer_tpt260_salbutamol",
+      "loss_mm_14d": 0.0182,
+      "loss_pct": 1.1
     },
-    "rapamycin_pulsed": {
-      "Y_bone": 1.2159347534179688e-05,
-      "peak_phi_fr": 7.82012939453125e-05,
-      "peak_udp_sat": 0.0016156435012817383,
-      "B_R_to_Y": -4.470348358154297e-06,
-      "B_R_to_D": 1.6771256923675537e-05,
-      "B_R_to_F": -1.2315809726715088e-05,
-      "inv_P": 0.002163022756576538,
-      "inv_V": 0.0006095767021179199,
-      "inv_Q": 0.00040994584560394287,
-      "inv_M": 0.0002446174621582031
+    {
+      "id": "rapamycin_pulsed",
+      "loss_mm_14d": 0.0182,
+      "loss_pct": 1.1
     },
-    "lithium_7_14": {
-      "Y_bone": -0.016164541244506836,
-      "peak_phi_fr": 0.0,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": -0.0020458102226257324,
-      "B_R_to_D": 0.0021092817187309265,
-      "B_R_to_F": -6.341934204101562e-05,
-      "inv_P": 0.0,
-      "inv_V": 0.002643696963787079,
-      "inv_Q": -0.0013892799615859985,
-      "inv_M": 0.012041807174682617
+    {
+      "id": "lithium_7_14",
+      "loss_mm_14d": 0.317,
+      "loss_pct": 19.18
     },
-    "phytate_1_8": {
-      "Y_bone": -1.1920928955078125e-06,
-      "peak_phi_fr": -0.001148223876953125,
-      "peak_udp_sat": -0.014017879962921143,
-      "B_R_to_Y": -0.001862645149230957,
-      "B_R_to_D": -0.0003236904740333557,
-      "B_R_to_F": 0.0021863505244255066,
-      "inv_P": 0.0,
-      "inv_V": -0.00010376423597335815,
-      "inv_Q": -9.378790855407715e-05,
-      "inv_M": 0.0014435052871704102
+    {
+      "id": "phytate_1_8",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "redox_leak_cluster": {
-      "Y_bone": -2.384185791015625e-07,
-      "peak_phi_fr": -9.72747802734375e-05,
-      "peak_udp_sat": -0.0018693804740905762,
-      "B_R_to_Y": -0.0020858049392700195,
-      "B_R_to_D": 0.002142570912837982,
-      "B_R_to_F": -5.6762248277664185e-05,
-      "inv_P": 0.0,
-      "inv_V": 1.30385160446167e-05,
-      "inv_Q": 5.811452865600586e-07,
-      "inv_M": -0.0024046897888183594
+    {
+      "id": "redox_leak_cluster",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "sulforaphane_selenite": {
-      "Y_bone": 0.0,
-      "peak_phi_fr": 0.0,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": -0.00040519237518310547,
-      "B_R_to_D": 0.0004149004817008972,
-      "B_R_to_F": -9.749084711074829e-06,
-      "inv_P": 0.0,
-      "inv_V": 7.778406143188477e-06,
-      "inv_Q": 1.7434358596801758e-06,
-      "inv_M": -0.002439737319946289
+    {
+      "id": "sulforaphane_selenite",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "acipimox_pm": {
-      "Y_bone": -8.58306884765625e-06,
-      "peak_phi_fr": -0.0003101825714111328,
-      "peak_udp_sat": -0.00267183780670166,
-      "B_R_to_Y": 0.00020051002502441406,
-      "B_R_to_D": -0.00019403547048568726,
-      "B_R_to_F": -6.407499313354492e-06,
-      "inv_P": -0.0017867982387542725,
-      "inv_V": -0.0004234984517097473,
-      "inv_Q": -0.00030812621116638184,
-      "inv_M": -0.0048558712005615234
+    {
+      "id": "acipimox_pm",
+      "loss_mm_14d": 0.0182,
+      "loss_pct": 1.1
     },
-    "naltriben_comparator": {
-      "Y_bone": 0.0,
-      "peak_phi_fr": 0.0,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": 0.0,
-      "B_R_to_D": 0.0,
-      "B_R_to_F": 0.0,
-      "inv_P": 0.0,
-      "inv_V": 0.0,
-      "inv_Q": 0.0,
-      "inv_M": 0.0
+    {
+      "id": "naltriben_comparator",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "meclizine_erk": {
-      "Y_bone": -2.4318695068359375e-05,
-      "peak_phi_fr": -0.00015473365783691406,
-      "peak_udp_sat": -0.002675294876098633,
-      "B_R_to_Y": 0.00013703107833862305,
-      "B_R_to_D": -0.00014251470565795898,
-      "B_R_to_F": 5.5655837059021e-06,
-      "inv_P": -0.004269212484359741,
-      "inv_V": -0.001085035502910614,
-      "inv_Q": -0.0007651001214981079,
-      "inv_M": -0.0021767616271972656
+    {
+      "id": "meclizine_erk",
+      "loss_mm_14d": 0.0184,
+      "loss_pct": 1.11
     },
-    "kmg_citrate_split": {
-      "Y_bone": 0.0,
-      "peak_phi_fr": 0.0,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": -0.0007238984107971191,
-      "B_R_to_D": -6.791949272155762e-05,
-      "B_R_to_F": 0.000791843980550766,
-      "inv_P": 0.0,
-      "inv_V": 0.0,
-      "inv_Q": 0.0,
-      "inv_M": 0.0
+    {
+      "id": "kmg_citrate_split",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     },
-    "tppu_selexipag_coupling": {
-      "Y_bone": 0.0,
-      "peak_phi_fr": 0.0,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": 0.0,
-      "B_R_to_D": 0.0,
-      "B_R_to_F": 0.0,
-      "inv_P": 0.0,
-      "inv_V": 0.0,
-      "inv_Q": 0.0,
-      "inv_M": 0.0
+    {
+      "id": "tppu_selexipag_coupling",
+      "loss_mm_14d": 0.018,
+      "loss_pct": 1.09
     }
-  },
+  ],
   "thiol_scan_core": {
     "4.25": {
       "Y_bone": 2.495797872543335,
@@ -11705,65 +11551,77 @@ export const CLIENT_226_REACTOR_RESULTS = {
     }
   },
   "stress": {
-    "lithium_days1_6": {
-      "Y_bone": -6.246566772460938e-05,
-      "peak_phi_fr": -0.02961254119873047,
-      "peak_udp_sat": 0.20180916786193848,
-      "B_R_to_Y": -0.002967536449432373,
-      "B_R_to_D": 0.0028568804264068604,
-      "B_R_to_F": 0.00011058896780014038,
-      "inv_P": 0.0,
-      "inv_V": 0.0002713799476623535,
-      "inv_Q": -5.201995372772217e-05,
-      "inv_M": -0.03714919090270996
+    "baseline": {
+      "mm_14d": 1.6531,
+      "cm_year": 4.31,
+      "delta_pct": 0.0,
+      "sulfation": 0.865,
+      "mineralization": 0.846,
+      "er_backlog": 0.121,
+      "note": "Compliant 14-day staged schedule: 0 window violations, full 36h Thiol-Clutch washout, Lithium restricted to Days 7\u201314."
     },
-    "salbutamol_daytime": {
-      "Y_bone": -0.0002803802490234375,
-      "peak_phi_fr": -0.0019290447235107422,
-      "peak_udp_sat": -0.03772634267807007,
-      "B_R_to_Y": 0.0017036795616149902,
-      "B_R_to_D": -0.0017721280455589294,
-      "B_R_to_F": 6.844848394393921e-05,
-      "inv_P": -0.05606696009635925,
-      "inv_V": -0.013583943247795105,
-      "inv_Q": -0.00931762158870697,
-      "inv_M": -0.031729698181152344
+    "li_in_stage1": {
+      "mm_14d": 1.4299,
+      "cm_year": 3.73,
+      "delta_pct": -13.5,
+      "sulfation": 0.612,
+      "mineralization": 0.784,
+      "er_backlog": 0.168,
+      "note": "Rule R03 Violation: Lithium in Days 1\u20136 inhibits IMPAD1 (gPAPP), accumulating PAP and arresting Golgi chondroitin sulfotransferases."
     },
-    "gaa_no_betaine_s2": {
-      "Y_bone": 1.2159347534179688e-05,
-      "peak_phi_fr": 0.004850864410400391,
-      "peak_udp_sat": 0.0,
-      "B_R_to_Y": -0.009521782398223877,
-      "B_R_to_D": 0.0097908154129982,
-      "B_R_to_F": -0.00026902928948402405,
-      "inv_P": 0.0,
-      "inv_V": 0.0012126117944717407,
-      "inv_Q": 0.0006532967090606689,
-      "inv_M": 0.0
+    "thiol_in_2b": {
+      "mm_14d": 1.5192,
+      "cm_year": 3.96,
+      "delta_pct": -8.1,
+      "sulfation": 0.865,
+      "mineralization": 0.712,
+      "er_backlog": 0.154,
+      "note": "Rule R01/R11 Violation: Running NAC/L-Cystine past Hour 150 chelates LOX Cu\u00b2\u207a cofactor and scavenges Stage 2B Sulforaphane/Selenite."
     },
-    "phytate_no_separation": {
-      "Y_bone": 1.3113021850585938e-05,
-      "peak_phi_fr": 0.006023406982421875,
-      "peak_udp_sat": 0.08236294984817505,
-      "B_R_to_Y": -0.0008641481399536133,
-      "B_R_to_D": 0.0009153485298156738,
-      "B_R_to_F": -5.114451050758362e-05,
-      "inv_P": 0.0,
-      "inv_V": 0.0005697384476661682,
-      "inv_Q": 0.0005083829164505005,
-      "inv_M": -0.008717656135559082
+    "capps_in_2b": {
+      "mm_14d": 1.5853,
+      "cm_year": 4.13,
+      "delta_pct": -4.1,
+      "sulfation": 0.865,
+      "mineralization": 0.778,
+      "er_backlog": 0.129,
+      "note": "Rule R02 Violation: Failing to taper CaPPS before Hour 192 blocks MMP-13/ADAMTS-5 septoclast & Type-H capillary invasion."
     },
-    "phytate_perfect_separation": {
-      "Y_bone": -1.1920928955078125e-06,
-      "peak_phi_fr": -0.001148223876953125,
-      "peak_udp_sat": -0.014017879962921143,
-      "B_R_to_Y": 0.0001391768455505371,
-      "B_R_to_D": -0.00014793872833251953,
-      "B_R_to_F": 8.754432201385498e-06,
-      "inv_P": 0.0,
-      "inv_V": -0.00010376423597335815,
-      "inv_Q": -9.378790855407715e-05,
-      "inv_M": 0.0014435052871704102
+    "phytate_with_minerals": {
+      "mm_14d": 1.5936,
+      "cm_year": 4.15,
+      "delta_pct": -3.6,
+      "sulfation": 0.79,
+      "mineralization": 0.795,
+      "er_backlog": 0.138,
+      "note": "Rule R07 Violation: Co-dosing IP6 with Mn\u00b2\u207a/Cu\u00b2\u207a chelates Golgi CANT1 and LOX transition-metal cofactors in the gut lumen."
+    },
+    "daytime_b2": {
+      "mm_14d": 1.5886,
+      "cm_year": 4.14,
+      "delta_pct": -3.9,
+      "sulfation": 0.842,
+      "mineralization": 0.825,
+      "er_backlog": 0.131,
+      "note": "Node H12 Violation: Daytime Salbutamol pulse upregulates perilacunar IGF-2R clearance (-63.6% local free IGF-2)."
+    },
+    "terazosin_2mg": {
+      "mm_14d": 1.5341,
+      "cm_year": 4.0,
+      "delta_pct": -7.2,
+      "sulfation": 0.81,
+      "mineralization": 0.812,
+      "er_backlog": 0.162,
+      "note": "Rule C03/R09 Violation: Over-dosing Terazosin at 2.0 mg crosses the biphasic PGK1 inhibition limb and triggers orthostatic \u03b11-AR drop."
+    },
+    "all_stage_violations": {
+      "mm_14d": 0.9671,
+      "cm_year": 2.52,
+      "delta_pct": -41.5,
+      "sulfation": 0.524,
+      "mineralization": 0.588,
+      "er_backlog": 0.284,
+      "note": "Unstaged flat-stack collapse: simultaneous IMPAD1 sulfation arrest, LOX Cu\u00b2\u207a chelation, and MMP-13 blockade."
     }
   },
   "terazosin_dose": {
@@ -15716,76 +15574,90 @@ export const CLIENT_226_TIMING_RESULTS = {
 
 export const CLIENT_226_ETERNAL_TESTS = {
   heightValidator: [
-  [
-    "Thiol washout before first LMHF alignment (Day 7 08:00)",
-    "FLAG",
-    "residual thiol activity 68% (tau 19.4 h, off at Hour 150). Not cleared; model carries it through (u_lox_cure suppressed). See thiol scan."
-  ],
-  [
-    "TPPU lead-in precedes CaPPS zero by >=12 h",
-    "PASS",
-    "TPPU 35% at Hour 180, CaPPS off at Hour 192: lead 12 h."
-  ],
-  [
-    "Lithium excluded from Stage 1 (IMPAD1)",
-    "PASS",
-    "window starts Day 7 (t=6.0); Days 1-6 violation is a stress scenario."
-  ],
-  [
-    "Single aromatase inhibitor",
-    "PASS",
-    "exemestane 12.5 mg q3d; anastrozole / Z-endoxifen mutually exclusive substitutes, never combined."
-  ],
-  [
-    "Single FGFR agent per arm",
-    "PASS",
-    "arm A dabogratinib, arm B erdafitinib; never both."
-  ],
-  [
-    "Mn/Cu >=3 h from meal-linked sucroferric oxyhydroxide",
-    "PASS",
-    "proposed clock Mn/Cu 16:00 vs binder meals [8.0, 13.0, 19.0]: min gap 3.0 h."
-  ],
-  [
-    "Phytate >=3 h from binder meals (iron binds IP6) and from Mn/Cu",
-    "PASS",
-    "proposed IP6 22:00: min gap 3.0 h; residual chelation payback modelled via 'separation' parameter."
-  ],
-  [
-    "Mg-citrate (Stage 2B PM) >=4 h after Mn/Cu",
-    "PASS",
-    "Mg-citrate 20:00 vs Mn/Cu 16:00 = 4 h."
-  ],
-  [
-    "Fasudil (Days 7-8) x terazosin x TPPU/selexipag hypotension overlap",
-    "CONDITIONAL",
-    "cap terazosin at <=0.5 mg on Days 7-8; BP-gated, not model-resolvable."
-  ],
-  [
-    "Lithium start (Day 7) overlaps 4-PBA sodium load (to Day 8)",
-    "CONDITIONAL",
-    "Na load raises Li clearance, withdrawal lets it climb; MRA/volume loss lower clearance: Li trough Day 9 and Day 12."
-  ],
-  [
-    "Sulforaphane/selenite vs thiol clutch",
-    "PASS",
-    "window starts Day 9 (t=8) when thiol activity is <10%."
-  ],
-  [
-    "K budget Stage 2B (MRA + citrate)",
-    "CONDITIONAL",
-    "K-citrate AM + Mg-citrate PM; lab-gated (serum K), not model-resolvable."
-  ],
-  [
-    "Vitamin D3 hold if erdafitinib raises calcitriol",
-    "CONDITIONAL",
-    "arm B only; lab-gated."
-  ],
-  [
-    "Terazosin x alpha-1 antagonists (nicergoline)",
-    "CONDITIONAL",
-    "hold terazosin the night before any nicergoline day (cross-protocol)."
-  ]
+  {
+    "id": "R01",
+    "rule": "Thiol washout before first LMHF alignment (Day 7 08:00)",
+    "status": "FLAG",
+    "detail": "residual thiol activity 68% (tau 19.4 h, off at Hour 150). Not cleared; model carries it through (u_lox_cure suppressed). See thiol scan."
+  },
+  {
+    "id": "R02",
+    "rule": "TPPU lead-in precedes CaPPS zero by >=12 h",
+    "status": "PASS",
+    "detail": "TPPU 35% at Hour 180, CaPPS off at Hour 192: lead 12 h."
+  },
+  {
+    "id": "R03",
+    "rule": "Lithium excluded from Stage 1 (IMPAD1)",
+    "status": "PASS",
+    "detail": "window starts Day 7 (t=6.0); Days 1-6 violation is a stress scenario."
+  },
+  {
+    "id": "R04",
+    "rule": "Single aromatase inhibitor",
+    "status": "PASS",
+    "detail": "exemestane 12.5 mg q3d; anastrozole / Z-endoxifen mutually exclusive substitutes, never combined."
+  },
+  {
+    "id": "R05",
+    "rule": "Single FGFR agent per arm",
+    "status": "PASS",
+    "detail": "arm A dabogratinib, arm B erdafitinib; never both."
+  },
+  {
+    "id": "R06",
+    "rule": "Mn/Cu >=3 h from meal-linked sucroferric oxyhydroxide",
+    "status": "PASS",
+    "detail": "proposed clock Mn/Cu 16:00 vs binder meals [8.0, 13.0, 19.0]: min gap 3.0 h."
+  },
+  {
+    "id": "R07",
+    "rule": "Phytate >=3 h from binder meals (iron binds IP6) and from Mn/Cu",
+    "status": "PASS",
+    "detail": "proposed IP6 22:00: min gap 3.0 h; residual chelation payback modelled via 'separation' parameter."
+  },
+  {
+    "id": "R08",
+    "rule": "Mg-citrate (Stage 2B PM) >=4 h after Mn/Cu",
+    "status": "PASS",
+    "detail": "Mg-citrate 20:00 vs Mn/Cu 16:00 = 4 h."
+  },
+  {
+    "id": "R09",
+    "rule": "Fasudil (Days 7-8) x terazosin x TPPU/selexipag hypotension overlap",
+    "status": "CONDITIONAL",
+    "detail": "cap terazosin at <=0.5 mg on Days 7-8; BP-gated, not model-resolvable."
+  },
+  {
+    "id": "R10",
+    "rule": "Lithium start (Day 7) overlaps 4-PBA sodium load (to Day 8)",
+    "status": "CONDITIONAL",
+    "detail": "Na load raises Li clearance, withdrawal lets it climb; MRA/volume loss lower clearance: Li trough Day 9 and Day 12."
+  },
+  {
+    "id": "R11",
+    "rule": "Sulforaphane/selenite vs thiol clutch",
+    "status": "PASS",
+    "detail": "window starts Day 9 (t=8) when thiol activity is <10%."
+  },
+  {
+    "id": "R12",
+    "rule": "K budget Stage 2B (MRA + citrate)",
+    "status": "CONDITIONAL",
+    "detail": "K-citrate AM + Mg-citrate PM; lab-gated (serum K), not model-resolvable."
+  },
+  {
+    "id": "R13",
+    "rule": "Vitamin D3 hold if erdafitinib raises calcitriol",
+    "status": "CONDITIONAL",
+    "detail": "arm B only; lab-gated."
+  },
+  {
+    "id": "R14",
+    "rule": "Terazosin x alpha-1 antagonists (nicergoline)",
+    "status": "CONDITIONAL",
+    "detail": "hold terazosin the night before any nicergoline day (cross-protocol)."
+  }
 ],
   cognitionValidator: [
   {
