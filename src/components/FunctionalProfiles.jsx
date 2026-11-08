@@ -11,8 +11,8 @@ export default function FunctionalProfiles() {
 
   return (
     <section className="studio-section functional-profiles-section" aria-label="Functional Effect Profiles">
-      <SectionHead title="Functional Effect Profiles · Deep Mechanistic Pharmacology">
-        Receptor occupancy kinetics, co-regulator recruitment, and biomarker guardrails for Telmisartan, Memantine, Endoxifen, and FGFR3/CNP.
+      <SectionHead title="Functional Effect Profiles">
+        Receptor occupancy, co-regulator recruitment, and biomarker targets for Telmisartan, Memantine, Endoxifen, and FGFR3/CNP.
       </SectionHead>
 
       <div className="profile-selector" role="tablist" aria-label="Select compound profile">
@@ -38,16 +38,16 @@ export default function FunctionalProfiles() {
         <header className="profile-detail-header">
           <div>
             <p className="microcopy">{profile.classification}</p>
-            <h3>{profile.name} — {profile.subtitle}</h3>
+            <h3>{profile.name} · {profile.subtitle}</h3>
             <p className="profile-summary">{profile.mechanisticSummary}</p>
           </div>
           <div className="profile-meta-readout">
             <div>
-              <span>Administration Window</span>
+              <span>Timing</span>
               <strong>{profile.standardWindow}</strong>
             </div>
             <div>
-              <span>Terminal Half-Life (t½)</span>
+              <span>Half-life</span>
               <strong className="tabular-nums">{profile.halfLifeH} h</strong>
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function FunctionalProfiles() {
         <div className="profile-dose-scrubber">
           <div className="inline-between">
             <span className="small">
-              <strong>Interactive Dose-Response Calibration:</strong> Select titration tier to inspect receptor occupancy & downstream signaling
+              <strong>Dose tier</strong>
             </span>
             <div className="dose-step-buttons" role="group" aria-label="Titration dose tiers">
               {profile.doseResponsePoints.map((pt, idx) => {
@@ -79,56 +79,48 @@ export default function FunctionalProfiles() {
             {profile.id === 'profile-telmisartan' && (
               <>
                 <div className="telemetry-cell">
-                  <span>AT1R Insurmountable Blockade</span>
+                  <span>AT1R blockade (t½ 213 min)</span>
                   <strong className="tabular-nums">{dosePoint.at1BlockadePct}%</strong>
-                  <small>Dissociation t½ = 213 min</small>
                 </div>
                 <div className="telemetry-cell">
-                  <span>Selective PPAR-γ Activation</span>
+                  <span>PPAR-γ activation (PGC-1α)</span>
                   <strong className="tabular-nums">{dosePoint.pparGammaPct}%</strong>
-                  <small>PGC-1α recruitment · 0% ENaC edema</small>
                 </div>
               </>
             )}
             {profile.id === 'profile-memantine' && (
               <>
                 <div className="telemetry-cell">
-                  <span>Extrasynaptic GluN2B Tonic Block</span>
+                  <span>Extrasynaptic GluN2B block (-70 mV)</span>
                   <strong className="tabular-nums">{dosePoint.extrasynapticBlockPct}%</strong>
-                  <small>Suppresses resting -70 mV Ca²⁺ leak</small>
                 </div>
                 <div className="telemetry-cell">
-                  <span>Synaptic Phasic LTP Preserved</span>
+                  <span>Synaptic LTP preserved (-20 mV)</span>
                   <strong className="tabular-nums">{dosePoint.synapticLtpPreservedPct}%</strong>
-                  <small>Unblocks in 0.8s under -20 mV AMPA pulse</small>
                 </div>
               </>
             )}
             {profile.id === 'profile-endoxifen' && (
               <>
                 <div className="telemetry-cell">
-                  <span>Hypothalamic & Mammary ERα Occupancy</span>
+                  <span>ERα occupancy (AF-2 H12)</span>
                   <strong className="tabular-nums">{dosePoint.erAlphaOccupancyPct}%</strong>
-                  <small>AF-2 Helix-12 NCoR/SMRT recruitment</small>
                 </div>
                 <div className="telemetry-cell">
-                  <span>CYP2D6 Inter-Individual Variance</span>
+                  <span>CYP2D6 variance</span>
                   <strong className="tabular-nums">±{dosePoint.cyp2d6VariancePct}%</strong>
-                  <small>Bypasses hepatic CYP2D6 prodrug bottleneck</small>
                 </div>
               </>
             )}
             {profile.id === 'profile-fgfr3-cnp' && (
               <>
                 <div className="telemetry-cell">
-                  <span>FGFR3 RAF-1 (Ser43) MAPK Suppression</span>
+                  <span>FGFR3 MAPK inhibition (Ser43)</span>
                   <strong className="tabular-nums">{dosePoint.mapkInhibitionPct}%</strong>
-                  <small>Via NPR-B → cGMP → PKGII phosphorylation</small>
                 </div>
                 <div className="telemetry-cell">
-                  <span>Collagen X (CXM) Epiphyseal Velocity Δ</span>
+                  <span>CXM velocity change</span>
                   <strong className="tabular-nums">+{dosePoint.cxmVelocityPct}%</strong>
-                  <small>Hypertrophic chondrocyte matrix expansion</small>
                 </div>
               </>
             )}
@@ -137,14 +129,14 @@ export default function FunctionalProfiles() {
 
         <div className="profile-columns">
           <div>
-            <h4>Mechanistic Signaling Axes</h4>
+            <h4>Signaling pathways</h4>
             <div className="record-list">
               {profile.pathways.map((pw) => (
                 <div className="record-row profile-pathway-row" key={pw.axis}>
                   <div>
                     <h3>{pw.axis} · <span className="muted">{pw.target}</span></h3>
                     <p>{pw.effect}</p>
-                    <small className="tabular-nums">{pw.kinetics}</small>
+                    <p className="small muted tabular-nums" style={{ marginTop: '4px' }}>{pw.kinetics}</p>
                   </div>
                 </div>
               ))}
@@ -152,7 +144,7 @@ export default function FunctionalProfiles() {
           </div>
 
           <div>
-            <h4>Biomarker & Clinical Titration Guardrails</h4>
+            <h4>Biomarker targets</h4>
             <div className="record-list">
               {profile.biomarkerTargets.map((bm) => (
                 <div className="record-row" key={bm.marker}>
@@ -164,8 +156,8 @@ export default function FunctionalProfiles() {
                 </div>
               ))}
             </div>
-            <p className="microcopy" style={{ marginTop: '12px' }}>
-              Primary Literature: {profile.source}
+            <p className="microcopy" style={{ marginTop: '16px' }}>
+              Source: {profile.source}
             </p>
           </div>
         </div>

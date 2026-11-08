@@ -1,4 +1,4 @@
-// Auto-generated deterministic Client 226 (cc224) Complete Mechanistic Dataset,
+﻿// Auto-generated deterministic Client 226 Complete Mechanistic Dataset,
 // 53 Frontier Functional Slots, 24-Rule Eternal Test Validator, 336-Hour Staged Reactor,
 // Side-Effect / Switching / Fix Matrix, and Shared Cross-Domain Compound Ledger.
 
@@ -16667,3 +16667,4 @@ export function evaluateReactorAtHour(hourInput = 144) {
     thiolSafeForStage2B: h < 192 || thiolLevel <= 0.15,
   };
 }
+

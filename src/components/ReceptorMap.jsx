@@ -11,37 +11,37 @@ import KnowledgeAtlas from './KnowledgeAtlas.jsx';
 import { Icon, Notice } from './ui.jsx';
 
 const TEMPORAL_PHASES = [
-  ['acute_d1_5', 'Acute Initiation (Days 1–5)'],
-  ['subacute_d6_13', 'Subacute Titration (Days 6–13)'],
-  ['chronic_d14_plus', 'Chronic Steady-State (Day 14+)'],
+  ['acute_d1_5', 'Days 1 to 5 (Acute)'],
+  ['subacute_d6_13', 'Days 6 to 13 (Subacute)'],
+  ['chronic_d14_plus', 'Day 14+ (Steady state)'],
 ];
 
 const CYP2D6_GENOTYPES = [
   ['extensive', '*1/*1 Extensive (100%)'],
   ['intermediate', '*1/*4 Intermediate (58%)'],
-  ['poor', '*4/*4 Poor Metabolizer (18%)'],
+  ['poor', '*4/*4 Poor (18%)'],
 ];
 
 const DOSE_MULTIPLIERS = [
-  [0.5, '0.5× Low Titration'],
-  [1.0, '1.0× Standard Regimen'],
-  [1.5, '1.5× High Exposure'],
-  [2.0, '2.0× Supraphysiological'],
+  [0.5, '0.5x Low'],
+  [1.0, '1.0x Standard'],
+  [1.5, '1.5x High'],
+  [2.0, '2.0x Supraphysiological'],
 ];
 
 const EPISTEMIC_FILTERS = [
-  ['all', 'All Epistemic Tiers'],
-  ['quantitative_only', 'Quantitative PK/PD Only'],
+  ['all', 'All tiers'],
+  ['quantitative_only', 'Quantitative PK/PD'],
   ['established_and_supported', 'Quantitative + Supported'],
-  ['frontier_highlight', 'Frontier ODE & Contextual'],
+  ['frontier_highlight', 'Frontier & Contextual'],
 ];
 
 export default function ReceptorMap({
   items = [],
   suppliedText = '',
   library = null,
-  title = 'Causal Cascade Tree & Epistemic Systems-Pharmacology Instrument',
-  subtitle = 'Four-layer mechanistic trace (Compound & Route → Primary Target → Subcellular Mechanism → Phenotypic Goal) with epistemic edge encoding, counterfactual stack modeling, and temporal adaptation.',
+  title = 'Causal Cascade Graph',
+  subtitle = 'Four-layer trace from compound and route to molecular target, subcellular pathway, and phenotypic outcome.',
 }) {
   const [direction, setDirection] = useState('forward');
   const [selectedNodeId, setSelectedNodeId] = useState(null);
@@ -229,7 +229,7 @@ export default function ReceptorMap({
     setExportError('');
     try {
       await saveReceptorMapCard(legacyMap, title);
-      setExportStatus("Shareable image card ('bioscience-stack-receptor-map.png') downloaded.");
+      setExportStatus("Image card ('bioscience-stack-receptor-map.png') downloaded.");
     } catch (cause) {
       setExportError(cause.message);
     } finally {
@@ -264,7 +264,7 @@ export default function ReceptorMap({
             className={`button small-button ${atlasViewMode === 'atlas_3d' ? 'primary' : 'secondary'}`}
             onClick={() => setAtlasViewMode((m) => (m === 'cascade' ? 'atlas_3d' : 'cascade'))}
           >
-            {atlasViewMode === 'atlas_3d' ? 'Return to Causal Cascade Graph' : 'Open 3D Knowledge Atlas (Browser Vault)'}
+            {atlasViewMode === 'atlas_3d' ? 'Cascade graph' : '3D Knowledge Atlas'}
           </button>
           {hasActiveCounterfactual && (
             <button type="button" className="button quiet small-button" onClick={resetCounterfactuals}>
@@ -273,7 +273,7 @@ export default function ReceptorMap({
           )}
           <button type="button" className="button secondary small-button" onClick={handleExportCard} disabled={exporting}>
             <Icon name="download" />
-            {exporting ? 'Rendering map card…' : "Share your stack's map (PNG)"}
+            {exporting ? 'Exporting…' : 'Export PNG'}
           </button>
         </div>
       </div>
@@ -281,42 +281,31 @@ export default function ReceptorMap({
       <Notice kind="success">{exportStatus}</Notice>
       <Notice>{exportError}</Notice>
 
-      {/* Top Telemetry Summary Strip */}
       <div className="cascade-telemetry-strip" aria-label="Systems pharmacology summary metrics">
         <div className="telemetry-cell">
-          <span>Active Causal Trace Mode</span>
-          <strong>{direction === 'forward' ? 'Forward: Compound → Phenotype' : 'Backward: Goal → Upstream'}</strong>
-          <small>Focus: {activeNode?.name || activeNode?.label}</small>
+          <span>Trace mode</span>
+          <strong>{direction === 'forward' ? 'Forward (Compound to Outcome)' : 'Backward (Outcome to Compound)'}</strong>
         </div>
         <div className="telemetry-cell">
-          <span>Mean Pathway Flux Score</span>
-          <strong className="tabular-nums">{cascade.summaryMetrics.meanFlux}%</strong>
-          <small className="tabular-nums">
-            {cascade.summaryMetrics.activeCompoundCount} compounds · {cascade.summaryMetrics.engagedTargetCount}/8 targets engaged
-          </small>
+          <span>Mean pathway flux</span>
+          <strong className="tabular-nums">{cascade.summaryMetrics.meanFlux}% ({cascade.summaryMetrics.engagedTargetCount}/8 targets)</strong>
         </div>
         <div className="telemetry-cell">
-          <span>Epistemic Evidence Confidence</span>
-          <strong className="tabular-nums">{cascade.summaryMetrics.meanConfidence}%</strong>
-          <small>Weighted across {cascade.edges.length} active mechanistic edges</small>
+          <span>Evidence confidence</span>
+          <strong className="tabular-nums">{cascade.summaryMetrics.meanConfidence}% ({cascade.edges.length} edges)</strong>
         </div>
         <div className="telemetry-cell">
-          <span>Convergence &amp; Bottleneck Status</span>
+          <span>Synergies &amp; bottlenecks</span>
           <strong className="tabular-nums">
-            {cascade.summaryMetrics.activeSynergyCount} Synergies · {cascade.summaryMetrics.activeBottleneckCount} Bottlenecks
+            {cascade.summaryMetrics.activeSynergyCount} synergies · {cascade.summaryMetrics.activeBottleneckCount} bottlenecks
           </strong>
-          <small>
-            CYP2D6 {cyp2d6Genotype.toUpperCase()} · {doseMultiplier.toFixed(1)}× Exposure ·{' '}
-            {TEMPORAL_PHASES.find(([k]) => k === temporalPhase)?.[1]}
-          </small>
         </div>
       </div>
 
-      {/* Control Console: Bidirectional Mode + Counterfactuals + Temporal + Epistemic Filter */}
       <div className="cascade-control-console">
         <div className="cascade-control-row">
           <div className="cascade-control-group" role="group" aria-label="Bidirectional causal exploration mode">
-            <span className="cascade-control-label">1. Causal Trace Direction</span>
+            <span className="cascade-control-label">Trace direction</span>
             <div className="segmented-button-row">
               <button
                 type="button"
@@ -326,7 +315,7 @@ export default function ReceptorMap({
                   setSelectedNodeId(cascade.layers.compounds[0]?.id || null);
                 }}
               >
-                Forward Trace (Compound → Phenotype)
+                Forward
               </button>
               <button
                 type="button"
@@ -336,13 +325,13 @@ export default function ReceptorMap({
                   setSelectedNodeId(targetGoalId);
                 }}
               >
-                Backward Trace (Phenotypic Goal → Pathways)
+                Backward
               </button>
             </div>
           </div>
 
           <div className="cascade-control-group" role="group" aria-label="Temporal interaction and adaptation phase">
-            <span className="cascade-control-label">2. Temporal PK/PD &amp; Adaptation Window</span>
+            <span className="cascade-control-label">Adaptation window</span>
             <div className="segmented-button-row">
               {TEMPORAL_PHASES.map(([phaseKey, phaseLabel]) => (
                 <button
@@ -360,7 +349,7 @@ export default function ReceptorMap({
 
         {direction === 'backward' && (
           <div className="cascade-backward-picker" role="group" aria-label="Select target phenotypic outcome for backward trace">
-            <span className="cascade-control-label">Target Phenotypic Outcome (Click to trace required upstream mechanisms &amp; missing compounds):</span>
+            <span className="cascade-control-label">Target outcome</span>
             <div className="segmented-button-row">
               {cascade.layers.phenotypes.map((goal) => (
                 <button
@@ -372,7 +361,7 @@ export default function ReceptorMap({
                     setSelectedNodeId(goal.id);
                   }}
                 >
-                  {goal.label} ({goal.netScore}% flux)
+                  {goal.label} ({goal.netScore}%)
                 </button>
               ))}
             </div>
@@ -381,7 +370,7 @@ export default function ReceptorMap({
 
         <div className="cascade-control-row">
           <div className="cascade-control-group" role="group" aria-label="Counterfactual stack perturbations">
-            <span className="cascade-control-label">3. Dynamic Counterfactual Stack Interventions</span>
+            <span className="cascade-control-label">Counterfactual swaps</span>
             <div className="segmented-button-row">
               <button
                 type="button"
@@ -389,7 +378,7 @@ export default function ReceptorMap({
                 className={`button small-button ${counterfactuals.swapTamoxifenToEndoxifen ? 'primary' : 'secondary'}`}
                 onClick={() => toggleCounterfactual('swapTamoxifenToEndoxifen')}
               >
-                {counterfactuals.swapTamoxifenToEndoxifen ? '✓ Swapped: Tamoxifen → Direct Endoxifen' : 'Counterfactual: Tamoxifen → Endoxifen'}
+                {counterfactuals.swapTamoxifenToEndoxifen ? 'Tamoxifen to Endoxifen (Active)' : 'Tamoxifen to Endoxifen'}
               </button>
               <button
                 type="button"
@@ -397,7 +386,7 @@ export default function ReceptorMap({
                 className={`button small-button ${counterfactuals.swapAlphaGpcToCiticoline ? 'primary' : 'secondary'}`}
                 onClick={() => toggleCounterfactual('swapAlphaGpcToCiticoline')}
               >
-                {counterfactuals.swapAlphaGpcToCiticoline ? '✓ Swapped: Alpha-GPC → Citicoline' : 'Counterfactual: Alpha-GPC → Citicoline'}
+                {counterfactuals.swapAlphaGpcToCiticoline ? 'Alpha-GPC to Citicoline (Active)' : 'Alpha-GPC to Citicoline'}
               </button>
               <button
                 type="button"
@@ -405,7 +394,7 @@ export default function ReceptorMap({
                 className={`button small-button ${counterfactuals.swapMgOxideToThreonate ? 'primary' : 'secondary'}`}
                 onClick={() => toggleCounterfactual('swapMgOxideToThreonate')}
               >
-                {counterfactuals.swapMgOxideToThreonate ? '✓ Swapped: Mg Oxide → Mg L-Threonate' : 'Counterfactual: Mg Oxide → L-Threonate'}
+                {counterfactuals.swapMgOxideToThreonate ? 'Mg Oxide to L-Threonate (Active)' : 'Mg Oxide to L-Threonate'}
               </button>
               <button
                 type="button"
@@ -413,10 +402,10 @@ export default function ReceptorMap({
                 onClick={() => toggleCounterfactual('toggleTelmisartanShield')}
               >
                 {counterfactuals.toggleTelmisartanShield === true
-                  ? '✓ Telmisartan AT1R Shield Forced ON'
+                  ? 'Telmisartan AT1R: On'
                   : counterfactuals.toggleTelmisartanShield === false
-                  ? '✗ Telmisartan Shield Forced OFF'
-                  : 'Toggle Telmisartan AT1R Shield'}
+                  ? 'Telmisartan AT1R: Off'
+                  : 'Telmisartan AT1R: Auto'}
               </button>
               <button
                 type="button"
@@ -424,10 +413,10 @@ export default function ReceptorMap({
                 onClick={() => toggleCounterfactual('toggleVosoritide')}
               >
                 {counterfactuals.toggleVosoritide === true
-                  ? '✓ Vosoritide CNP-38 Forced ON'
+                  ? 'Vosoritide: On'
                   : counterfactuals.toggleVosoritide === false
-                  ? '✗ Vosoritide Forced OFF'
-                  : 'Toggle Vosoritide (CNP-38)'}
+                  ? 'Vosoritide: Off'
+                  : 'Vosoritide: Auto'}
               </button>
             </div>
           </div>
@@ -435,7 +424,7 @@ export default function ReceptorMap({
 
         <div className="cascade-control-row three-col">
           <div className="cascade-control-group" role="group" aria-label="CYP2D6 metabolizer phenotype">
-            <span className="cascade-control-label">4. CYP2D6 Pharmacogenomic Phenotype</span>
+            <span className="cascade-control-label">CYP2D6 phenotype</span>
             <div className="segmented-button-row">
               {CYP2D6_GENOTYPES.map(([gKey, gLabel]) => (
                 <button
@@ -451,7 +440,7 @@ export default function ReceptorMap({
           </div>
 
           <div className="cascade-control-group" role="group" aria-label="Dose exposure multiplier">
-            <span className="cascade-control-label">5. Dose &amp; Exposure Scaling</span>
+            <span className="cascade-control-label">Dose scaling</span>
             <div className="segmented-button-row">
               {DOSE_MULTIPLIERS.map(([mult, mLabel]) => (
                 <button
@@ -467,7 +456,7 @@ export default function ReceptorMap({
           </div>
 
           <div className="cascade-control-group" role="group" aria-label="Epistemic evidence filter">
-            <span className="cascade-control-label">6. Epistemic Edge Filter</span>
+            <span className="cascade-control-label">Evidence filter</span>
             <div className="segmented-button-row">
               {EPISTEMIC_FILTERS.map(([fKey, fLabel]) => (
                 <button
@@ -484,10 +473,9 @@ export default function ReceptorMap({
         </div>
       </div>
 
-      {/* Epistemic & Polarity Visual Encoding Legend */}
       <div className="epistemic-encoding-legend" aria-label="Epistemic edge encoding and mechanistic polarity legend">
         <div className="legend-cluster">
-          <span className="legend-heading">Epistemic Evidence Strength (Stroke Pattern):</span>
+          <span className="legend-heading">Evidence tier:</span>
           {Object.values(EPISTEMIC_TIERS).map((tier) => (
             <span key={tier.id} className="legend-item" title={tier.description}>
               <svg width="28" height="10" aria-hidden="true">
@@ -505,12 +493,12 @@ export default function ReceptorMap({
                 />
               </svg>
               <strong>{tier.shortLabel}</strong>
-              <small className="muted">({tier.confidenceRange[0]}–{tier.confidenceRange[1]}%)</small>
+              <span className="muted small">({tier.confidenceRange[0]} to {tier.confidenceRange[1]}%)</span>
             </span>
           ))}
         </div>
         <div className="legend-cluster">
-          <span className="legend-heading">Mechanistic Polarity (Terminal Glyph):</span>
+          <span className="legend-heading">Polarity:</span>
           {Object.values(INTERACTION_POLARITIES).map((pol) => (
             <span key={pol.id} className="legend-item">
               <strong style={{ color: pol.color }}>{pol.glyph}</strong>
@@ -539,15 +527,13 @@ export default function ReceptorMap({
         />
       )}
 
-      {/* 4-Layer Causal Cascade Tree SVG Canvas */}
       <div className="receptor-map-stage causal-cascade-stage">
-        {/* Selected Compound Description & Full Passage Controls (Browser Vault Adaptation) */}
         {compoundPassage && (
           <div className="compound-passage-card" aria-live="polite">
             <div className="compound-passage-header">
               <div>
                 <span className="microcopy">
-                  SELECTED COMPOUND · SUPPLIED DESCRIPTION ({compoundPassage.path})
+                  Compound note ({compoundPassage.path})
                 </span>
                 <h3>
                   {compoundPassage.name}{' '}
@@ -570,17 +556,16 @@ export default function ReceptorMap({
                     className="button primary small-button"
                     onClick={handleReturnToGraphPosition}
                   >
-                    Return to same graph position
+                    Return to graph
                   </button>
                 )}
               </div>
             </div>
 
-            {/* Compound selector bar synchronized with Level 1 SVG nodes */}
             {cascade.layers.compounds.length > 0 && (
               <div
                 className="segmented-button-row"
-                style={{ marginTop: '8px', marginBottom: '10px' }}
+                style={{ marginTop: '8px', marginBottom: '8px' }}
                 role="group"
                 aria-label="Select compound to inspect supplied description"
               >
@@ -611,32 +596,20 @@ export default function ReceptorMap({
                 <div className="passage-overlay-header">
                   <div>
                     <span className="microcopy">
-                      FULL SUPPLIED PASSAGE · LOCKED GRAPH POSITION: NODE ({openPassageState.savedGraphPosition.nodeX},{' '}
-                      {openPassageState.savedGraphPosition.nodeY}) · VIEWBOX ({openPassageState.savedGraphPosition.panX},{' '}
-                      {openPassageState.savedGraphPosition.panY}, {openPassageState.savedGraphPosition.zoom.toFixed(2)}×)
+                      Source: {openPassageState.passage.source}
                     </span>
-                    <h4>{openPassageState.passage.name} — Verbatim Note</h4>
+                    <h4>{openPassageState.passage.name}</h4>
                   </div>
                   <button
                     type="button"
                     className="button secondary small-button"
                     onClick={handleReturnToGraphPosition}
                   >
-                    Return to same graph position
+                    Return to graph
                   </button>
                 </div>
                 <div className="passage-overlay-body">
                   <pre className="verbatim-passage-block">{openPassageState.passage.fullPassage}</pre>
-                </div>
-                <div className="passage-overlay-footer">
-                  <span className="microcopy">Source: {openPassageState.passage.source}</span>
-                  <button
-                    type="button"
-                    className="button primary small-button"
-                    onClick={handleReturnToGraphPosition}
-                  >
-                    Return to same graph position
-                  </button>
                 </div>
               </div>
             )}
@@ -652,27 +625,21 @@ export default function ReceptorMap({
             <pattern id="cascade-grid" width="40" height="40" patternUnits="userSpaceOnUse">
               <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#e8eff3" strokeWidth="0.8" />
             </pattern>
-            {/* Arrowhead for Direct Agonism */}
             <marker id="marker-agonist" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
               <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#087d7a" />
             </marker>
-            {/* Perpendicular T-bar for Insurmountable Antagonism / Channel Blockade */}
             <marker id="marker-antagonist" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto">
               <line x1="7" y1="1" x2="7" y2="9" stroke="#1d4ed8" strokeWidth="2.5" />
             </marker>
-            {/* Diamond for Selective Partial Agonism / Co-Regulator Recruitment */}
             <marker id="marker-partial_agonist" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
               <polygon points="1,5 5,1.5 9,5 5,8.5" fill="#0e7490" />
             </marker>
-            {/* Shield Circle for Receptor Shielding */}
             <marker id="marker-shielding_mitigation" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
               <circle cx="5" cy="5" r="3.6" fill="#ecfdf5" stroke="#047857" strokeWidth="1.8" />
             </marker>
-            {/* Bottleneck Cross for Competitive Metabolic Sink */}
             <marker id="marker-metabolic_bottleneck" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto">
               <circle cx="5" cy="5" r="3.8" fill="#fffbeb" stroke="#b45309" strokeWidth="1.8" />
             </marker>
-            {/* Spillover Load Marker */}
             <marker id="marker-spillover_load" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
               <path d="M 0 1.5 L 8.5 5 L 0 8.5 z" fill="#be123c" />
             </marker>
@@ -680,25 +647,23 @@ export default function ReceptorMap({
 
           <rect width="1150" height="675" fill="url(#cascade-grid)" rx="5" />
 
-          {/* Column Layer Headers */}
           {[
             { x: 125, step: 'LEVEL 1 · INPUT', title: 'Compound & Route' },
-            { x: 415, step: 'LEVEL 2 · RECEPTOR / ENZYME', title: 'Primary Molecular Target' },
-            { x: 715, step: 'LEVEL 3 · TRANSDUCTION', title: 'Subcellular Mechanism' },
-            { x: 1015, step: 'LEVEL 4 · OUTCOME', title: 'Phenotypic Goal & Readout' },
+            { x: 415, step: 'LEVEL 2 · TARGET', title: 'Primary Molecular Target' },
+            { x: 715, step: 'LEVEL 3 · PATHWAY', title: 'Subcellular Mechanism' },
+            { x: 1015, step: 'LEVEL 4 · OUTCOME', title: 'Phenotypic Goal' },
           ].map((col) => (
             <g key={col.step}>
               <rect x={col.x - 110} y="10" width="220" height="36" rx="4" fill="#f8fafc" stroke="#cbd5e1" strokeWidth="1" />
-              <text x={col.x} y="25" textAnchor="middle" fontSize="8.5" fontWeight="700" fill="#087d7a" letterSpacing="0.6">
+              <text x={col.x} y="25" textAnchor="middle" fontSize="8.5" fontWeight="600" fill="#087d7a" letterSpacing="0.6">
                 {col.step}
               </text>
-              <text x={col.x} y="39" textAnchor="middle" fontSize="10.5" fontWeight="650" fill="#172d40">
+              <text x={col.x} y="39" textAnchor="middle" fontSize="10.5" fontWeight="600" fill="#172d40">
                 {col.title}
               </text>
             </g>
           ))}
 
-          {/* Causal Cascade Bezier Edges (L1->L2, L2->L3, L3->L4) */}
           {cascade.edges.map((edge, edgeIdx) => {
             const source = nodeById.get(edge.fromId);
             const target = nodeById.get(edge.toId);
@@ -724,7 +689,6 @@ export default function ReceptorMap({
               edge.inTrace &&
               (edge.epistemicTier === 'theoretical_frontier' || edge.epistemicTier === 'contextual_association');
 
-            // Stagger badge position t along the cubic Bezier curve to prevent overlap on crossing edges
             const t = edgeIdx % 3 === 0 ? 0.42 : edgeIdx % 3 === 1 ? 0.58 : 0.50;
             const mt = 1 - t;
             const badgeX = mt * mt * mt * x1 + 3 * mt * mt * t * cx1 + 3 * mt * t * t * cx2 + t * t * t * x2;
@@ -736,7 +700,6 @@ export default function ReceptorMap({
                 onClick={() => setSelectedEdgeId(edge.id)}
                 style={{ cursor: 'pointer' }}
               >
-                {/* Epistemic Uncertainty Envelope for Frontier/Contextual Hypotheses */}
                 {showUncertaintyHalo && (
                   <path
                     d={pathD}
@@ -756,7 +719,6 @@ export default function ReceptorMap({
                   opacity={opacity}
                   markerEnd={`url(#marker-${edge.interactionType})`}
                 />
-                {/* Polarity & Flux Micro-Badge on Active Trace Edges */}
                 {isHighlighted && (
                   <g transform={`translate(${badgeX}, ${badgeY})`}>
                     <rect
@@ -775,7 +737,7 @@ export default function ReceptorMap({
                       y="3.5"
                       textAnchor="middle"
                       fontSize="8.5"
-                      fontWeight="700"
+                      fontWeight="600"
                       fill={isSelectedEdge ? '#ffffff' : strokeColor}
                     >
                       {edge.polaritySpec.glyph} {edge.fluxScore}%
@@ -786,7 +748,6 @@ export default function ReceptorMap({
             );
           })}
 
-          {/* LEVEL 1 NODES: Compound & Route */}
           {cascade.layers.compounds.map((cmp) => {
             const isSelected = activeNode?.id === cmp.id;
             const inTrace = cmp.inTrace;
@@ -808,7 +769,7 @@ export default function ReceptorMap({
                   stroke={isSelected ? '#11b6b1' : cmp.isCounterfactualAdded ? '#087d7a' : '#0f172a'}
                   strokeWidth={isSelected ? '2.5' : '1.4'}
                 />
-                <text x={cmp.x} y={cmp.y - 7} textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="650">
+                <text x={cmp.x} y={cmp.y - 7} textAnchor="middle" fill="#ffffff" fontSize="11" fontWeight="600">
                   {cmp.name}
                 </text>
                 <text x={cmp.x} y={cmp.y + 7} textAnchor="middle" fill="#cbd5e1" fontSize="8.5">
@@ -821,7 +782,6 @@ export default function ReceptorMap({
             );
           })}
 
-          {/* LEVEL 2 NODES: Primary Molecular Target */}
           {cascade.layers.targets.map((tgt) => {
             const isSelected = activeNode?.id === tgt.id;
             const fill =
@@ -859,7 +819,7 @@ export default function ReceptorMap({
                   stroke={isSelected ? '#11b6b1' : stroke}
                   strokeWidth={isSelected ? '2.6' : tgt.inTrace ? '1.8' : '1.1'}
                 />
-                <text x={tgt.x} y={tgt.y - 6} textAnchor="middle" fill="#172d40" fontSize="10.5" fontWeight="650">
+                <text x={tgt.x} y={tgt.y - 6} textAnchor="middle" fill="#172d40" fontSize="10.5" fontWeight="600">
                   {tgt.label}
                 </text>
                 <text x={tgt.x} y={tgt.y + 7} textAnchor="middle" fill="#64748b" fontSize="8.5">
@@ -871,7 +831,7 @@ export default function ReceptorMap({
                   textAnchor="middle"
                   fill={tgt.state === 'bottleneck_warning' ? '#b45309' : '#087d7a'}
                   fontSize="8.5"
-                  fontWeight="650"
+                  fontWeight="600"
                 >
                   {tgt.incomingCount > 0 ? `Occupancy ~${tgt.occupancyPct}% (${tgt.incomingCount} input)` : 'Unoccupied (0%)'}
                 </text>
@@ -879,7 +839,6 @@ export default function ReceptorMap({
             );
           })}
 
-          {/* LEVEL 3 NODES: Subcellular Mechanism */}
           {cascade.layers.mechanisms.map((mech) => {
             const isSelected = activeNode?.id === mech.id;
             const tierSpec = EPISTEMIC_TIERS[mech.epistemicTier] || EPISTEMIC_TIERS.supported_mechanistic;
@@ -905,7 +864,7 @@ export default function ReceptorMap({
                   strokeWidth={isSelected ? '2.6' : mech.inTrace ? '1.8' : '1.1'}
                   strokeDasharray={tierSpec.strokeDasharray === 'none' ? undefined : tierSpec.strokeDasharray}
                 />
-                <text x={mech.x} y={mech.y - 6} textAnchor="middle" fill="#172d40" fontSize="9.8" fontWeight="650">
+                <text x={mech.x} y={mech.y - 6} textAnchor="middle" fill="#172d40" fontSize="9.8" fontWeight="600">
                   {mech.label}
                 </text>
                 <text x={mech.x} y={mech.y + 7} textAnchor="middle" fill="#475569" fontSize="8">
@@ -917,15 +876,14 @@ export default function ReceptorMap({
                   textAnchor="middle"
                   fill={mech.isBottleneck ? '#b45309' : '#0f766e'}
                   fontSize="8.5"
-                  fontWeight="650"
+                  fontWeight="600"
                 >
-                  {mech.engaged ? `Cascade Flux ${mech.meanFlux}% · ${tierSpec.shortLabel}` : 'Inactive Pathway'}
+                  {mech.engaged ? `Flux ${mech.meanFlux}% · ${tierSpec.shortLabel}` : 'Inactive'}
                 </text>
               </g>
             );
           })}
 
-          {/* LEVEL 4 NODES: Phenotypic Goal & Biomarker Readout */}
           {cascade.layers.phenotypes.map((pheno) => {
             const isSelected = activeNode?.id === pheno.id || (direction === 'backward' && targetGoalId === pheno.id);
             const active = pheno.incomingCount > 0;
@@ -947,28 +905,25 @@ export default function ReceptorMap({
                   stroke={isSelected ? '#087d7a' : active ? '#172d40' : '#cbd5e1'}
                   strokeWidth={isSelected ? '2.8' : pheno.inTrace ? '2.0' : '1.2'}
                 />
-                <text x={pheno.x} y={pheno.y - 9} textAnchor="middle" fill="#172d40" fontSize="10.2" fontWeight="700">
+                <text x={pheno.x} y={pheno.y - 9} textAnchor="middle" fill="#172d40" fontSize="10.2" fontWeight="600">
                   {pheno.label}
                 </text>
                 <text x={pheno.x} y={pheno.y + 5} textAnchor="middle" fill="#475569" fontSize="8.2">
                   {pheno.biomarker}
                 </text>
-                <text x={pheno.x} y={pheno.y + 19} textAnchor="middle" fill="#087d7a" fontSize="9" fontWeight="700">
-                  {active ? `Net Phenotypic Flux: ${pheno.netScore}%` : '0% Active Drive (Click to trace)'}
+                <text x={pheno.x} y={pheno.y + 19} textAnchor="middle" fill="#087d7a" fontSize="9" fontWeight="600">
+                  {active ? `Net flux: ${pheno.netScore}%` : '0% drive'}
                 </text>
               </g>
             );
           })}
         </svg>
 
-        {/* Deep Mechanistic Node & Edge Inspector */}
         <div className="receptor-map-inspector cascade-inspector-grid">
           <div className="cascade-inspector-card">
             <div className="receptor-inspector-head">
               <div>
-                <span className="microcopy">
-                  Selected Causal Edge · Click any curve badge or node in the 4-layer tree to inspect
-                </span>
+                <span className="microcopy">Selected edge</span>
                 <h3>
                   {nodeById.get(activeEdge?.fromId)?.name || nodeById.get(activeEdge?.fromId)?.label}{' '}
                   <span style={{ color: activeEdge?.polaritySpec?.color }}>{activeEdge?.polaritySpec?.glyph}</span>{' '}
@@ -977,28 +932,25 @@ export default function ReceptorMap({
               </div>
               {activeEdge && (
                 <span className="receptor-state-tag">
-                  {activeEdge.epistemicSpec.label} ({activeEdge.confidencePct}% confidence)
+                  {activeEdge.epistemicSpec.label} ({activeEdge.confidencePct}%)
                 </span>
               )}
             </div>
 
             {activeEdge ? (
-              <div className="cascade-edge-details">
-                <p>
-                  <strong>Quantitative / Biophysical Basis ({activeEdge.quantitativeMetric}):</strong>{' '}
-                  {activeEdge.mechanismNote}
-                </p>
-                <p className="small" style={{ marginTop: '6px' }}>
-                  <strong>Temporal Behavior ({TEMPORAL_PHASES.find(([k]) => k === temporalPhase)?.[1]}):</strong>{' '}
-                  {activeEdge.activeTemporalNote}
-                </p>
-                <p className="microcopy" style={{ marginTop: '6px' }}>
-                  <strong>Epistemic Uncertainty &amp; Limitation ({activeEdge.epistemicSpec.uncertaintyLabel}):</strong>{' '}
-                  {activeEdge.limitationNote} · <em>Source: {activeEdge.source}</em>
-                </p>
-              </div>
+              <ul className="compact-list cascade-edge-details" style={{ margin: '8px 0 0', paddingLeft: '16px' }}>
+                <li>
+                  <strong>Metric ({activeEdge.quantitativeMetric}):</strong> {activeEdge.mechanismNote}
+                </li>
+                <li style={{ marginTop: '4px' }}>
+                  <strong>Window ({TEMPORAL_PHASES.find(([k]) => k === temporalPhase)?.[1]}):</strong> {activeEdge.activeTemporalNote}
+                </li>
+                <li style={{ marginTop: '4px' }}>
+                  <strong>Bounds ({activeEdge.epistemicSpec.uncertaintyLabel}):</strong> {activeEdge.limitationNote} · Source: {activeEdge.source}
+                </li>
+              </ul>
             ) : (
-              <p className="muted small">Select any node or edge to inspect its quantitative parameters and epistemic bounds.</p>
+              <p className="muted small">Select a node or edge to view parameters.</p>
             )}
           </div>
 
@@ -1006,14 +958,12 @@ export default function ReceptorMap({
             <div className="receptor-inspector-head">
               <div>
                 <span className="microcopy">
-                  {direction === 'backward'
-                    ? 'Backward Phenotypic Trace · Upstream Requirements & Missing Candidates'
-                    : 'Convergent Synergies & Rate-Limiting Bottlenecks'}
+                  {direction === 'backward' ? 'Backward trace' : 'Pathway interactions'}
                 </span>
                 <h3>
                   {direction === 'backward'
-                    ? `Goal Trace: ${cascade.layers.phenotypes.find((p) => p.id === targetGoalId)?.label || 'Phenotypic Outcome'}`
-                    : `${cascade.synergies.length} Active Synergies · ${cascade.bottlenecks.length} Bottlenecks`}
+                    ? cascade.layers.phenotypes.find((p) => p.id === targetGoalId)?.label || 'Outcome'
+                    : `${cascade.synergies.length} synergies · ${cascade.bottlenecks.length} bottlenecks`}
                 </h3>
               </div>
             </div>
@@ -1023,22 +973,22 @@ export default function ReceptorMap({
                 {(() => {
                   const goalObj = cascade.layers.phenotypes.find((p) => p.id === targetGoalId) || cascade.layers.phenotypes[0];
                   return (
-                    <>
-                      <p className="small">
-                        <strong>Biomarker Target:</strong> {goalObj.biomarker} ·{' '}
-                        <strong className="tabular-nums">Current Modeled Drive: {goalObj.netScore}%</strong>
-                      </p>
-                      {goalObj.missingCandidates?.length > 0 ? (
-                        <p className="small" style={{ marginTop: '6px' }}>
-                          <strong>Unoccupied Upstream Pathways (Candidate Additions):</strong> Adding{' '}
-                          <strong>{goalObj.missingCandidates.join(' or ')}</strong> engages orthogonal L2→L3 pathways feeding this phenotype.
-                        </p>
-                      ) : (
-                        <p className="small" style={{ marginTop: '6px' }}>
-                          <strong>Pathway Coverage Complete:</strong> All primary upstream receptor axes for {goalObj.label} are represented in the active stack.
-                        </p>
-                      )}
-                    </>
+                    <ul className="compact-list" style={{ margin: '8px 0 0', paddingLeft: '16px' }}>
+                      <li className="small">
+                        <strong>Biomarker:</strong> {goalObj.biomarker} · <strong className="tabular-nums">Drive: {goalObj.netScore}%</strong>
+                      </li>
+                      <li className="small" style={{ marginTop: '4px' }}>
+                        {goalObj.missingCandidates?.length > 0 ? (
+                          <>
+                            <strong>Unoccupied pathways:</strong> {goalObj.missingCandidates.join(', ')}
+                          </>
+                        ) : (
+                          <>
+                            <strong>Coverage:</strong> Primary upstream receptor axes active.
+                          </>
+                        )}
+                      </li>
+                    </ul>
                   );
                 })()}
               </div>
@@ -1048,20 +998,20 @@ export default function ReceptorMap({
               {cascade.bottlenecks.map((bn) => (
                 <div className="record-row" key={bn.id}>
                   <div>
-                    <h3 style={{ color: '#b45309' }}>▲ Bottleneck: {bn.title}</h3>
+                    <h3 style={{ color: '#b45309' }}>Bottleneck: {bn.title}</h3>
                     <p>{bn.detail}</p>
-                    <small className="muted">{bn.remedy}</small>
+                    <p className="small muted" style={{ marginTop: '4px' }}>{bn.remedy}</p>
                   </div>
                 </div>
               ))}
               {cascade.synergies.map((syn) => (
                 <div className="record-row" key={syn.id}>
                   <div>
-                    <h3 style={{ color: '#087d7a' }}>● Convergent Synergy: {syn.title}</h3>
+                    <h3 style={{ color: '#087d7a' }}>Synergy: {syn.title}</h3>
                     <p>{syn.detail}</p>
-                    <small className="muted">
-                      Epistemic Class: {EPISTEMIC_TIERS[syn.epistemicTier]?.label}
-                    </small>
+                    <p className="small muted" style={{ marginTop: '4px' }}>
+                      {EPISTEMIC_TIERS[syn.epistemicTier]?.label}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -1069,16 +1019,15 @@ export default function ReceptorMap({
           </div>
         </div>
 
-        {/* Temporal Pharmacokinetic Overlap & Circadian Mitigation Strip */}
         <div className="cascade-circadian-strip" aria-label="24-hour circadian pharmacokinetic overlap and adaptation schedule">
-          <h4>Temporal Pharmacokinetic Overlap &amp; Adaptation Mitigation ({TEMPORAL_PHASES.find(([k]) => k === temporalPhase)?.[1]})</h4>
+          <h4>Circadian window ({TEMPORAL_PHASES.find(([k]) => k === temporalPhase)?.[1]})</h4>
           <div className="circadian-slot-grid">
             {cascade.circadianSlots.map((slot) => (
               <article className="circadian-slot-card" key={slot.id}>
                 <span className="microcopy">{slot.window}</span>
-                <strong>{slot.compounds.length ? slot.compounds.join(' + ') : 'No compounds scheduled in this window'}</strong>
+                <strong>{slot.compounds.length ? slot.compounds.join(' + ') : 'No compounds scheduled'}</strong>
                 <p className="small muted">{slot.pkDynamics}</p>
-                <small className="circadian-mitigation-note">{slot.mitigationRule}</small>
+                <p className="small circadian-mitigation-note" style={{ marginTop: '4px' }}>{slot.mitigationRule}</p>
               </article>
             ))}
           </div>

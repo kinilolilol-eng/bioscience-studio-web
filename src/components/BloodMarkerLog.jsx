@@ -31,7 +31,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
     const file = event.target.files?.[0];
     if (!file) return;
     setPhotoName(file.name);
-    setSuccess(`Extracted 5 biomarkers from lab slip photo "${file.name}". Review values below and save to schedule your calendar recheck.`);
+    setSuccess(`Loaded 5 markers from "${file.name}". Review values and save to schedule the recheck.`);
   }
 
   function applyLabPreset(preset) {
@@ -68,7 +68,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
         recordedAtIso: new Date().toISOString(),
       });
       if (result) {
-        setSuccess(`Blood-marker panel logged and Recheck Calendar Event scheduled for ${dateTime(result.panel.recheckDateIso, workspace.timezone)}.`);
+        setSuccess(`Markers saved. Recheck scheduled for ${dateTime(result.panel.recheckDateIso, workspace.timezone)}.`);
         if (onSaved) await onSaved();
       }
     } catch {
@@ -77,28 +77,28 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
   }
 
   return (
-    <section className="studio-section blood-marker-section" aria-label="Blood-Marker Log & Budget Optimizer">
+    <section className="studio-section blood-marker-section" aria-label="Blood-Marker Log">
       <SectionHead
-        title="Blood-Marker Log · Photo Entry (#5) & Calendar Recheck"
+        title="Blood-Marker Log"
         action={
           <div className="inline-actions">
             <button type="button" className="button secondary small-button" onClick={() => applyLabPreset('optimal')}>
-              Load steady-state photo preset
+              Steady-state preset
             </button>
             <button type="button" className="button quiet small-button" onClick={() => applyLabPreset('elevated_e2_hct')}>
-              Simulate elevated E2 / Hct slip
+              Elevated E2 / Hct preset
             </button>
           </div>
         }
       >
-        Scan or upload a lab slip photo, schedule the recheck directly onto your protocol calendar, and see the lowest-cost direct requisition bundle.
+        Log lab values, schedule a calendar recheck, and compare direct requisition pricing.
       </SectionHead>
 
       <div className="budget-callout">
         <div className="inline-between">
-          <strong>Cheapest way to test these markers</strong>
+          <strong>Direct requisition pricing</strong>
           <span className="tabular-nums">
-            Direct bundle: <strong>${previewPanel.bundledDirectUsd}</strong> vs ${previewPanel.totalRetailUsd} clinic retail · <strong>Saves ${previewPanel.savedOnLabsUsd}</strong>
+            Bundle: <strong>${previewPanel.bundledDirectUsd}</strong> vs ${previewPanel.totalRetailUsd} retail · <strong>Saves ${previewPanel.savedOnLabsUsd}</strong>
           </span>
         </div>
         <p>{previewPanel.cheapestTestLine}</p>
@@ -107,22 +107,22 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
       <form onSubmit={handleSubmit}>
         <div className="form-grid two">
           <Input
-            label="Photo Entry (#5) — Upload Lab Slip Photo or Requisition PDF"
+            label="Lab slip image or PDF"
             type="file"
             accept="image/*,.pdf"
             onChange={handlePhotoUpload}
-            hint={`Active source slip: ${photoName}`}
+            hint={`Source file: ${photoName}`}
           />
           <Select
-            label="Recheck Calendar Event Horizon"
+            label="Recheck interval"
             value={recheckWeeks}
             onChange={(e) => setRecheckWeeks(e.target.value)}
-            hint={`Automatically adds a Calendar Reminder on ${dateTime(previewPanel.recheckDateIso, workspace?.timezone)}`}
+            hint={`Recheck date: ${dateTime(previewPanel.recheckDateIso, workspace?.timezone)}`}
           >
-            <option value="4">4 weeks post-titration (Acute SERM / Ester check)</option>
-            <option value="6">6 weeks post-titration (Standard steady-state)</option>
-            <option value="8">8 weeks post-titration (Renal & Metabolic consolidation)</option>
-            <option value="12">12 weeks (Quarterly maintenance)</option>
+            <option value="4">4 weeks (acute check)</option>
+            <option value="6">6 weeks (steady state)</option>
+            <option value="8">8 weeks (consolidation)</option>
+            <option value="12">12 weeks (quarterly)</option>
           </Select>
         </div>
 
@@ -134,10 +134,10 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
               currentVal === ''
                 ? ''
                 : numVal < spec.min
-                ? '▲ Low'
+                ? 'Low'
                 : numVal > spec.max
-                ? '▲ Elevated'
-                : '● Optimal';
+                ? 'Elevated'
+                : 'In range';
             return (
               <Input
                 key={spec.id}
@@ -146,7 +146,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
                 step="any"
                 value={currentVal}
                 onChange={(e) => setValues((prev) => ({ ...prev, [spec.id]: e.target.value }))}
-                hint={`Ref: ${spec.min}–${spec.max} ${spec.unit} · ${spec.provider} ($${spec.directUsd}) ${flag}`}
+                hint={`Ref ${spec.min} to ${spec.max} ${spec.unit} · ${spec.provider} $${spec.directUsd}${flag ? ` · ${flag}` : ''}`}
               />
             );
           })}
@@ -157,7 +157,7 @@ export default function BloodMarkerLog({ workspace, onSaved }) {
 
         <div className="form-actions">
           <button type="submit" className="button primary" disabled={mutation.pending || !entries.length}>
-            {mutation.pending ? 'Logging markers & calendar event…' : 'Save blood markers & schedule calendar recheck'}
+            {mutation.pending ? 'Saving…' : 'Save markers & schedule recheck'}
           </button>
         </div>
       </form>

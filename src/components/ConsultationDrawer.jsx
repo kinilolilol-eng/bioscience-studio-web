@@ -5,23 +5,24 @@ import { Drawer, Input, Notice, Textarea } from './ui.jsx';
 
 export default function ConsultationDrawer({ workspace, prefilled = null, onSaved, onClose }) {
   const [clientCode, setClientCode] = useState(
-    prefilled?.clientCode || 'CL-2026-226 (cc224)'
+    prefilled?.clientCode ? String(prefilled.clientCode).replace(/\s*\(cc224\)/gi, '') : 'Client 226'
   );
   const [biologicalBaseline, setBiologicalBaseline] = useState(
-    prefilled?.biologicalBaseline ||
-      (prefilled
-        ? `Goal: ${prefilled.goalLabel} · Entered Stack: ${prefilled.enteredStack} · BP ${prefilled.baselineBp || '116/74 mmHg'} · Weight ${prefilled.baselineWeightKg || '74'} kg.`
-        : 'Client 226 (cc224) · 74.0 kg · Dual-Domain Architecture (53-Slot Cognition + 14-Day Staged Epiphyseal Height Reactor) · Resting BP 114/72 mmHg · CYP2D6 *4/*10.')
+    prefilled?.biologicalBaseline
+      ? String(prefilled.biologicalBaseline).replace(/\s*\(cc224\)/gi, '')
+      : prefilled
+      ? `Goal: ${prefilled.goalLabel} · Stack: ${prefilled.enteredStack} · BP ${prefilled.baselineBp || '116/74 mmHg'} · Weight ${prefilled.baselineWeightKg || '74'} kg`
+      : 'Client 226 · 74.0 kg · Client 226 Height & Client 226 Cognition · Seated BP 114/72 mmHg · CYP2D6 *4/*10'
   );
   const [biomarkerTargets, setBiomarkerTargets] = useState(
     prefilled?.biomarkerTargets ||
-      'Serum PO4 <= 4.5 mg/dL (R03) · Ultrasensitive E2 (LC-MS/MS) 12–20 pg/mL (R01) · Free T4 1.3–1.7 ng/dL (R02) · Collagen X (CXM) > 42 ng/mL.'
+      'Serum PO4 <= 4.5 mg/dL · Sensitive E2 (LC-MS/MS) 12 to 20 pg/mL · Free T4 1.3 to 1.7 ng/dL · CXM > 42 ng/mL'
   );
   const [titrationAdjustments, setTitrationAdjustments] = useState(
     prefilled?.titrationNotes ||
-      'Height Arm A: Dabogratinib 18.5 mg (0.25 mg/kg/d) + Vosoritide 1.11 mg (15 mcg/kg/d) + Staged Somatropin (1.25x Stage 1 / 0.80x Stage 2B) + Thiol-Clutch 36h before Day 9. Cognition: TAK-653 0.5 mg + ACD856 10 mg + OV350 25 mg + AUT00206 50 mg + Basmisanil 5 mg + Terazosin 0.6 mg.'
+      'Client 226 Height: Dabogratinib 18.5 mg + Vosoritide 1.11 mg + Somatropin staged (1.25x Stage 1, 0.80x Stage 2B) + 36h washout before Day 9. Client 226 Cognition: TAK-653 0.5 mg + ACD856 10 mg + OV350 25 mg + AUT00206 50 mg + Basmisanil 5 mg + Terazosin 0.6 mg.'
   );
-  const [clinicianSignoff, setClinicianSignoff] = useState('Protocol Studio — Client 226 Mechanistic Architecture');
+  const [clinicianSignoff, setClinicianSignoff] = useState('Client 226 Protocol Studio');
   const [success, setSuccess] = useState('');
   const mutation = useMutation();
 
@@ -39,7 +40,7 @@ export default function ConsultationDrawer({ workspace, prefilled = null, onSave
         goalLabel: prefilled?.goalLabel,
       });
       if (result) {
-        setSuccess('Consultation intake & titration baseline saved to workspace.');
+        setSuccess('Consultation record saved to workspace.');
         if (onSaved) await onSaved();
       }
     } catch {
@@ -51,28 +52,28 @@ export default function ConsultationDrawer({ workspace, prefilled = null, onSave
 
   return (
     <Drawer
-      title="Consultation Notes & Client Intake"
-      subtitle={prefilled ? `Pre-filled from Goal → Protocol Finder (${prefilled.goalLabel})` : workspace?.label || 'Private clinical baseline & titration log'}
+      title="Consultation Notes"
+      subtitle={prefilled ? `Pre-filled from ${prefilled.goalLabel}` : workspace?.label || 'Client 226 baseline and titration log'}
       onClose={onClose}
       wide
     >
       <div className="drawer-content">
         {prefilled && (
           <Notice kind="info">
-            Pre-filled directly from your Goal → Protocol Finder & Stack Check result so nothing gets typed twice. Review and save to lock into the client workspace.
+            Pre-filled from your stack check. Review and save to the workspace.
           </Notice>
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-grid two">
             <Input
-              label="Client Reference Code"
+              label="Client reference"
               required
               value={clientCode}
               onChange={(e) => setClientCode(e.target.value)}
             />
             <Input
-              label="Clinician / Studio Attribution"
+              label="Studio attribution"
               required
               value={clinicianSignoff}
               onChange={(e) => setClinicianSignoff(e.target.value)}
@@ -80,30 +81,30 @@ export default function ConsultationDrawer({ workspace, prefilled = null, onSave
           </div>
 
           <Textarea
-            label="Client Biological Baselines (Anthropometrics, Pharmacogenomics, Hemodynamics, Current Stack)"
+            label="Biological baseline"
             required
             rows="3"
             value={biologicalBaseline}
             onChange={(e) => setBiologicalBaseline(e.target.value)}
-            hint="Include CYP2D6 / UGT metabolizer status, resting seated BP, epiphyseal status, and prior compound history."
+            hint="Weight, metabolizer status, seated blood pressure, and active domain."
           />
 
           <Textarea
-            label="Biomarker Targets & Guardrail Thresholds"
+            label="Biomarker targets"
             required
             rows="3"
             value={biomarkerTargets}
             onChange={(e) => setBiomarkerTargets(e.target.value)}
-            hint="Specify exact assay methodology (e.g., LC-MS/MS for Estradiol & IGF-1, Cystatin C for glomerular filtration)."
+            hint="Target ranges and assay methods (LC-MS/MS E2, IGF-1, Cystatin C, PO4)."
           />
 
           <Textarea
-            label="Titration Adjustments & Mechanistic Protocol Notes"
+            label="Titration schedule"
             required
             rows="3"
             value={titrationAdjustments}
             onChange={(e) => setTitrationAdjustments(e.target.value)}
-            hint="Document compound intervals, α7-nAChR adaptation bridges, or CYP2D6 prodrug substitutions."
+            hint="Dosing intervals, washout windows, and prodrug substitutions."
           />
 
           <Notice>{mutation.error}</Notice>
@@ -114,25 +115,27 @@ export default function ConsultationDrawer({ workspace, prefilled = null, onSave
               Close
             </button>
             <button type="submit" className="button primary" disabled={mutation.pending}>
-              {mutation.pending ? 'Saving intake…' : 'Save consultation intake'}
+              {mutation.pending ? 'Saving…' : 'Save consultation record'}
             </button>
           </div>
         </form>
 
         {notes.length > 0 && (
-          <section className="recent-records" style={{ marginTop: '28px' }}>
-            <h3>Recorded Consultation Intakes ({notes.length})</h3>
-            <div className="record-list" style={{ marginTop: '10px' }}>
+          <section className="recent-records" style={{ marginTop: '24px' }}>
+            <h3>Saved records ({notes.length})</h3>
+            <div className="record-list" style={{ marginTop: '8px' }}>
               {notes.map((entry) => (
                 <article className="record-row" key={entry.id} style={{ alignItems: 'flex-start' }}>
                   <div>
                     <h3>
-                      {entry.clientCode} <span>·</span> <span className="muted">{dateTime(entry.createdAt, workspace?.timezone)}</span>
+                      {String(entry.clientCode || 'Client 226').replace(/\s*\(cc224\)/gi, '')} <span>·</span>{' '}
+                      <span className="muted">{dateTime(entry.createdAt, workspace?.timezone)}</span>
                     </h3>
-                    <p><strong>Baseline:</strong> {entry.biologicalBaseline}</p>
-                    <p><strong>Targets:</strong> {entry.biomarkerTargets}</p>
-                    <p><strong>Titration:</strong> {entry.titrationAdjustments}</p>
-                    <small className="muted">{entry.clinicianSignoff}</small>
+                    <ul className="compact-list" style={{ margin: '8px 0 0', paddingLeft: '16px' }}>
+                      <li><strong>Baseline:</strong> {String(entry.biologicalBaseline || '').replace(/\s*\(cc224\)/gi, '')}</li>
+                      <li><strong>Targets:</strong> {entry.biomarkerTargets}</li>
+                      <li><strong>Titration:</strong> {entry.titrationAdjustments}</li>
+                    </ul>
                   </div>
                 </article>
               ))}

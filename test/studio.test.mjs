@@ -1,4 +1,4 @@
-import assert from 'node:assert/strict';
+﻿import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   EPISTEMIC_TIERS,
@@ -228,7 +228,7 @@ test('Browser-adapted Obsidian vault access resolves supplied compound descripti
   }
 });
 
-test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slots + 32 phase/reactor records), 170 compounds, 24 Eternal Tests, dose calculators, 336h reactor, and side-effect matrix', () => {
+test('Client 226 complete suite: 85 frontier records (53 functional slots + 32 phase/reactor records), 170 compounds, 24 Eternal Tests, dose calculators, 336h reactor, and side-effect matrix', () => {
   assert.equal(CLIENT_226_FRONTIER_RECORDS.length, 85);
   assert.equal(CLIENT_226_COMPOUNDS.length >= 165, true);
   assert.equal(
@@ -284,5 +284,6 @@ test('Client 226 (cc224) complete suite: 85 frontier records (53 functional slot
   assert.equal(stage2B.thiolSafeForStage2B, true);
   assert.equal(CLIENT_226_REACTOR_RESULTS.stress.baseline.mm_14d, 1.6531);
 });
+
 
 

@@ -14,7 +14,7 @@ import {
   CLIENT_226_RELATIONS,
 } from './client226Data.js';
 
-const STORAGE_KEY = 'bioscience_studio_state_226_v4';
+const STORAGE_KEY = 'bioscience_studio_state_226_v6';
 
 function buildInitialState() {
   const now = new Date('2026-11-08T09:00:00.000Z');
@@ -606,12 +606,12 @@ function buildInitialState() {
     consultation_notes: [
       {
         id: 'consult-1',
-        clientCode: 'CL-2026-226 (cc224)',
+        clientCode: 'Client 226',
         createdAt: isoAt(-96),
-        biologicalBaseline: 'Client 226 (cc224) · 74.0 kg · Dual-Domain Architecture (53-Slot Cognition + 14-Day Staged Epiphyseal Height Reactor) · Resting BP 114/72 mmHg · CYP2D6 *4/*10 · eGFR 112 mL/min.',
+        biologicalBaseline: 'Client 226 · 74.0 kg · Client 226 Cognition & Client 226 Height · Resting BP 114/72 mmHg · CYP2D6 *4/*10 · eGFR 112 mL/min.',
         biomarkerTargets: 'Serum PO4 <= 4.5 mg/dL (R03) · Ultrasensitive E2 12–20 pg/mL (R01) · Free T4 1.3–1.7 ng/dL (R02) · CXM > 42 ng/mL.',
-        titrationAdjustments: 'Height Arm A: Dabogratinib 18.5 mg + Vosoritide 1.11 mg SubQ + Staged Somatropin + Thiol-Clutch 36h before Day 9. Cognition: TAK-653 0.5 mg + ACD856 10 mg + OV350 25 mg + AUT00206 50 mg + Basmisanil 5 mg + Terazosin 0.6 mg.',
-        clinicianSignoff: 'Protocol Studio — Client 226 Mechanistic Architecture',
+        titrationAdjustments: 'Client 226 Height: Mandatory Erdafitinib 18.5 mg + 70/30 Somatropin + CJC-1295 no DAC 150 mcg + Ipamorelin 150 mcg + 14-day staged matrix. Client 226 Cognition: KW-6356 1.5 mg + Armodafinil 75 mg + ASP4345 7.5 mg + Guanfacine 0.5 mg + Intranasal Insulin 25 IU x 3.',
+        clinicianSignoff: 'Client 226 Protocol Plan',
       },
     ],
   };
@@ -637,8 +637,8 @@ function buildInitialState() {
 
   const ws226Cognition = {
     id: 'ws-226-cognition',
-    label: 'Client 226 (cc224) · Active 5 On-Hand Cognition Core + 53-Slot Explorer',
-    goal: 'Anchor on Client 226’s 5 On-Hand Cognition compounds — Guanfacine (dlPFC Layer III spine-neck α2A HCN clamp), Armodafinil (tonic DAT wakefulness + CYP3A4 tracking), KW-6356 (insurmountable striatopallidal A2A effort initiation), ASP4345 (selective spine-head D1 PAM for multi-step working-memory hold), and Intranasal Insulin (#1 brain-fog/durability responder across >=3 study windows) — with full 4-domain & 53-slot upgrade/rotation access.',
+    label: 'Client 226 Cognition',
+    goal: '5 On-Hand Core · 4-Domain Study Plan',
     timezone: 'UTC',
     revision: 7,
     allow_plan_changes: true,
@@ -884,8 +884,8 @@ function buildInitialState() {
 
   const ws226Height = {
     id: 'ws-226-height',
-    label: 'Client 226 (cc224) · Minimalistic 14-Day Height Protocol (Mandatory ERDA + 70/30 rhGH + CJC-1295 no DAC + Ipamorelin)',
-    goal: 'Settled Minimalistic 14-Day Height Protocol (226 — height protocol.md): Mandatory Erdafitinib (ERDA 0.25 mg/kg/d or 4–8 mg/d; no TYRA-300 available) + Erdafitinib Targeted Ancillaries (Sucroferric oxyhydroxide/Sevelamer + Nicotinamide + Tenapanor + Racecadotril/Cilostazol + Rebamipide + Finerenone/Dorzolamide + TUDCA/Colesevelam) + 70% Night / 30% Morning Somatropin (12–15 IU/d) + CJC-1295 no DAC (150 mcg) & Ipamorelin (150 mcg) + Stage 1A/1B Build (Days 1–6) -> Stage 2A Lower Load (Days 7–8) -> Stage 2B Higher Load (Days 9–14).',
+    label: 'Client 226 Height',
+    goal: '14-Day Staged Protocol · Mandatory Erdafitinib · 70/30 GH + CJC-1295 no DAC + Ipamorelin',
     timezone: 'UTC',
     revision: 6,
     allow_plan_changes: true,
@@ -1160,7 +1160,7 @@ function buildInitialState() {
       relations: mergedRelations,
       public_insights: mergedPublicInsights,
     },
-    workspaces: [ws226Cognition, ws226Height],
+    workspaces: [ws226Height, ws226Cognition],
   };
 }
 
