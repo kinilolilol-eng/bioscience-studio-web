@@ -1,4 +1,4 @@
-﻿// Auto-generated deterministic Client 226 Complete Mechanistic Dataset,
+// Auto-generated deterministic Client 226 Complete Mechanistic Dataset,
 // 53 Frontier Functional Slots, 24-Rule Eternal Test Validator, 336-Hour Staged Reactor,
 // Side-Effect / Switching / Fix Matrix, and Shared Cross-Domain Compound Ledger.
 
@@ -16336,11 +16336,11 @@ export function computeGhSecretagogueSynergy({
   betaCartilage = 0.45,
   equalTotalPeptide = true,
 } = {}) {
-  const ghIu = Math.max(0, Math.min(24, Number(totalGhIu) || 12));
-  const cjcMcg = Math.max(0, Math.min(400, Number(cjcDoseMcg) || 150));
-  const ipaMcg = Math.max(0, Math.min(400, Number(ipaDoseMcg) || 150));
-  const gamma = Math.max(0.05, Math.min(2.0, Number(gammaSocs2) || 0.65));
-  const betaCart = Math.max(0.0, Math.min(1.5, Number(betaCartilage) || 0.45));
+  const ghIu = Math.max(0, Math.min(24, Number.isFinite(Number(totalGhIu)) ? Number(totalGhIu) : 12));
+  const cjcMcg = Math.max(0, Math.min(400, Number.isFinite(Number(cjcDoseMcg)) ? Number(cjcDoseMcg) : 150));
+  const ipaMcg = Math.max(0, Math.min(400, Number.isFinite(Number(ipaDoseMcg)) ? Number(ipaDoseMcg) : 150));
+  const gamma = Math.max(0.05, Math.min(2.0, Number.isFinite(Number(gammaSocs2)) ? Number(gammaSocs2) : 0.65));
+  const betaCart = Math.max(0.0, Math.min(1.5, Number.isFinite(Number(betaCartilage)) ? Number(betaCartilage) : 0.45));
 
   // Analytical Bateman peak for SC Somatropin (ka = 0.25 h^-1, kel = 0.35 h^-1)
   const ka = 0.25;
@@ -16368,18 +16368,28 @@ export function computeGhSecretagogueSynergy({
     }
 
     const dt = 0.25;
+    const subSteps = 10;
+    const dtSub = dt / subSteps; // 0.025 h (1.5 min) sub-step eliminates coarse-Euler truncation & ordering artifacts
     const stepsPerDay = Math.round(24 / dt);
+    const tauCisSteps = Math.round(0.60 / dtSub); // 24 sub-steps (0.60 h fast steric CIS delay)
+    const tauSocs2Steps = Math.round(1.40 / dtSub); // 56 sub-steps (1.40 h slow E3 SOCS2 delay)
+    const pCartHist = new Array(tauSocs2Steps + 1).fill(0);
+    let histIdx = 0;
+
     let aH = 0;
     let hX = 0;
     let h22 = 0;
     let h20 = 0;
     let sst = 0.25;
+    let igfSys = 1.0;
     let mStore = 1.0;
+    let rGhsr = 0.95;
     let rLiver = 0.9;
     let pLiver = 0.0;
     let nLiver = 0.1;
     let rCart = 0.92;
     let pCart = 0.0;
+    let cCisCart = 0.06;
     let nCart = 0.08;
 
     let intStat5Liver = 0;
@@ -16397,90 +16407,111 @@ export function computeGhSecretagogueSynergy({
       int20kDa = 0;
 
       for (let s = 0; s < stepsPerDay; s++) {
-        const t = s * dt;
-        if (Math.abs(t - 7.0) < dt / 2 && dMorn > 0) aH += dMorn;
-        if (Math.abs(t - 22.25) < dt / 2 && dNight > 0) aH += dNight;
+        const tTick = s * dt;
+        if (Math.abs(tTick - 7.0) < dt / 2 && dMorn > 0) aH += dMorn;
+        if (Math.abs(tTick - 22.25) < dt / 2 && dNight > 0) aH += dNight;
 
-        // Exogenous SC rhGH Bateman dynamics
-        const dAh = -ka * aH;
-        const dHx = 0.82 * ka * aH - kel * hX;
-        aH = Math.max(0, aH + dAh * dt);
-        hX = Math.max(0, hX + dHx * dt);
+        for (let sub = 0; sub < subSteps; sub++) {
+          const t = tTick + sub * dtSub;
 
-        // Hypothalamic Somatostatin S(t) driven by circulating GH feedback
-        const hTotal = hX + h22 + 0.85 * h20;
-        const dSst = 0.18 + 0.55 * (hTotal / (2.5 + hTotal)) - 0.45 * sst;
-        sst = Math.max(0.1, sst + dSst * dt);
+          // Exogenous SC rhGH Bateman dynamics
+          const dAh = -ka * aH;
+          const dHx = 0.82 * ka * aH - kel * hX;
+          aH = Math.max(0, aH + dAh * dtSub);
+          hX = Math.max(0, hX + dHx * dtSub);
 
-        // Secretagogue receptor drives r(t) [Mod GRF, t½=0.5h] and q(t) [Ipamorelin, t½=2.0h]
-        let rDrive = 0;
-        let qDrive = 0;
-        for (const pt of pulseTimes) {
-          const dtPulse = t >= pt ? t - pt : t + 24 - pt;
-          if (dtPulse >= 0 && dtPulse <= 8.0) {
-            const cR = (cjcMcg * pulseScale) * Math.exp(-1.386 * dtPulse) * (1 - Math.exp(-5.5 * dtPulse));
-            const cQ = (ipaMcg * pulseScale) * Math.exp(-0.346 * dtPulse) * (1 - Math.exp(-3.4 * dtPulse));
-            rDrive += cR / (65 + cR);
-            qDrive += cQ / (55 + cQ);
+          // Closed-loop Hypothalamic Somatostatin S(t) driven by circulating GH + systemic IGF-1 feedback
+          const hTotal = hX + h22 + 0.85 * h20;
+          const dIgfSys = 0.08 * (1.0 + 0.45 * pLiver - igfSys);
+          igfSys = Math.max(0.8, igfSys + dIgfSys * dtSub);
+          const dSst = 0.18 + 0.55 * (hTotal / (2.5 + hTotal)) + 0.08 * Math.max(0, igfSys - 1.0) - 0.45 * sst;
+          sst = Math.max(0.1, sst + dSst * dtSub);
+
+          // Secretagogue receptor drives r(t) [Mod GRF, t½=0.5h] and q(t) [Ipamorelin, t½=2.0h] with Hill cooperativity
+          let rOcc = 0;
+          let qOcc = 0;
+          for (const pt of pulseTimes) {
+            const dtPulse = t >= pt ? t - pt : t + 24 - pt;
+            if (dtPulse >= 0 && dtPulse <= 24.0) {
+              const cR = (cjcMcg * pulseScale) * Math.exp(-1.386 * dtPulse) * (1 - Math.exp(-5.5 * dtPulse));
+              const cQ = (ipaMcg * pulseScale) * Math.exp(-0.346 * dtPulse) * (1 - Math.exp(-3.4 * dtPulse));
+              rOcc += Math.pow(cR, 1.44) / (Math.pow(52, 1.44) + Math.pow(cR, 1.44));
+              qOcc += Math.pow(cQ, 1.44) / (Math.pow(45, 1.44) + Math.pow(cQ, 1.44));
+            }
           }
-        }
-        rDrive = Math.min(1.0, rDrive);
-        qDrive = Math.min(1.0, qDrive);
+          rOcc = Math.min(1.0, rOcc);
+          qOcc = Math.min(1.0, qOcc);
 
-        // Pituitary Gs (p) and Gq/Ca2+ (z) with Ipamorelin opposing SST hyperpolarization
-        const sstEff = Math.max(0.05, sst * (1.0 - 0.72 * qDrive));
-        const pCamp = (0.08 + 0.92 * rDrive) / (1.0 + 1.35 * sstEff);
-        const zCa = 1.0 / (1.0 + Math.exp(-4.2 * (0.65 * qDrive - 0.55 * sstEff + 0.05)));
+          // Somatotroph GHSR1a surface receptor trafficking (beta-arrestin2 endocytosis, t½_rec = 4.0h -> k_rec = 0.173 h^-1)
+          const rDrive = rOcc;
+          const qDrive = rGhsr * qOcc;
+          rGhsr = Math.max(0.18, Math.min(1.0, rGhsr + (0.173 * (1.0 - rGhsr) - 1.25 * qOcc * rGhsr) * dtSub));
 
-        // Multiplicative pituitary secretion v_sec = M * (b0 + bp*p + bz*z + bpz*p*z)
-        const vSec =
-          mStore *
-          (0.02 + 0.35 * pCamp + 0.28 * zCa + 1.85 * pCamp * zCa) /
-          (1.0 + 0.25 * (hX / (4.0 + hX)));
+          // Pituitary Gs (p) and Gq/Ca2+ (z) with Ipamorelin opposing SST hyperpolarization
+          const sstEff = Math.max(0.05, sst * (1.0 - 0.72 * qDrive));
+          const pCamp = (0.08 + 0.92 * rDrive) / (1.0 + 1.35 * sstEff);
+          const zCa = 1.0 / (1.0 + Math.exp(-4.2 * (0.65 * qDrive - 0.55 * sstEff + 0.05)));
 
-        // Vesicle store M(t) depletion & Pit-1/GHRH synthesis recovery
-        const dM = 0.22 * (1.0 - mStore) * (1.0 + 0.45 * rDrive) - 0.32 * vSec;
-        mStore = Math.max(0.12, Math.min(1.2, mStore + dM * dt));
+          // Multiplicative pituitary secretion v_sec = M * (b0 + bp*p + bz*z + bpz*p*z)
+          const vSec =
+            mStore *
+            (0.02 + 0.35 * pCamp + 0.28 * zCa + 1.85 * pCamp * zCa) /
+            (1.0 + 0.25 * (hX / (4.0 + hX)));
 
-        // Endogenous 22 kDa (90%, k22=1.9 h^-1) & 20 kDa (10%, k20=1.15 h^-1 slower clearance)
-        h22 = Math.max(0, h22 + (0.90 * vSec * 4.2 - 1.9 * h22) * dt);
-        h20 = Math.max(0, h20 + (0.10 * vSec * 4.2 - 1.15 * h20) * dt);
+          // Vesicle store M(t) depletion & Pit-1/GHRH synthesis recovery
+          const dM = 0.22 * (1.0 - mStore) * (1.0 + 0.45 * rDrive) - 0.32 * vSec;
+          mStore = Math.max(0.12, Math.min(1.2, mStore + dM * dtSub));
 
-        // Peripheral Compartment 1: Liver (fast fenestrated exposure, stronger CIS/SOCS2 adaptation)
-        const thetaL = (hX + h22 + 0.75 * h20) / (1.8 + hX + h22 + 0.75 * h20);
-        rLiver = Math.max(0.15, Math.min(1.0, rLiver + (0.28 * (1 - rLiver) - 0.34 * thetaL * rLiver) * dt));
-        pLiver = Math.max(
-          0,
-          Math.min(
-            1.0,
-            pLiver + ((1.35 * rLiver * thetaL) / (1.0 + gamma * 1.35 * nLiver) * (1 - pLiver) - 0.75 * pLiver) * dt
-          )
-        );
-        nLiver = Math.max(0, nLiver + (0.48 * pLiver - 0.25 * nLiver) * dt);
+          // Endogenous 22 kDa (90%, k22=1.9 h^-1) & 20 kDa (10%, k20=1.15 h^-1 slower clearance)
+          h22 = Math.max(0, h22 + (0.90 * vSec * 4.2 - 1.9 * h22) * dtSub);
+          h20 = Math.max(0, h20 + (0.10 * vSec * 4.2 - 1.15 * h20) * dtSub);
 
-        // Peripheral Compartment 2: Growth-Plate Cartilage (Donnan diffusive filter + 20kDa retention + local beta_RQ GHRHR/GHSR1a)
-        const hCartDrive = 0.72 * hX + 0.88 * h22 + 1.25 * h20;
-        const thetaC = hCartDrive / (2.2 + hCartDrive);
-        rCart = Math.max(0.20, Math.min(1.0, rCart + (0.32 * (1 - rCart) - 0.22 * thetaC * rCart) * dt));
-        pCart = Math.max(
-          0,
-          Math.min(
-            1.0,
-            pCart + ((1.45 * rCart * thetaC) / (1.0 + gamma * 0.85 * nCart) * (1 - pCart) - 0.65 * pCart) * dt
-          )
-        );
-        nCart = Math.max(0, nCart + (0.38 * pCart - 0.25 * nCart) * dt);
+          // Peripheral Compartment 1: Liver (fast fenestrated exposure, stronger CIS/SOCS2 adaptation)
+          const thetaL = (hX + h22 + 0.75 * h20) / (1.8 + hX + h22 + 0.75 * h20);
+          rLiver = Math.max(0.15, Math.min(1.0, rLiver + (0.28 * (1 - rLiver) - 0.34 * thetaL * rLiver) * dtSub));
+          pLiver = Math.max(
+            0,
+            Math.min(
+              1.0,
+              pLiver + ((1.35 * rLiver * thetaL) / (1.0 + gamma * 1.35 * nLiver) * (1 - pLiver) - 0.75 * pLiver) * dtSub
+            )
+          );
+          nLiver = Math.max(0, nLiver + (0.48 * pLiver - 0.25 * nLiver) * dtSub);
 
-        // Local Epiphyseal IGF-1 synthesis (STAT5b + direct chondrocyte GHRHR/GHSR1a autocrine branch betaCart)
-        const localAutocrine = betaCart * (0.35 * rDrive + 0.25 * qDrive + 0.65 * rDrive * qDrive);
-        const igf1Rate = 1.25 * pCart + localAutocrine;
+          // Peripheral Compartment 2: Growth-Plate Cartilage (Donnan filter + 20kDa retention + dual-timescale CIS/SOCS2 delay)
+          pCartHist[histIdx] = pCart;
+          const pDelCis = pCartHist[(histIdx - tauCisSteps + pCartHist.length) % pCartHist.length];
+          const pDelSocs2 = pCartHist[(histIdx - tauSocs2Steps + pCartHist.length) % pCartHist.length];
+          histIdx = (histIdx + 1) % pCartHist.length;
 
-        if (day === 2) {
-          intStat5Liver += pLiver * dt;
-          intStat5Cart += pCart * dt;
-          intLocalIgf1 += igf1Rate * dt;
-          intPitSec += vSec * dt;
-          int20kDa += h20 * dt;
+          const hCartDrive = 0.72 * hX + 0.88 * h22 + 1.25 * h20;
+          const thetaC = hCartDrive / (2.2 + hCartDrive);
+          rCart = Math.max(
+            0.20,
+            Math.min(1.0, rCart + (0.32 * (1 - rCart) - 0.22 * thetaC * rCart * (0.65 + 0.85 * nCart)) * dtSub)
+          );
+          cCisCart = Math.max(0, cCisCart + (0.58 * pDelCis - 1.20 * cCisCart) * dtSub);
+          nCart = Math.max(0, nCart + (0.42 * pDelSocs2 - 0.25 * nCart) * dtSub);
+          const feedbackBrake = 1.0 + gamma * (0.65 * cCisCart + 0.55 * nCart);
+          pCart = Math.max(
+            0,
+            Math.min(
+              1.0,
+              pCart + ((1.45 * rCart * thetaC) / feedbackBrake * (1 - pCart) - 0.65 * pCart) * dtSub
+            )
+          );
+
+          // Local Epiphyseal IGF-1 synthesis (STAT5b + direct chondrocyte GHRHR/GHSR1a autocrine branch betaCart)
+          const localAutocrine = betaCart * (0.38 * rDrive + 0.28 * qDrive + 0.58 * rDrive * qDrive);
+          const igf1Rate = 1.25 * pCart + localAutocrine;
+
+          if (day === 2) {
+            intStat5Liver += pLiver * dtSub;
+            intStat5Cart += pCart * dtSub;
+            intLocalIgf1 += igf1Rate * dtSub;
+            intPitSec += vSec * dtSub;
+            int20kDa += h20 * dtSub;
+          }
         }
       }
     }
@@ -16522,8 +16553,23 @@ export function computeGhSecretagogueSynergy({
   candidates.sort((a, b) => b.intLocalIgf1 - a.intLocalIgf1);
   const optimalSplitSchedule = candidates[0].modeKey;
 
+  let regimeExplanation;
+  if (optimalSplitSchedule === 'afternoon_1600') {
+    regimeExplanation =
+      gamma >= 0.75
+        ? 'High CIS/SOCS2 Adaptation Regime: 16:00 Afternoon Trough Bridge (9h after 07:00 Morning 30% rhGH) outperforms unseparated pre-bed priming and split-dose tachyphylaxis by avoiding peripheral GHR desensitization overlap and GHSR1a beta-arrestin2 depletion.'
+        : 'Balanced Adaptation Regime: 16:00 Afternoon Trough Bridge provides the cleanest single-pulse STAT5b resensitization and full GHSR1a surface recovery; 07:30 Morning Trough is optimal during the 100% Night rhGH ramp.';
+  } else if (optimalSplitSchedule === 'dual_1600_2145') {
+    regimeExplanation =
+      'Positive Cartilage Autocrine + Somatostatin-Clamped Regime: Dual (16:00 Bridge + 21:45 Pre-Bed Primer) maximizes cumulative epiphyseal STAT5b + local chondrocyte GHRHR/GHSR1a IGF-1 and 20 kDa isoform output.';
+  } else {
+    regimeExplanation =
+      'Pre-Bed Priming Regime: 21:45 Pre-Bed Primer aligns endogenous 20 kDa/22 kDa pituitary release with the nocturnal anabolic window under low CIS/SOCS2 adaptation.';
+  }
+
   return {
     batemanTmaxH,
+    integrationSubStepH: 0.025,
     tailFractionAt4_5h: 0.955,
     tailFractionAt9h: 0.508,
     current,
@@ -16532,12 +16578,7 @@ export function computeGhSecretagogueSynergy({
     cartilageSynergyPct,
     stat5CartGainPct,
     optimalSplitSchedule,
-    regimeExplanation:
-      gamma >= 0.75 && betaCart < 0.35
-        ? 'High CIS/SOCS2 Adaptation Regime: 16:00 Afternoon Trough Bridge (9h after 07:00 Morning 30% rhGH) outperforms unseparated pre-bed priming by avoiding peripheral GHR desensitization overlap.'
-        : betaCart >= 0.40
-          ? 'Positive Cartilage Autocrine + Somatostatin-Clamped Regime: Dual (16:00 Bridge + 21:45 Pre-Bed Primer) or 21:45 Primer maximizes epiphyseal STAT5b + local GHRHR/GHSR1a IGF-1 and 20 kDa isoform output.'
-          : 'Balanced Adaptation Regime: 16:00 Afternoon Trough Bridge provides the cleanest single-pulse STAT5b resensitization; 07:30 Morning Trough is optimal during the 100% Night rhGH ramp.',
+    regimeExplanation,
   };
 }
 
@@ -16667,4 +16708,3 @@ export function evaluateReactorAtHour(hourInput = 144) {
     thiolSafeForStage2B: h < 192 || thiolLevel <= 0.15,
   };
 }
-
