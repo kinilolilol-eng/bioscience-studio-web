@@ -173,6 +173,8 @@
 .verbatim-passage-block { font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; margin-block: 24px; max-width: 85ch; }
 .browser-atlas-shell { border-width: 0; padding: 0; margin-block: 24px; position: relative; }
 .browser-atlas-toolbar { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 24px; }
+.browser-atlas-shell > .segmented-button-row { flex-wrap: nowrap; overflow-x: auto; gap: 8px; padding-block: 4px 12px; margin-block: 16px 24px; scrollbar-width: thin; }
+.browser-atlas-shell > .segmented-button-row > button { flex: 0 0 auto; white-space: nowrap; }
 .browser-atlas-workspace { grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); gap: 24px; }
 .browser-atlas-stage-wrap { border-radius: var(--radius-surface); }
 .browser-atlas-stage-controls { padding: 16px; gap: 16px; }
