@@ -1,0 +1,334 @@
+/* Form-craft pass: existing palette, content, navigation and calculations remain intact. */
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-section: 48px;
+  --radius-small: 6px;
+  --radius-control: 10px;
+  --radius-inset: 12px;
+  --radius-surface: 20px;
+  --radius-sheet: 24px;
+  --page-gutter: clamp(20px, 3vw, 48px);
+}
+
+/* A shared frame keeps the navigation, heading and content on the same rails. */
+.header-inner,
+.main-content,
+.site-footer {
+  max-width: 1536px;
+  padding-inline: var(--page-gutter);
+}
+
+.header-inner { min-height: 72px; gap: var(--space-lg); }
+.primary-nav { gap: var(--space-lg); }
+.primary-nav button { min-height: 44px; padding-inline: 2px; white-space: nowrap; }
+.header-actions { gap: var(--space-md); }
+.utility-button { min-height: 44px; white-space: nowrap; }
+.workspace-pill-switcher { padding: 4px; gap: 4px; border-radius: 14px; }
+.workspace-pill { min-height: 36px; padding: 8px 14px; border-radius: 9px; white-space: nowrap; }
+.main-content { padding-block: var(--space-xl) 72px; }
+.view-heading { margin-bottom: var(--space-xl); }
+.site-footer { padding-block: var(--space-lg); }
+
+/* Compact rows provide an overview; the board no longer stretches each row to fill the screen. */
+.plan-board-viewport {
+  min-height: auto;
+  gap: var(--space-lg);
+  padding-block: 0 var(--space-xl);
+  justify-content: flex-start;
+}
+.plan-top-bar { gap: 16px 24px; align-items: flex-start; }
+.plan-title-group { align-items: baseline; gap: 8px 16px; }
+.plan-subtitle { max-width: 72ch; }
+.plan-filter-bar { gap: var(--space-sm); }
+.plan-filter-pill { min-height: 36px; padding: 8px 12px; border-radius: var(--radius-control); }
+.gdocs-sync-bar { padding: 12px 16px; border-radius: var(--radius-inset); gap: 8px 24px; }
+.gdocs-sync-left { gap: 8px 16px; }
+.plan-grid-four { gap: var(--space-md); align-items: stretch; flex: initial; }
+.plan-column-card { padding: 20px; border-radius: var(--radius-surface); min-width: 0; }
+.plan-column-head { gap: 8px; padding-bottom: 16px; margin-bottom: 4px; flex-wrap: wrap; }
+.plan-column-head > div { gap: 8px; }
+.plan-item-list { flex: initial; justify-content: flex-start; }
+.plan-item-row { grid-template-columns: 44px minmax(0, 1fr) auto; min-height: 56px; gap: 8px; padding-block: 12px; }
+.plan-row-name { white-space: normal; overflow: visible; overflow-wrap: anywhere; line-height: 1.45; }
+.plan-row-tag { font-size: 11px; white-space: normal; }
+.plan-row-dose { font-size: 12px; }
+.plan-footer-strip { align-items: flex-start; gap: 16px 24px; padding-top: 0; }
+.guardrail-pill { padding: 6px 10px; border-radius: var(--radius-small); }
+.plan-jump-links { gap: 12px 20px; flex-wrap: wrap; }
+.plan-jump-link { display: inline-flex; align-items: center; min-height: 36px; }
+.onhand-five-strip { gap: var(--space-md); }
+.onhand-card { padding: 20px; gap: 12px; border-radius: var(--radius-surface); }
+.onhand-card-main { flex-wrap: wrap; }
+
+/* One boundary per section. Inset readouts use their existing surface, without another frame. */
+.today-layout { gap: var(--space-xl); padding-top: var(--space-section); }
+.studio-section { margin-top: var(--space-section); padding-top: var(--space-xl); }
+.client226-suite { margin-top: 0; padding-top: 0; }
+.section-head { gap: 12px 24px; margin-bottom: var(--space-lg); align-items: center; }
+.section-head > div { min-width: 0; }
+.studio-panel { border-width: 0; border-radius: 0; padding: 24px 0; margin-top: 0; }
+.branch-summary-card { padding: 24px; border-radius: var(--radius-inset); }
+.dose-telemetry-grid { gap: var(--space-md); margin-top: var(--space-lg); }
+.telemetry-cell { border-width: 0; padding: 20px; border-radius: var(--radius-inset); gap: 8px; min-width: 0; }
+.telemetry-cell strong { overflow-wrap: anywhere; }
+.studio-side-card { padding: 24px; border-radius: var(--radius-surface); }
+.slot-card { padding-block: 24px; }
+.slot-card:first-child { padding-top: 8px; }
+.mode-kv-grid,
+.profile-columns { gap: var(--space-xl); }
+.mode-kv-row { display: grid; grid-template-columns: minmax(96px, .35fr) minmax(0, 1fr); padding-block: 12px; gap: 16px; align-items: baseline; }
+.mode-kv-row > :only-child { grid-column: 1 / -1; }
+.mode-kv-label,
+.mode-kv-val { min-width: 0; overflow-wrap: anywhere; text-align: left; }
+.profile-selector { gap: var(--space-md); margin-bottom: var(--space-lg); }
+.profile-tab-button { padding: 16px 20px; border-radius: var(--radius-inset); gap: 8px; }
+.profile-detail-panel { border-width: 0; border-radius: 0; padding: 24px 0; }
+.profile-detail-header { gap: var(--space-lg); padding-bottom: 24px; }
+.profile-dose-scrubber { padding-block: 24px; }
+.profile-pathway-row { padding-block: 16px; }
+.profile-pathway-row p { margin-top: 8px; }
+.se-grid { gap: var(--space-lg); margin-top: 16px; }
+.protocol-list { margin-top: var(--space-xl); padding-top: var(--space-lg); }
+.stack-row { padding-block: 20px; gap: 16px; }
+.stack-name { flex-wrap: wrap; gap: 8px; }
+.stack-actions { flex-wrap: wrap; }
+.record-row { padding-block: 20px; gap: 16px; }
+.record-row > div { min-width: 0; overflow-wrap: anywhere; }
+.finding { padding: 16px 20px; border-radius: var(--radius-inset); }
+.finding summary { gap: 12px 16px; flex-wrap: wrap; align-items: flex-start; }
+.finding summary > span:first-child { min-width: 0; flex: 1 1 180px; overflow-wrap: anywhere; }
+.finding .status { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.finding .inline-between { flex-wrap: wrap; }
+.finding p { max-width: 80ch; }
+.compact-list li { overflow-wrap: anywhere; }
+.check-in { padding-top: 24px; }
+.check-in-details { margin-top: 24px; }
+
+/* Controls share dimensions and optical alignment without changing their existing states. */
+.button { min-height: 44px; padding: 11px 18px; gap: 8px; border-radius: var(--radius-control); }
+.button.small-button { min-height: 36px; padding: 8px 12px; }
+.icon-button { width: 40px; height: 40px; }
+.text-button { min-height: 32px; }
+.field { gap: 8px; margin-bottom: 24px; }
+.field input:not([type='range']):not([type='checkbox']):not([type='radio']),
+.field textarea,
+.field select { min-height: 44px; padding: 11px 14px; border-radius: var(--radius-control); }
+.field textarea { min-height: 112px; }
+.form-grid { column-gap: 24px; }
+.form-actions { gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+.checkbox-group { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-block: 16px 24px; }
+.checkbox,
+.radio { min-height: 32px; align-items: center; gap: 10px; }
+.tabs { gap: 24px; }
+.tabs button { min-height: 48px; padding-block: 14px 12px; }
+.secondary-tabs { padding-inline: 0; }
+.editor-list { display: grid; gap: 24px; }
+.editor-entry { position: relative; padding: 24px 0; border-bottom: 1px solid var(--line); }
+.entry-remove { position: absolute; right: 0; top: 16px; }
+.editor-entry > .form-grid { padding-right: 48px; }
+.import-preview,
+.invite-result { padding: 24px; margin-block: 24px; border-radius: var(--radius-inset); background: var(--bg-subtle); }
+.preview-items { display: grid; gap: 12px; padding-left: 20px; }
+.notice { padding: 16px 20px; border-radius: var(--radius-inset); }
+.empty { padding-block: var(--space-section); max-width: 70ch; }
+
+/* Sheets stay attached to their edge; only their free corners are rounded. */
+.drawer { width: min(640px, 100%); border-radius: var(--radius-sheet) 0 0 var(--radius-sheet); }
+.drawer-wide { width: min(800px, 100%); }
+.drawer-inner { min-height: 100%; }
+.drawer-head { position: sticky; top: 0; z-index: 5; padding: 32px; align-items: flex-start; }
+.drawer-head > div { min-width: 0; }
+.drawer-content { padding: 28px 32px 40px; }
+.drawer-footer { padding: 20px 32px; flex-wrap: wrap; }
+.drawer .secondary-tabs { padding-inline: 32px; }
+.definition-list { display: grid; grid-template-columns: minmax(100px, 1fr) 1.6fr; gap: 12px 24px; }
+.definition-list dt,
+.definition-list dd { margin: 0; overflow-wrap: anywhere; }
+
+/* Graphs and their readers share the same frame, with nested corners following the inset. */
+.cascade-telemetry-strip { gap: 16px; margin-bottom: 24px; }
+.cascade-control-console { border-width: 0; padding: 24px; border-radius: var(--radius-surface); gap: 24px; margin-bottom: 24px; }
+.cascade-control-row { gap: 24px; }
+.cascade-control-label { display: block; margin-bottom: 12px; }
+.segmented-button-row { gap: 8px; }
+.epistemic-encoding-legend { border-width: 0; padding: 8px 0 24px; gap: 12px; }
+.receptor-map-stage { padding: 24px; border-radius: var(--radius-surface); min-width: 0; }
+.receptor-map-stage > svg { min-width: 600px; }
+.causal-cascade-stage { overflow-x: auto; }
+.cascade-inspector-grid { gap: 24px; padding-top: 24px; }
+.cascade-inspector-card { border-width: 0; padding: 24px; border-radius: var(--radius-inset); min-width: 0; }
+.receptor-inspector-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.receptor-state-tag { display: inline-block; padding: 4px 8px; border-radius: var(--radius-small); }
+.circadian-slot-grid { gap: 16px; margin-top: 16px; }
+.circadian-slot-card { border-width: 0; padding: 20px; border-radius: var(--radius-inset); gap: 8px; }
+.compound-passage-card { border-width: 0; padding: 24px 0; }
+.compound-passage-header,
+.passage-overlay-header { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+.compound-supplied-description { margin-top: 12px; max-width: 80ch; }
+.compound-full-passage-panel { padding-top: 24px; }
+.verbatim-passage-block { font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.65; margin-block: 24px; max-width: 85ch; }
+.browser-atlas-shell { border-width: 0; padding: 0; margin-block: 24px; position: relative; }
+.browser-atlas-toolbar { display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 24px; }
+.browser-atlas-workspace { grid-template-columns: minmax(0, 1.7fr) minmax(260px, 1fr); gap: 24px; }
+.browser-atlas-stage-wrap { border-radius: var(--radius-surface); }
+.browser-atlas-stage-controls { padding: 16px; gap: 16px; }
+.browser-atlas-card { padding: 24px; border-radius: var(--radius-surface); min-width: 0; }
+.browser-atlas-search-input { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius-control); font: inherit; }
+.browser-atlas-search-dropdown { display: grid; max-height: 240px; overflow-y: auto; padding-block: 8px; gap: 4px; }
+.browser-atlas-search-dropdown button { min-height: 40px; text-align: left; padding: 8px 12px; }
+.browser-atlas-hover-pill { position: absolute; inset: auto 16px 16px; padding: 10px 14px; border-radius: var(--radius-control); background: var(--bg-card); pointer-events: none; }
+.browser-atlas-passage-overlay { position: absolute; inset: 16px; z-index: 6; overflow-y: auto; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius-inset); background: var(--bg-card); }
+.passage-overlay-body { padding-block: 16px; }
+.passage-overlay-footer { padding-top: 16px; }
+
+/* Public and secondary tools use the same spacing, rather than browser-default stacks. */
+.compare-layout { grid-template-columns: minmax(260px, 320px) minmax(0, 1fr); gap: 40px; }
+.comparison-controls,
+.comparison-output { min-width: 0; }
+.comparison-output { padding-left: 40px; }
+.comparison-controls > section + section,
+.curve-result + .curve-result,
+.protocol-history { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.measure-picker { max-width: 360px; margin-block: 24px; }
+.observations { margin-top: 32px; }
+.chart { padding-block: 24px 12px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 16px; }
+.public-main { max-width: 1120px; padding-top: 48px; }
+.public-heading { margin-bottom: 32px; }
+.goal-picker > div { gap: 12px; }
+.goal-button { padding: 16px 20px; min-height: 56px; border-radius: var(--radius-inset); }
+.public-stack-form { padding-bottom: 32px; }
+.public-submit-row { gap: 24px; flex-wrap: wrap; }
+.public-results { margin-top: 40px; }
+.public-verdict { padding: 24px; border-radius: var(--radius-surface); }
+.public-analysis { gap: 32px; }
+.public-insight,
+.ambiguous-entry { padding-block: 24px; }
+.recognized-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 24px; }
+.recognized-item { padding: 8px 12px; border: 1px solid var(--line); border-radius: var(--radius-control); }
+.resolution-options,
+.match-options { display: flex; flex-wrap: wrap; gap: 12px; margin-block: 16px; }
+.waste-savings-banner { padding: 24px; border-radius: var(--radius-inset); margin-block: 24px; background: var(--bg-subtle); }
+.auth-page,
+.initial-load { min-height: 100dvh; padding: 48px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+.auth-panel { width: min(100%, 440px); padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-surface); background: var(--bg-card); }
+.auth-heading { margin-bottom: 32px; }
+.auth-heading p { margin-top: 12px; }
+.auth-foot { margin-top: 16px; text-align: center; }
+.auth-note { text-align: center; max-width: 48ch; }
+
+/* Continuous corners progressively enhance the existing precise, neutral shape language. */
+@supports (corner-shape: squircle) {
+  :root {
+    --radius-control: 15px;
+    --radius-inset: 18px;
+    --radius-surface: 30px;
+    --radius-sheet: 36px;
+  }
+  :is(.button, .field input, .field textarea, .field select, .plan-column-card,
+    .onhand-card, .branch-summary-card, .telemetry-cell, .studio-side-card,
+    .profile-tab-button, .goal-button, .public-verdict, .drawer, .finding,
+    .notice, .cascade-control-console, .receptor-map-stage, .cascade-inspector-card,
+    .circadian-slot-card, .browser-atlas-stage-wrap, .browser-atlas-card,
+    .browser-atlas-passage-overlay, .auth-panel, .gdocs-sync-bar, .import-preview,
+    .invite-result, .recognized-item, .waste-savings-banner) { corner-shape: squircle; }
+}
+
+@media (max-width: 1199px) {
+  .header-inner { display: grid; grid-template-columns: auto 1fr auto; gap: 8px 24px; padding-block: 12px 0; }
+  .workspace-pill-switcher { justify-self: start; }
+  .header-actions { grid-column: 3; grid-row: 1; }
+  .primary-nav { grid-row: 2; grid-column: 1 / -1; justify-content: center; }
+  .plan-grid-four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .profile-selector { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .browser-atlas-workspace { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 800px) {
+  .today-layout,
+  .compare-layout,
+  .public-analysis,
+  .cascade-inspector-grid,
+  .cascade-control-row,
+  .cascade-control-row.three-col { grid-template-columns: minmax(0, 1fr); }
+  .comparison-output { padding: 32px 0 0; border-left: 0; border-top: 1px solid var(--line); }
+  .cascade-telemetry-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .goal-picker > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .header-inner { grid-template-columns: 1fr auto; column-gap: 16px; }
+  .header-actions { grid-column: 2; }
+  .workspace-pill-switcher { grid-row: 2; grid-column: 1 / -1; width: 100%; }
+  .workspace-pill { flex: 1; }
+  .primary-nav { grid-row: 3; gap: 0; justify-content: stretch; }
+  .primary-nav button { flex: 1; min-height: 44px; }
+}
+
+@media (max-width: 560px) {
+  :root { --page-gutter: 20px; --space-section: 36px; }
+  .main-content { padding-block: 24px 48px; }
+  .header-actions { gap: 12px; }
+  .utility-button { font-size: 12px; gap: 4px; }
+  .brand { gap: 8px; }
+  .brand img { width: 24px; height: 24px; }
+  .brand > span { font-size: 15px; }
+  .plan-filter-bar { width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .plan-filter-pill { text-align: center; min-height: 40px; }
+  .plan-grid-four,
+  .onhand-five-strip,
+  .form-grid.four,
+  .form-grid.three,
+  .form-grid.two,
+  .mode-kv-grid,
+  .profile-columns,
+  .se-grid,
+  .circadian-slot-grid { grid-template-columns: minmax(0, 1fr); }
+  .plan-column-card { padding: 20px; }
+  .plan-column-head { flex-wrap: nowrap; }
+  .plan-row-name { overflow-wrap: normal; }
+  .plan-item-row { grid-template-columns: 48px minmax(0, 1fr) auto; }
+  .gdocs-sync-bar { align-items: flex-start; }
+  .plan-footer-strip { gap: 24px; }
+  .today-layout { padding-top: 32px; }
+  .workspace-toolbar,
+  .workspace-select,
+  .view-heading { flex-wrap: wrap; align-items: flex-start; }
+  .workspace-select { width: 100%; }
+  .workspace-select .field { min-width: 0; width: 100%; }
+  .section-head { align-items: flex-start; }
+  .tabs { gap: 20px; scrollbar-width: thin; }
+  .drawer { width: 100%; border-radius: 0; border-left: 0; }
+  .drawer-head { padding: 24px 20px; }
+  .drawer-content { padding: 24px 20px 32px; }
+  .drawer-footer { padding: 16px 20px; }
+  .drawer .secondary-tabs { padding-inline: 20px; }
+  .profile-meta-readout { flex-wrap: wrap; gap: 16px; max-width: 100%; flex-shrink: 1; }
+  .profile-meta-readout > div { text-align: left; min-width: 0; }
+  .profile-meta-readout strong { overflow-wrap: anywhere; }
+  .mode-kv-row { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .branch-summary-card,
+  .cascade-control-console,
+  .cascade-inspector-card,
+  .browser-atlas-card { padding: 20px; }
+  .receptor-map-stage { padding: 12px; }
+  .cascade-telemetry-strip { gap: 12px; }
+  .cascade-telemetry-strip .telemetry-cell { padding: 16px; }
+  .delta-row { gap: 12px; grid-template-columns: minmax(0, 1fr) auto auto; }
+  .definition-list { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .definition-list dd { margin-bottom: 12px; }
+  .auth-panel { padding: 24px; }
+  .verbatim-passage-block { max-width: 100%; }
+}
+
+@media (max-width: 380px) {
+  :root { --page-gutter: 16px; }
+  .header-inner { column-gap: 12px; }
+  .header-actions { gap: 8px; }
+  .utility-button { font-size: 11px; }
+  .brand { gap: 6px; }
+  .brand img { width: 22px; height: 22px; }
+  .brand > span { font-size: 14px; }
+  .workspace-pill { font-size: 12px; padding-inline: 10px; }
+}
